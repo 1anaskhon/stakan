@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
    
     <style>
         :root {
@@ -198,7 +196,7 @@
         }
 
         .mobile-nav .mobile-cart-holder a span {
-            display: none;
+            display: none; /* Doira ichida yozuv shart emas */
         }
 
         .mobile-nav .mobile-cart-holder a.active {
@@ -320,6 +318,7 @@
             color: var(--primary-yellow);
         }
 
+        /* Ruletka holatlari: Markaz, Chap va O'ng tomonlar */
         .roulette-card.active-center {
             opacity: 1;
             transform: translateX(0) scale(1.2);
@@ -714,47 +713,11 @@
             transform: scale(1.03);
         }
 
-        /* ----------------------------------------------------
-           XARITA UCHUN YANGI QO'SHILGAN STIL (Dizayn buzilmaydi)
-        ------------------------------------------------------- */
-        .map-delivery-title {
-            font-size: 14px;
-            color: var(--primary-yellow);
-            margin: 10px 0 5px 0;
-            font-weight: bold;
-        }
-        .map-wrapper {
-            position: relative;
-            width: 100%;
-            height: 180px;
-            border-radius: 12px;
-            border: 2px solid #252f3e;
-            margin-bottom: 15px;
-            overflow: hidden;
-        }
-        #delivery-map {
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-        }
-        /* Yandex uslubidagi qimirlamaydigan markaziy pin marker */
-        .center-pin {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -100%);
-            z-index: 10;
-            font-size: 28px;
-            color: var(--accent-red);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            pointer-events: none; /* xaritani to'sib qo'ymaydi */
-        }
-
         /* RESPONSIVE */
         @media (max-width: 768px) {
             header { padding: 10px 4%; }
             nav.desktop-nav { display: none; }
-            .mobile-nav { display: grid; }
+            .mobile-nav { display: grid; } /* Mobil panel ko'rinadi */
             .page { padding: 20px 4% 90px 4%; }
             .home-grid, .about-content, .cart-page { grid-template-columns: 1fr; gap: 25px; }
             .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -771,16 +734,16 @@
 
     <div class="lang-modal" id="languageModal">
         <div class="lang-box">
-            <h3 id="lang-title">Choose Language / Тилni tanlang</h3>
-            <button class="lang-btn" onclick="selectLanguage('uz')">???? O'zbekcha</button>
-            <button class="lang-btn" onclick="selectLanguage('ru')">???? Русский</button>
-            <button class="lang-btn" onclick="selectLanguage('en')">???? English</button>
+            <h3 id="lang-title">Choose Language / Тилни танланг</h3>
+            <button class="lang-btn" onclick="selectLanguage('uz')">🇺🇿 O'zbekcha</button>
+            <button class="lang-btn" onclick="selectLanguage('ru')">🇷🇺 Русский</button>
+            <button class="lang-btn" onclick="selectLanguage('en')">🇬🇧 English</button>
         </div>
     </div>
  
     <header>
         <div class="logo-area">
-            <div class="logo-icon">?</div>
+            <div class="logo-icon">☕</div>
             <div class="logo-text">
                 <h1>STAKAN</h1>
                 <span>CAFE</span>
@@ -792,7 +755,7 @@
             <a onclick="switchPage('about')" id="nav-about"><i class="fa-solid fa-circle-info"></i> <span class="txt-about">Biz haqimizda</span></a>
             <a onclick="switchPage('contact')" id="nav-contact"><i class="fa-solid fa-phone"></i> <span class="txt-contact">Bog'lanish</span></a>
             <button class="savat-btn" onclick="switchPage('cart')">
-                ?? <span class="txt-cart">Savat</span>
+                🛒 <span class="txt-cart">Savat</span>
                 <div class="badge" id="cart-badge">0</div>
             </button>
         </nav>
@@ -802,7 +765,7 @@
         <a onclick="switchPage('home')" id="m-nav-home" class="active"><i class="fa-solid fa-house"></i><span class="txt-home">Bosh sahifa</span></a>
         <a onclick="switchPage('menu')" id="m-nav-menu"><i class="fa-solid fa-utensils"></i><span class="txt-menu">Menyu</span></a>
         <div class="mobile-cart-holder">
-            <a onclick="switchPage('cart')" id="m-nav-cart">??</a>
+            <a onclick="switchPage('cart')" id="m-nav-cart">🛒</a>
             <div class="badge" id="m-cart-badge" style="top: -22px; right: 18px; z-index: 1000;">0</div>
         </div>
         <a onclick="switchPage('about')" id="m-nav-about"><i class="fa-solid fa-circle-info"></i><span class="txt-about">Biz haqimizda</span></a>
@@ -837,7 +800,7 @@
                 <div class="map-visual">
                     <div class="landmark-illustration">
                         <i class="fa-solid fa-gopuram building" title="Maxdumi A'zam Ziyoratgohi"></i>
-                        <span>??</span>
+                        <span>🕌</span>
                     </div>
                     <h4 class="txt-city">Kosonsoy Tumani</h4>
                     <p class="txt-landmark">Maxdumi A'zam tarixiy majmuasi yonida</p>
@@ -847,7 +810,7 @@
                 </div>
                 <div class="about-text">
                     <h2 class="txt-about-h2">Biz Haqimizda</h2>
-                    <p id="about-p1"><strong>STAKAN CAFE</strong> - Namangan viloyati, Kosonsoy shahrining eng muqaddas va tarixiy go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi majmuasi yaqinida joyhaz zamonaviy fast-food maskanidir.</p>
+                    <p id="about-p1"><strong>STAKAN CAFE</strong> - Namangan viloyati, Kosonsoy shahrining eng muqaddas va tarixiy go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi majmuasi yaqinida joylashgan zamonaviy fast-food maskanidir.</p>
                     <p id="about-p2">Bizning maqsadimiz - har bir mijozga yuqori sifatli, tezkor va mazali taomlarni taqdim etish orqali unga a'lo kayfiyat ulashishdir.</p>
                 </div>
             </div>
@@ -873,13 +836,11 @@
                 <div class="cart-list-container">
                     <h2 style="font-family: var(--font-display); color: var(--primary-yellow); margin-bottom: 15px;" class="txt-cart-h2">Savatdagi mahsulotlar</h2>
                     <div class="cart-items-scroll" id="cart-list-output"></div>
-                    
                     <div class="history-section">
                         <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> <span class="txt-history-title">Oxirgi buyurtmalarim:</span></div>
                         <div id="history-output"></div>
                     </div>
                 </div>
-                
                 <div class="checkout-box">
                     <div class="bill-details">
                         <h3><i class="fa-solid fa-receipt"></i> <span class="txt-receipt">Buyurtma Cheki</span></h3>
@@ -889,29 +850,21 @@
                             <span id="total-price-sum">0 UZS</span>
                         </div>
                     </div>
-                    
                     <div class="delivery-section" id="delivery-area">
                         <div class="customer-inputs">
                             <input type="text" id="cust-name" placeholder="Ismingizni kiriting..." required>
                             <div class="phone-method-selector">
-                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">? Avto</button>
-                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">?? Qo'lda</button>
+                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">⚡ Avto</button>
+                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">⌨️ Qo'lda</button>
                             </div>
                             <input type="tel" id="cust-phone" name="telephone" placeholder="Telefon raqamingiz..." autocomplete="tel" inputmode="tel" required>
                         </div>
-
-                        <div class="map-delivery-title"><i class="fa-solid fa-map-location-dot"></i> Yetkazish manzili (Xaritani suring):</div>
-                        <div class="map-wrapper">
-                            <div id="delivery-map"></div>
-                            <div class="center-pin"><i class="fa-solid fa-location-dot"></i></div>
-                        </div>
-
                         <div class="bill-row" style="color: #4caf50; font-weight: bold; margin-bottom: 15px;">
                             <span><i class="fa-solid fa-truck"></i> <span class="txt-our-phone">Aloqa raqamimiz:</span></span>
                             <span>+998 (33) 626-22-23</span>
                         </div>
                         <button class="btn-main btn-yellow" style="width: 100%;" onclick="confirmOrder()">
-                            <i class="fa-solid fa-circle-check"></i> <span class="txt-confirm">Buyurtmani Tasdiqlash</span>
+                            <i class="fa-solid fa-circle-check"></i> <span class="txt-confirm">Buyurtmaning Tasdiqlash</span>
                         </button>
                     </div>
                 </div>
@@ -920,61 +873,65 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Stakan Cafe Kosonsoy. Barcha huquqlar himoyalangan.</p>
+        &copy; 2026 Stakan Cafe - Kosonsoy. Barcha huquqlar himoyalangan.
     </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <script>
-        // Mahsulotlar ro'yxati
         const products = [
-            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "??" },
-            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "??" },
-            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "??" },
-            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "?" },
-            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "?" },
-            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "??" },
-            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "??" },
-            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "??" }
+            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "🍔" },
+            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "🌯" },
+            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "🍕" },
+            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "☕" },
+            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "🥤" },
+            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "🧋" },
+            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "🍔" },
+            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "🥪" }
         ];
 
         let cart = {};
         let currentLang = 'uz';
         let phoneMethod = 'auto';
         let rouletteIndex = 0;
-        let map, centerMarkerCoords;
-
-        // Bot sozlamalari (BOT TOKEN va CHAT ID'ni kiriting!)
-        const botToken = "BOT_TOKEN_SHU_YERGA_YOZILADI"; 
-        const chatId = "CHAT_ID_SHU_YERGA_YOZILADI"; 
 
         const languages = {
             uz: {
                 home: "Bosh sahifa", menu: "Menyu", about: "Biz haqimizda", contact: "Bog'lanish", cart: "Savat",
-                heroTitle: "STAKAN CAFE: Eng Mazali Fast-Food va Premium Kofe!", heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat va unutilmas shinam muhit.",
-                orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", city: "Kosonsoy Tumani", landmark: "Maxdumi A'zam majmuasi yaqinida", region: "Namangan Viloyati",
-                aboutH2: "Biz Haqimizda", contactH2: "Biz bilan aloqa", cartH2: "Savatdagi mahsulotlar", receipt: "Buyurtma Cheki", total: "Umumiy summa:",
-                ourPhone: "Aloqa raqami:", confirm: "Tasdiqlash", historyTitle: "Oxirgi buyurtmalarim (Qayta buyurtma uchun bosing):",
-                emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!", noItems: "Mahsulot tanlanmagan", placeholderName: "Ismingizni kiriting...",
-                alertFields: "Iltimos, ism va telefonni kiriting!", alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
+                heroTitle: "STAKAN CAFE: Eng Mazali Fast-Food va Premium Kofe!",
+                heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat va unutilmas shinam muhit.",
+                orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", city: "Kosonsoy Tumani",
+                landmark: "Maxdumi A'zam majmuasi yaqinida", region: "Namangan Viloyati", aboutH2: "Biz Haqimizda",
+                contactH2: "Biz bilan aloqa", cartH2: "Savatdagi mahsulotlar", receipt: "Buyurtma Cheki",
+                total: "Umumiy summa:", ourPhone: "Aloqa raqami:", confirm: "Tasdiqlash",
+                historyTitle: "Oxirgi buyurtmalarim (Tanlash uchun bosing):",
+                emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!", noItems: "Mahsulot tanlanmagan",
+                placeholderName: "Ismingizni kiriting...", alertFields: "Iltimos, ism va telefonni kiriting!",
+                alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
             },
             ru: {
                 home: "Главная", menu: "Меню", about: "О нас", contact: "Контакты", cart: "Корзина",
-                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!", heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
-                orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", city: "Касансайский район", landmark: "Рядом с комплексом Махдуми Аъзам", region: "Наманганская область",
-                aboutH2: "О Нас", contactH2: "Связаться с нами", cartH2: "Товары в корзине", receipt: "Чек заказа", total: "Общая сумма:",
-                ourPhone: "Наш телефон:", confirm: "Подтвердить заказ", historyTitle: "Мои последние заказы (Нажмите для повтора):",
-                emptyCart: "Корзина пуста. Добавьте блюда из меню!", noItems: "Товары не выбраны", placeholderName: "Введите ваше имя...",
-                alertFields: "Пожалуйста, введите имя и телефон!", alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.", noHistory: "Нет предыдущих заказов."
+                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!",
+                heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
+                orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", city: "Касансайский район",
+                landmark: "Рядом с комплексом Махдуми Аъзам", region: "Наманганская область", aboutH2: "О Нас",
+                contactH2: "Связаться с нами", cartH2: "Товары в корзине", receipt: "Чек заказа",
+                total: "Общая сумма:", ourPhone: "Наш телефон:", confirm: "Подтвердить заказ",
+                historyTitle: "Мои последние заказы (Нажмите для выбора):",
+                emptyCart: "Корзина пуста. Добавьте блюда из меню!", noItems: "Товары не выбраны",
+                placeholderName: "Введите ваше имя...", alertFields: "Пожалуйста, введите имя и телефон!",
+                alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.", noHistory: "Нет предыдущих заказов."
             },
             en: {
                 home: "Home", menu: "Menu", about: "About Us", contact: "Contact", cart: "Cart",
-                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!", heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
-                orderBtn: "Order Now", menuTitle: "Our Menu", city: "Kasansay District", landmark: "Near Maxdumi A'zam complex", region: "Namangan Region",
-                aboutH2: "About Us", contactH2: "Contact Us", cartH2: "Items in Cart", receipt: "Receipt Details", total: "Total Amount:",
-                ourPhone: "Our Phone:", confirm: "Confirm Order", historyTitle: "My Recent Orders (Click to reorder):",
-                emptyCart: "Cart is empty. Add items from Menu!", noItems: "No items selected", placeholderName: "Enter your name...",
-                alertFields: "Please enter name and phone number!", alertSuccess: "Thank you! Your order has been sent to Telegram.", noHistory: "No history found."
+                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!",
+                heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
+                orderBtn: "Order Now", menuTitle: "Our Menu", city: "Kasansay District",
+                landmark: "Near Maxdumi A'zam complex", region: "Namangan Region", aboutH2: "About Us",
+                contactH2: "Contact Us", cartH2: "Items in Cart", receipt: "Receipt Details",
+                total: "Total Amount:", ourPhone: "Our Phone:", confirm: "Confirm Order",
+                historyTitle: "My Recent Orders (Click to choose):",
+                emptyCart: "Cart is empty. Add items from Menu!", noItems: "No items selected",
+                placeholderName: "Enter your name...", alertFields: "Please enter name and phone number!",
+                alertSuccess: "Thank you! Your order has been sent to Telegram.", noHistory: "No history found."
             }
         };
 
@@ -1052,127 +1009,61 @@
                 if (!card) return;
                 card.className = "roulette-card";
                 if (idx === rouletteIndex) {
-                    card.classList.add("active-center");
+                    card.classList.add('active-center');
                 } else if (idx === (rouletteIndex - 1 + len) % len) {
-                    card.classList.add("active-left");
+                    card.classList.add('active-left');
                 } else if (idx === (rouletteIndex + 1) % len) {
-                    card.classList.add("active-right");
-                } else if (idx < rouletteIndex) {
-                    card.classList.add("hidden-left");
+                    card.classList.add('active-right');
+                } else if ((idx < rouletteIndex && idx !== (rouletteIndex - 1 + len) % len) || (rouletteIndex === 0 && idx === len - 1)) {
+                    card.classList.add('hidden-left');
                 } else {
-                    card.classList.add("hidden-right");
+                    card.classList.add('hidden-right');
                 }
             });
         }
 
         function initMenu() {
-            const grid = document.getElementById('menu-items-output');
-            grid.innerHTML = products.map(p => {
-                const count = cart[p.id] || 0;
+            const menuOutput = document.getElementById('menu-items-output');
+            menuOutput.innerHTML = products.map(p => {
+                let count = cart[p.id] ? cart[p.id] : 0;
+                let badgeStyle = count > 0 ? 'display: flex;' : 'display: none;';
                 return `
                     <div class="menu-item">
-                        <div class="count-badge" id="badge-${p.id}" style="display: ${count > 0 ? 'flex' : 'none'}">${count}</div>
+                        <div class="count-badge" id="badge-${p.id}" style="${badgeStyle}">${count}</div>
                         <div class="menu-item-emoji">${p.emoji}</div>
                         <h3>${p.name}</h3>
                         <p>${p.desc}</p>
                         <div class="price">${p.price.toLocaleString()} UZS</div>
-                        <button class="btn-main btn-yellow" style="padding: 8px 20px; font-size:14px;" onclick="addToCart(${p.id})">+ Qo'shish</button>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
+                            <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+                        </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => {
-                p.classList.remove('active');
-                p.style.display = 'none';
-            });
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            
-            const activePage = document.getElementById(`page-${pageId}`);
-            if (activePage) {
-                activePage.style.display = 'flex';
-                setTimeout(() => activePage.classList.add('active'), 50);
-            }
-
-            const navD = document.getElementById(`nav-${pageId}`);
-            if (navD) navD.classList.add('active');
-            const navM = document.getElementById(`m-nav-${pageId}`);
-            if (navM) navM.classList.add('active');
-
-            if (pageId === 'cart') {
-                updateCartPage();
-                // Sahifa to'liq yuklangandan keyin xaritani initsializatsiya qilish
-                setTimeout(() => { initDeliveryMap(); }, 200);
-            }
-        }
-
-        // Xaritani yaratish va Yandex uslubida boshqarish funksiyasi
-        function initDeliveryMap() {
-            // Agar xarita allaqachon yaratilgan bo'lsa shunchaki o'lchamini yangilaymiz
-            if (map) {
-                map.invalidateSize();
-                return;
-            }
-
-            // Kosonsoy markazi koordinatalari: 41.258, 71.550
-            const startLat = 41.258;
-            const startLng = 71.550;
-            centerMarkerCoords = { lat: startLat, lng: startLng };
-
-            map = L.map('delivery-map', {
-                center: [startLat, startLng],
-                zoom: 15,
-                zoomControl: false
-            });
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap'
-            }).addTo(map);
-
-            // Foydalanuvchi xaritani yurgizganda (drag) markaziy koordinatani aniqlash
-            map.on('move', function () {
-                const center = map.getCenter();
-                centerMarkerCoords = { lat: center.lat, lng: center.lng };
-            });
-
-            // Foydalanuvchi turgan joyni aniqlash (Ruxsat berilsa xarita o'sha yerga boradi)
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const uLat = position.coords.latitude;
-                    const uLng = position.coords.longitude;
-                    map.setView([uLat, uLng], 16);
-                    centerMarkerCoords = { lat: uLat, lng: uLng };
-                }, () => {
-                    console.log("Geolokatsiyaga ruxsat berilmadi, default koordinata tanlandi.");
-                });
-            }
-        }
-
-        function addToCart(id) {
-            cart[id] = (cart[id] || 0) + 1;
-            updateDOM();
-        }
-
-        function updateQty(id, delta) {
-            if (!cart[id]) return;
+        function changeQty(id, delta) {
+            if (!cart[id]) cart[id] = 0;
             cart[id] += delta;
             if (cart[id] <= 0) delete cart[id];
-            updateDOM();
+            
+            let count = cart[id] ? cart[id] : 0;
+            let badge = document.getElementById(`badge-${id}`);
+            if (badge) {
+                if (count > 0) {
+                    badge.innerText = count;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+            updateCartBadges();
             updateCartPage();
         }
 
-        function updateDOM() {
-            let totalItems = 0;
-            products.forEach(p => {
-                const count = cart[p.id] || 0;
-                totalItems += count;
-                const badge = document.getElementById(`badge-${p.id}`);
-                if (badge) {
-                    badge.innerText = count;
-                    badge.style.display = count > 0 ? 'flex' : 'none';
-                }
-            });
+        function updateCartBadges() {
+            let totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
             document.getElementById('cart-badge').innerText = totalItems;
             document.getElementById('m-cart-badge').innerText = totalItems;
         }
@@ -1181,180 +1072,176 @@
             const listOutput = document.getElementById('cart-list-output');
             const billOutput = document.getElementById('bill-items');
             const deliveryArea = document.getElementById('delivery-area');
-            const totalSumEl = document.getElementById('total-price-sum');
+            const totalPriceSum = document.getElementById('total-price-sum');
             const l = languages[currentLang];
 
-            let hasItems = Object.keys(cart).length > 0;
-            
-            if (!hasItems) {
-                listOutput.innerHTML = `<div style="padding:20px; text-align:center; color:#9ca3af;">${l.emptyCart}</div>`;
-                billOutput.innerHTML = `<div style="padding:10px; color:#9ca3af;">${l.noItems}</div>`;
-                deliveryArea.style.display = 'none';
-                totalSumEl.innerText = "0 UZS";
-                loadHistoryDOM();
+            let cartKeys = Object.keys(cart);
+            if (cartKeys.length === 0) {
+                listOutput.innerHTML = `<div style="padding: 20px; color: #9ca3af; text-align: center;">${l.emptyCart}</div>`;
+                billOutput.innerHTML = `<div style="padding: 10px; color: #6b7280; text-align: center;">${l.noItems}</div>`;
+                deliveryArea.style.display = "none";
+                totalPriceSum.innerText = "0 UZS";
+                loadHistory();
                 return;
             }
 
-            deliveryArea.style.display = 'block';
-            let listHTML = "";
-            let billHTML = "";
+            deliveryArea.style.display = "block";
             let totalSum = 0;
+            let listHtml = "";
+            let billHtml = "";
 
-            products.forEach(p => {
-                const qty = cart[p.id];
-                if (qty > 0) {
-                    const itemSum = p.price * qty;
-                    totalSum += itemSum;
+            cartKeys.forEach(key => {
+                let p = products.find(prod => prod.id == key);
+                let qty = cart[key];
+                let itemSum = p.price * qty;
+                totalSum += itemSum;
 
-                    listHTML += `
-                        <div class="cart-item">
-                            <div class="cart-item-info">
-                                <span class="item-emoji">${p.emoji}</span>
-                                <div>
-                                    <h4 style="font-size:16px;">${p.name}</h4>
-                                    <span style="font-size:13px; color:#9ca3af;">${p.price.toLocaleString()} UZS</span>
-                                </div>
-                            </div>
-                            <div class="cart-item-controls">
-                                <button class="qty-btn" onclick="updateQty(${p.id}, -1)">-</button>
-                                <span style="font-weight:bold; font-size:16px; width:20px; text-align:center;">${qty}</span>
-                                <button class="qty-btn" onclick="updateQty(${p.id}, 1)">+</button>
+                listHtml += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <span class="item-emoji">${p.emoji}</span>
+                            <div>
+                                <h4 style="font-family: var(--font-display); color: var(--primary-yellow);">${p.name}</h4>
+                                <span style="font-size: 13px; color: #9ca3af;">${p.price.toLocaleString()} UZS</span>
                             </div>
                         </div>
-                    `;
-
-                    billHTML += `
-                        <div class="bill-row">
-                            <span>${p.name} x ${qty}</span>
-                            <span>${itemSum.toLocaleString()} UZS</span>
+                        <div class="cart-item-controls">
+                            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
+                            <span style="font-weight: bold; width: 20px; text-align: center;">${qty}</span>
+                            <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
                         </div>
-                    `;
-                }
+                    </div>
+                `;
+
+                billHtml += `
+                    <div class="bill-row">
+                        <span>${p.name} x ${qty}</span>
+                        <span>${itemSum.toLocaleString()} UZS</span>
+                    </div>
+                `;
             });
 
-            listOutput.innerHTML = listHTML;
-            billOutput.innerHTML = billHTML;
-            totalSumEl.innerText = totalSum.toLocaleString() + " UZS";
-            loadHistoryDOM();
+            listOutput.innerHTML = listHtml;
+            billOutput.innerHTML = billHtml;
+            totalPriceSum.innerText = totalSum.toLocaleString() + " UZS";
+            loadHistory();
         }
 
-        // Tarixni yuklash va DOMga chiqarish funksiyasi
-        function loadHistoryDOM() {
+        function loadHistory() {
             const historyOutput = document.getElementById('history-output');
-            const l = languages[currentLang];
             let historyData = localStorage.getItem('stakan_history');
-            let orders = historyData ? JSON.parse(historyData) : [];
+            const l = languages[currentLang];
 
-            if (orders.length === 0) {
-                historyOutput.innerHTML = `<div style="font-size:12px; color:#6b7280; padding:5px;">${l.noHistory}</div>`;
+            if (!historyData) {
+                historyOutput.innerHTML = `<div style="font-size: 13px; color: #6b7280; padding: 5px;">${l.noHistory}</div>`;
                 return;
             }
 
-            historyOutput.innerHTML = orders.map((item, index) => `
-                <div class="history-item" onclick="repeatOrder(${index})">
-                    <div style="font-weight:bold; color:var(--primary-yellow); margin-bottom:4px; font-size:12px;">?? ${item.date}</div>
-                    <div style="color:#d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.summary}</div>
+            let orders = JSON.parse(historyData);
+            historyOutput.innerHTML = orders.map((o, idx) => `
+                <div class="history-item" onclick="repeatOrder(${idx})">
+                    <div style="display: flex; justify-content: space-between; color: #9ca3af; margin-bottom: 4px;">
+                        <span>📅 ${o.date}</span>
+                        <span style="color: var(--primary-yellow); font-weight: bold;">Takrorlash 🔁</span>
+                    </div>
+                    <div style="color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${o.summary}</div>
                 </div>
             `).join('');
         }
 
-        // Tarixdagi buyurtmani qaytadan savatga yuklash funksiyasi
-        function repeatOrder(index) {
+        function repeatOrder(idx) {
             let historyData = localStorage.getItem('stakan_history');
             if (!historyData) return;
             let orders = JSON.parse(historyData);
-            let selectedOrder = orders[index];
-            
-            if (selectedOrder && selectedOrder.cart) {
-                cart = JSON.parse(JSON.stringify(selectedOrder.cart)); // Savatni yangilash
-                updateDOM();
+            if (orders[idx]) {
+                cart = JSON.parse(JSON.stringify(orders[idx].cart));
+                updateCartBadges();
+                initMenu();
                 updateCartPage();
-                alert(currentLang === 'uz' ? "Buyurtma qayta savatga qo'shildi!" : (currentLang === 'ru' ? "Заказ повторно добавлен в корзину!" : "Order re-added to cart!"));
             }
         }
 
-        // Buyurtmani yakunlash va Telegram botga jo'natish funksiyasi
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            document.querySelectorAll('nav a').forEach(a => {
+                a.classList.remove('active');
+            });
+            
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) targetPage.classList.add('active');
+
+            const navDesktop = document.getElementById(`nav-${pageId}`);
+            if (navDesktop) navDesktop.classList.add('active');
+
+            const navMobile = document.getElementById(`m-nav-${pageId}`);
+            if (navMobile) navMobile.classList.add('active');
+        }
+
         function confirmOrder() {
-            const name = document.getElementById('cust-name').value.trim();
-            const phone = document.getElementById('cust-phone').value.trim();
+            const nameInput = document.getElementById('cust-name').value.trim();
+            const phoneInput = document.getElementById('cust-phone').value.trim();
             const l = languages[currentLang];
 
-            if (!name || !phone) {
+            if (!nameInput || !phoneInput) {
                 alert(l.alertFields);
                 return;
             }
 
-            let summaryText = "";
+            let botToken = "7339798485:AAGZ8Qx2yZgLms_TfKz_7pM8b5-7n9T10_8"; 
+            let chatId = "6109405615"; 
+            let telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            let message = `🛒 *YANGI BUYURTMA (STAKAN CAFE)*\n\n`;
+            message += `👤 *Mijoz:* ${nameInput}\n`;
+            message += `📞 *Telefon:* ${phoneInput}\n\n`;
+            message += `📦 *Maxsulotlar:*\n`;
+
             let totalSum = 0;
+            let summaryText = "";
 
-            products.forEach(p => {
-                const qty = cart[p.id];
-                if (qty > 0) {
-                    summaryText += `${p.emoji} ${p.name} x ${qty}, `;
-                    totalSum += p.price * qty;
-                }
+            Object.keys(cart).forEach(key => {
+                let p = products.find(prod => prod.id == key);
+                let qty = cart[key];
+                let itemSum = p.price * qty;
+                totalSum += itemSum;
+                message += `▪️ ${p.name} x ${qty} = ${itemSum.toLocaleString()} UZS\n`;
+                summaryText += `${p.name} (${qty}), `;
             });
 
-            // Telegram xabar tayyorlash (Markdown formatida)
-            let message = `?? *YANGI BUYURTMA (STAKAN CAFE)*\n\n`;
-            message += `?? *Mijoz:* ${name}\n`;
-            message += `?? *Telefon:* ${phone}\n\n`;
-            message += `?? *Maxsulotlar:*\n`;
-            
-            products.forEach(p => {
-                const qty = cart[p.id];
-                if (qty > 0) {
-                    message += `  ?? ${p.name} x ${qty} = ${(p.price * qty).toLocaleString()} UZS\n`;
-                }
-            });
-            
-            message += `\n?? *Umumiy summa:* ${totalSum.toLocaleString()} UZS\n`;
-            
-            // Xaritadan olingan koordinatalar va Yandex/Google xarita linki
-            if (centerMarkerCoords) {
-                const mapLink = `https://www.google.com/maps/search/?api=1&query=${centerMarkerCoords.lat},${centerMarkerCoords.lng}`;
-                message += `?? *Lokatsiya:* [Xaritada ko'rish](${mapLink})\n`;
-                message += `?? *Koordinatalar:* \`${centerMarkerCoords.lat.toFixed(6)}, ${centerMarkerCoords.lng.toFixed(6)}\``;
-            }
-
-            const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            message += `\n💵 *Umumiy summa:* ${totalSum.toLocaleString()} UZS`;
 
             fetch(telegramUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown", disable_web_page_preview: false })
+                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
             })
             .then(response => {
                 if (response.ok) {
                     alert(l.alertSuccess);
                     
-                    // Buyurtmani tarixga yozish logikasi (Maksimal 5 ta)
                     let historyData = localStorage.getItem('stakan_history');
                     let orders = historyData ? JSON.parse(historyData) : [];
                     
                     let now = new Date();
-                    let dateStr = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth()+1).toString().padStart(2, '0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                    let dateStr = `${now.getDate()}.${now.getMonth()+1} ${now.getHours()}:${now.getMinutes()}`;
                     
                     orders.unshift({
                         date: dateStr,
-                        cart: JSON.parse(JSON.stringify(cart)), // Savat holatini nusxalash
+                        cart: cart,
                         summary: summaryText.substring(0, summaryText.length - 2) + " = " + totalSum.toLocaleString() + " UZS"
                     });
                     
-                    if (orders.length > 5) orders.pop();
+                    if(orders.length > 5) orders.pop();
                     localStorage.setItem('stakan_history', JSON.stringify(orders));
 
-                    // Savatni tozalash va bosh sahifaga qaytish
                     cart = {};
-                    updateDOM();
+                    updateCartBadges();
+                    initMenu();
+                    updateCartPage();
                     switchPage('home');
-                } else {
-                    alert("Telegramga yuborishda xatolik! Bot token yoki Chat ID xato kiritilgan bo'lishi mumkin.");
                 }
-            })
-            .catch(err => {
-                console.error(err);
-                alert("Tarmoq xatoligi sodir bo'ldi!");
             });
         }
  
