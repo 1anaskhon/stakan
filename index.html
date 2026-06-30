@@ -734,16 +734,16 @@
 
     <div class="lang-modal" id="languageModal">
         <div class="lang-box">
-            <h3 id="lang-title">Choose Language / Тилни танланг</h3>
-            <button class="lang-btn" onclick="selectLanguage('uz')">🇺🇿 O'zbekcha</button>
-            <button class="lang-btn" onclick="selectLanguage('ru')">🇷🇺 Русский</button>
-            <button class="lang-btn" onclick="selectLanguage('en')">🇬🇧 English</button>
+            <h3 id="lang-title">Choose Language / РўРёР»ni tanlang</h3>
+            <button class="lang-btn" onclick="selectLanguage('uz')">рџ‡єрџ‡ї O'zbekcha</button>
+            <button class="lang-btn" onclick="selectLanguage('ru')">рџ‡·рџ‡є Р СѓСЃСЃРєРёР№</button>
+            <button class="lang-btn" onclick="selectLanguage('en')">рџ‡¬рџ‡§ English</button>
         </div>
     </div>
  
     <header>
         <div class="logo-area">
-            <div class="logo-icon">☕</div>
+            <div class="logo-icon">в•</div>
             <div class="logo-text">
                 <h1>STAKAN</h1>
                 <span>CAFE</span>
@@ -755,7 +755,7 @@
             <a onclick="switchPage('about')" id="nav-about"><i class="fa-solid fa-circle-info"></i> <span class="txt-about">Biz haqimizda</span></a>
             <a onclick="switchPage('contact')" id="nav-contact"><i class="fa-solid fa-phone"></i> <span class="txt-contact">Bog'lanish</span></a>
             <button class="savat-btn" onclick="switchPage('cart')">
-                🛒 <span class="txt-cart">Savat</span>
+                рџ›’ <span class="txt-cart">Savat</span>
                 <div class="badge" id="cart-badge">0</div>
             </button>
         </nav>
@@ -764,10 +764,12 @@
     <nav class="mobile-nav">
         <a onclick="switchPage('home')" id="m-nav-home" class="active"><i class="fa-solid fa-house"></i><span class="txt-home">Bosh sahifa</span></a>
         <a onclick="switchPage('menu')" id="m-nav-menu"><i class="fa-solid fa-utensils"></i><span class="txt-menu">Menyu</span></a>
+        
         <div class="mobile-cart-holder">
-            <a onclick="switchPage('cart')" id="m-nav-cart">🛒</a>
+            <a onclick="switchPage('cart')" id="m-nav-cart">рџ›’</a>
             <div class="badge" id="m-cart-badge" style="top: -22px; right: 18px; z-index: 1000;">0</div>
         </div>
+        
         <a onclick="switchPage('about')" id="m-nav-about"><i class="fa-solid fa-circle-info"></i><span class="txt-about">Biz haqimizda</span></a>
         <a onclick="switchPage('contact')" id="m-nav-contact"><i class="fa-solid fa-phone"></i><span class="txt-contact">Aloqa</span></a>
     </nav>
@@ -800,7 +802,7 @@
                 <div class="map-visual">
                     <div class="landmark-illustration">
                         <i class="fa-solid fa-gopuram building" title="Maxdumi A'zam Ziyoratgohi"></i>
-                        <span>🕌</span>
+                        <span>в•</span>
                     </div>
                     <h4 class="txt-city">Kosonsoy Tumani</h4>
                     <p class="txt-landmark">Maxdumi A'zam tarixiy majmuasi yonida</p>
@@ -836,11 +838,13 @@
                 <div class="cart-list-container">
                     <h2 style="font-family: var(--font-display); color: var(--primary-yellow); margin-bottom: 15px;" class="txt-cart-h2">Savatdagi mahsulotlar</h2>
                     <div class="cart-items-scroll" id="cart-list-output"></div>
+                    
                     <div class="history-section">
                         <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> <span class="txt-history-title">Oxirgi buyurtmalarim:</span></div>
                         <div id="history-output"></div>
                     </div>
                 </div>
+                
                 <div class="checkout-box">
                     <div class="bill-details">
                         <h3><i class="fa-solid fa-receipt"></i> <span class="txt-receipt">Buyurtma Cheki</span></h3>
@@ -850,44 +854,45 @@
                             <span id="total-price-sum">0 UZS</span>
                         </div>
                     </div>
+                    
                     <div class="delivery-section" id="delivery-area">
                         <div class="customer-inputs">
                             <input type="text" id="cust-name" placeholder="Ismingizni kiriting..." required>
+                            
                             <div class="phone-method-selector">
-                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">⚡ Avto</button>
-                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">⌨️ Qo'lda</button>
+                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">вњЁ Avto</button>
+                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">вњЌпёЏ Qo'lda</button>
                             </div>
+                            
                             <input type="tel" id="cust-phone" name="telephone" placeholder="Telefon raqamingiz..." autocomplete="tel" inputmode="tel" required>
                         </div>
+
                         <div class="bill-row" style="color: #4caf50; font-weight: bold; margin-bottom: 15px;">
                             <span><i class="fa-solid fa-truck"></i> <span class="txt-our-phone">Aloqa raqamimiz:</span></span>
                             <span>+998 (33) 626-22-23</span>
                         </div>
                         <button class="btn-main btn-yellow" style="width: 100%;" onclick="confirmOrder()">
-                            <i class="fa-solid fa-circle-check"></i> <span class="txt-confirm">Buyurtmaning Tasdiqlash</span>
+                            <i class="fa-solid fa-circle-check"></i> <span class="txt-confirm">Buyurtmani Tasdiqlash</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
-    <footer>
-        &copy; 2026 Stakan Cafe - Kosonsoy. Barcha huquqlar himoyalangan.
-    </footer>
-
+ 
     <script>
+        // Aniq va chiroyli haqiqiy Emojilar o'rnatildi
         const products = [
-            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "🍔" },
-            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "🌯" },
-            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "🍕" },
-            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "☕" },
-            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "🥤" },
-            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "🧋" },
-            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "🍔" },
-            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "🥪" }
+            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "рџЌ”" }, 
+            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "рџЊЇ" },
+            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "рџЌ•" },
+            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "в•" },
+            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "рџҐ¤" },
+            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "рџ§‹" },
+            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "рџЌ”" },
+            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "рџҐЄ" }
         ];
-
+ 
         let cart = {};
         let currentLang = 'uz';
         let phoneMethod = 'auto';
@@ -896,41 +901,32 @@
         const languages = {
             uz: {
                 home: "Bosh sahifa", menu: "Menyu", about: "Biz haqimizda", contact: "Bog'lanish", cart: "Savat",
-                heroTitle: "STAKAN CAFE: Eng Mazali Fast-Food va Premium Kofe!",
-                heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat va unutilmas shinam muhit.",
-                orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", city: "Kosonsoy Tumani",
-                landmark: "Maxdumi A'zam majmuasi yaqinida", region: "Namangan Viloyati", aboutH2: "Biz Haqimizda",
-                contactH2: "Biz bilan aloqa", cartH2: "Savatdagi mahsulotlar", receipt: "Buyurtma Cheki",
-                total: "Umumiy summa:", ourPhone: "Aloqa raqami:", confirm: "Tasdiqlash",
-                historyTitle: "Oxirgi buyurtmalarim (Tanlash uchun bosing):",
-                emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!", noItems: "Mahsulot tanlanmagan",
-                placeholderName: "Ismingizni kiriting...", alertFields: "Iltimos, ism va telefonni kiriting!",
+                heroTitle: "STAKAN CAFE: Eng Mazali Fast-Food va Premium Kofe!", heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat va unutilmas shinam muhit.",
+                orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", city: "Kosonsoy Tumani", landmark: "Maxdumi A'zam majmuasi yaqinida",
+                region: "Namangan Viloyati", aboutH2: "Biz Haqimizda", contactH2: "Biz bilan aloqa", cartH2: "Savatdagi mahsulotlar",
+                receipt: "Buyurtma Cheki", total: "Umumiy summa:", ourPhone: "Aloqa raqami:", confirm: "Tasdiqlash",
+                historyTitle: "Oxirgi buyurtmalarim (Tanlash uchun bosing):", emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!",
+                noItems: "Mahsulot tanlanmagan", placeholderName: "Ismingizni kiriting...", alertFields: "Iltimos, ism va telefonni kiriting!",
                 alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
             },
             ru: {
-                home: "Главная", menu: "Меню", about: "О нас", contact: "Контакты", cart: "Корзина",
-                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!",
-                heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
-                orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", city: "Касансайский район",
-                landmark: "Рядом с комплексом Махдуми Аъзам", region: "Наманганская область", aboutH2: "О Нас",
-                contactH2: "Связаться с нами", cartH2: "Товары в корзине", receipt: "Чек заказа",
-                total: "Общая сумма:", ourPhone: "Наш телефон:", confirm: "Подтвердить заказ",
-                historyTitle: "Мои последние заказы (Нажмите для выбора):",
-                emptyCart: "Корзина пуста. Добавьте блюда из меню!", noItems: "Товары не выбраны",
-                placeholderName: "Введите ваше имя...", alertFields: "Пожалуйста, введите имя и телефон!",
-                alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.", noHistory: "Нет предыдущих заказов."
+                home: "Р“Р»Р°РІРЅР°СЏ", menu: "РњРµРЅСЋ", about: "Рћ РЅР°СЃ", contact: "РљРѕРЅС‚Р°РєС‚С‹", cart: "РљРѕСЂР·РёРЅР°",
+                heroTitle: "STAKAN CAFE: Р’РєСѓСЃРЅС‹Р№ Р¤Р°СЃС‚-Р¤СѓРґ Рё РџСЂРµРјРёР»РёСЏ РљРѕС„Рµ!", heroDesc: "Р›СѓС‡С€РёРµ Рё РґРѕСЃС‚СѓРїРЅС‹Рµ Р±Р»СЋРґР°, РєРѕС‚РѕСЂС‹Рµ РІР°Рј РїРѕРЅСЂР°РІСЏС‚СЃСЏ. Р‘С‹СЃС‚СЂС‹Р№ СЃРµСЂРІРёСЃ Рё СѓСЋС‚РЅР°СЏ Р°С‚РјРѕСЃС„РµСЂР°.",
+                orderBtn: "Р—Р°РєР°Р·Р°С‚СЊ СЃРµР№С‡Р°СЃ", menuTitle: "РќР°С€Рµ РњРµРЅСЋ", city: "РљР°СЃР°РЅСЃР°Р№СЃРєРёР№ СЂР°Р№РѕРЅ", landmark: "Р СЏРґРѕРј СЃ РєРѕРјРїР»РµРєСЃРѕРј РњР°С…РґСѓРјРё РђСЉР·Р°Рј",
+                region: "РќР°РјР°РЅРіР°РЅСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ", aboutH2: "Рћ РќР°СЃ", contactH2: "РЎРІСЏР·Р°С‚СЊСЃСЏ СЃ РЅР°РјРё", cartH2: "РўРѕРІР°СЂС‹ РІ РєРѕСЂР·РёРЅРµ",
+                receipt: "Р§РµРє Р·Р°РєР°Р·Р°", total: "РћР±С‰Р°СЏ СЃСѓРјРјР°:", ourPhone: "РќР°С€ С‚РµР»РµС„РѕРЅ:", confirm: "РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РєР°Р·",
+                historyTitle: "РњРѕРё РїРѕСЃР»РµРґРЅРёРµ Р·Р°РєР°Р·С‹ (РќР°Р¶РјРёС‚Рµ РґР»СЏ РІС‹Р±РѕСЂР°):", emptyCart: "РљРѕСЂР·РёРЅР° РїСѓСЃС‚Р°. Р”РѕР±Р°РІСЊС‚Рµ Р±Р»СЋРґР° РёР· РјРµРЅСЋ!",
+                noItems: "РўРѕРІР°СЂС‹ РЅРµ РІС‹Р±СЂР°РЅС‹", placeholderName: "Р’РІРµРґРёС‚Рµ РІР°С€Рµ РёРјСЏ...", alertFields: "РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ РёРјСЏ Рё С‚РµР»РµС„РѕРЅ!",
+                alertSuccess: "РЎРїР°СЃРёР±Рѕ! Р’Р°С€ Р·Р°РєР°Р· РѕС‚РїСЂР°РІР»РµРЅ РІ Telegram.", noHistory: "РќРµС‚ РїСЂРµРґС‹РґСѓС‰РёС… Р·Р°РєР°Р·РѕРІ."
             },
             en: {
                 home: "Home", menu: "Menu", about: "About Us", contact: "Contact", cart: "Cart",
-                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!",
-                heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
-                orderBtn: "Order Now", menuTitle: "Our Menu", city: "Kasansay District",
-                landmark: "Near Maxdumi A'zam complex", region: "Namangan Region", aboutH2: "About Us",
-                contactH2: "Contact Us", cartH2: "Items in Cart", receipt: "Receipt Details",
-                total: "Total Amount:", ourPhone: "Our Phone:", confirm: "Confirm Order",
-                historyTitle: "My Recent Orders (Click to choose):",
-                emptyCart: "Cart is empty. Add items from Menu!", noItems: "No items selected",
-                placeholderName: "Enter your name...", alertFields: "Please enter name and phone number!",
+                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!", heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
+                orderBtn: "Order Now", menuTitle: "Our Menu", city: "Kasansay District", landmark: "Near Maxdumi A'zam complex",
+                region: "Namangan Region", aboutH2: "About Us", contactH2: "Contact Us", cartH2: "Items in Cart",
+                receipt: "Receipt Details", total: "Total Amount:", ourPhone: "Our Phone:", confirm: "Confirm Order",
+                historyTitle: "My Recent Orders (Click to choose):", emptyCart: "Cart is empty. Add items from Menu!",
+                noItems: "No items selected", placeholderName: "Enter your name...", alertFields: "Please enter name and phone number!",
                 alertSuccess: "Thank you! Your order has been sent to Telegram.", noHistory: "No history found."
             }
         };
@@ -948,6 +944,7 @@
             document.querySelectorAll('.txt-about').forEach(el => el.innerText = l.about);
             document.querySelectorAll('.txt-contact').forEach(el => el.innerText = l.contact);
             document.querySelectorAll('.txt-cart').forEach(el => el.innerText = l.cart);
+            
             document.getElementById('main-hero-title').innerText = l.heroTitle;
             document.getElementById('main-hero-desc').innerText = l.heroDesc;
             document.querySelector('.txt-order-btn').innerText = l.orderBtn;
@@ -963,22 +960,27 @@
             document.querySelector('.txt-our-phone').innerText = l.ourPhone;
             document.querySelector('.txt-confirm').innerText = l.confirm;
             document.querySelector('.txt-history-title').innerText = l.historyTitle;
+            
             document.getElementById('cust-name').placeholder = l.placeholderName;
+            
             initMenu();
             initRoulette();
             updateCartPage();
         }
 
+        // Avto raqam to'ldirish funksiyasi modernizatsiya qilindi
         function setPhoneMethod(method) {
             phoneMethod = method;
             document.getElementById('btn-method-auto').classList.remove('active');
             document.getElementById('btn-method-manual').classList.remove('active');
+            
             const phoneInput = document.getElementById('cust-phone');
+            
             if (method === 'auto') {
                 document.getElementById('btn-method-auto').classList.add('active');
-                phoneInput.value = "";
+                phoneInput.value = ""; // Brauzerga avtomatik taklif chiqarish imkonini berish uchun bo'shatiladi
                 phoneInput.placeholder = "Telefon raqamingizni bosing...";
-                phoneInput.focus();
+                phoneInput.focus(); 
             } else {
                 document.getElementById('btn-method-manual').classList.add('active');
                 phoneInput.value = "+998";
@@ -986,7 +988,8 @@
                 phoneInput.focus();
             }
         }
-
+ 
+        // 3D Ruletka Slayderini yaratish funksiyasi
         function initRoulette() {
             const track = document.getElementById('roulette-track-output');
             track.innerHTML = products.map((p, idx) => `
@@ -995,26 +998,30 @@
                     <h4>${p.name}</h4>
                 </div>
             `).join('');
+            
             animateRoulette();
             setInterval(() => {
                 rouletteIndex = (rouletteIndex + 1) % products.length;
                 animateRoulette();
-            }, 2500);
+            }, 2500); // Har 2.5 sekundda aylanadi
         }
 
+        // Ruletka holatlarini yangilab blur effektini berish
         function animateRoulette() {
             const len = products.length;
             products.forEach((_, idx) => {
                 const card = document.getElementById(`roulette-card-${idx}`);
                 if (!card) return;
-                card.className = "roulette-card";
+                
+                card.className = "roulette-card"; // Tozalash
+                
                 if (idx === rouletteIndex) {
                     card.classList.add('active-center');
                 } else if (idx === (rouletteIndex - 1 + len) % len) {
                     card.classList.add('active-left');
                 } else if (idx === (rouletteIndex + 1) % len) {
                     card.classList.add('active-right');
-                } else if ((idx < rouletteIndex && idx !== (rouletteIndex - 1 + len) % len) || (rouletteIndex === 0 && idx === len - 1)) {
+                } else if (idx === (rouletteIndex - 2 + len) % len) {
                     card.classList.add('hidden-left');
                 } else {
                     card.classList.add('hidden-right');
@@ -1023,195 +1030,197 @@
         }
 
         function initMenu() {
-            const menuOutput = document.getElementById('menu-items-output');
-            menuOutput.innerHTML = products.map(p => {
-                let count = cart[p.id] ? cart[p.id] : 0;
-                let badgeStyle = count > 0 ? 'display: flex;' : 'display: none;';
-                return `
-                    <div class="menu-item">
-                        <div class="count-badge" id="badge-${p.id}" style="${badgeStyle}">${count}</div>
-                        <div class="menu-item-emoji">${p.emoji}</div>
-                        <h3>${p.name}</h3>
-                        <p>${p.desc}</p>
-                        <div class="price">${p.price.toLocaleString()} UZS</div>
-                        <div style="display: flex; gap: 10px; justify-content: center;">
-                            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
-                            <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            const container = document.getElementById('menu-items-output');
+            container.innerHTML = products.map(p => `
+                <div class="menu-item">
+                    <div class="count-badge" id="badge-${p.id}">0</div>
+                    <div class="menu-item-emoji">${p.emoji}</div>
+                    <h3>${p.name}</h3>
+                    <p>${p.desc}</p>
+                    <div class="price">${p.price.toLocaleString()} UZS</div>
+                    <button class="btn-main btn-yellow" style="font-size: 14px; padding: 8px 20px;" onclick="addToCart(${p.id})">
+                        рџ›’ ${currentLang === 'uz' ? 'Savatga qo\'shish' : currentLang === 'ru' ? 'Р’ РєРѕСЂР·РёРЅСѓ' : 'Add to Cart'}
+                    </button>
+                </div>
+            `).join('');
+            updateDOM();
         }
-
-        function changeQty(id, delta) {
-            if (!cart[id]) cart[id] = 0;
-            cart[id] += delta;
-            if (cart[id] <= 0) delete cart[id];
+ 
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+ 
+            document.getElementById(`page-${pageId}`).classList.add('active');
             
-            let count = cart[id] ? cart[id] : 0;
-            let badge = document.getElementById(`badge-${id}`);
-            if (badge) {
-                if (count > 0) {
-                    badge.innerText = count;
-                    badge.style.display = 'flex';
-                } else {
-                    badge.style.display = 'none';
-                }
+            const navLinkDesktop = document.getElementById(`nav-${pageId}`);
+            if (navLinkDesktop) navLinkDesktop.classList.add('active');
+            
+            const navLinkMobile = document.getElementById(`m-nav-${pageId}`);
+            if (navLinkMobile) navLinkMobile.classList.add('active');
+
+            if(pageId === 'cart') {
+                updateCartPage();
             }
-            updateCartBadges();
+        }
+ 
+        function addToCart(id) {
+            if (cart[id]) { cart[id]++; } else { cart[id] = 1; }
+            updateDOM();
+        }
+ 
+        function changeQty(id, delta) {
+            if (cart[id]) {
+                cart[id] += delta;
+                if (cart[id] <= 0) delete cart[id];
+            }
+            updateDOM();
             updateCartPage();
         }
-
-        function updateCartBadges() {
-            let totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
+ 
+        function updateDOM() {
+            let totalItems = 0;
+            products.forEach(p => {
+                const countBadge = document.getElementById(`badge-${p.id}`);
+                if (countBadge) {
+                    if (cart[p.id] && cart[p.id] > 0) {
+                        countBadge.innerText = cart[p.id];
+                        countBadge.style.display = "flex";
+                        totalItems += cart[p.id];
+                    } else {
+                        countBadge.style.display = "none";
+                    }
+                }
+            });
             document.getElementById('cart-badge').innerText = totalItems;
             document.getElementById('m-cart-badge').innerText = totalItems;
         }
-
+ 
         function updateCartPage() {
             const listOutput = document.getElementById('cart-list-output');
             const billOutput = document.getElementById('bill-items');
             const deliveryArea = document.getElementById('delivery-area');
-            const totalPriceSum = document.getElementById('total-price-sum');
             const l = languages[currentLang];
-
-            let cartKeys = Object.keys(cart);
-            if (cartKeys.length === 0) {
-                listOutput.innerHTML = `<div style="padding: 20px; color: #9ca3af; text-align: center;">${l.emptyCart}</div>`;
-                billOutput.innerHTML = `<div style="padding: 10px; color: #6b7280; text-align: center;">${l.noItems}</div>`;
-                deliveryArea.style.display = "none";
-                totalPriceSum.innerText = "0 UZS";
-                loadHistory();
-                return;
-            }
-
-            deliveryArea.style.display = "block";
+            
             let totalSum = 0;
             let listHtml = "";
             let billHtml = "";
-
-            cartKeys.forEach(key => {
-                let p = products.find(prod => prod.id == key);
-                let qty = cart[key];
-                let itemSum = p.price * qty;
-                totalSum += itemSum;
-
+            const activeIds = Object.keys(cart);
+ 
+            if (activeIds.length === 0) {
+                listOutput.innerHTML = `<div style="text-align:center; padding:30px; color:#6b7280;">${l.emptyCart}</div>`;
+                billOutput.innerHTML = `<div style="color:#6b7280; font-size:14px;">${l.noItems}</div>`;
+                document.getElementById('total-price-sum').innerText = "0 UZS";
+                deliveryArea.style.display = "none";
+                showOrderHistory();
+                return;
+            }
+ 
+            activeIds.forEach(id => {
+                const item = products.find(p => p.id == id); 
+                const itemTotal = item.price * cart[id];
+                totalSum += itemTotal;
+ 
                 listHtml += `
                     <div class="cart-item">
                         <div class="cart-item-info">
-                            <span class="item-emoji">${p.emoji}</span>
+                            <span class="item-emoji">${item.emoji}</span>
                             <div>
-                                <h4 style="font-family: var(--font-display); color: var(--primary-yellow);">${p.name}</h4>
-                                <span style="font-size: 13px; color: #9ca3af;">${p.price.toLocaleString()} UZS</span>
+                                <h4 style="font-family: var(--font-display);">${item.name}</h4>
+                                <span style="color:var(--accent-red); font-weight:700;">${item.price.toLocaleString()} UZS</span>
                             </div>
                         </div>
                         <div class="cart-item-controls">
-                            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
-                            <span style="font-weight: bold; width: 20px; text-align: center;">${qty}</span>
-                            <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+                            <button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
+                            <span style="font-weight:bold; width:20px; text-align:center;">${cart[id]}</span>
+                            <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
                         </div>
                     </div>
                 `;
-
+ 
                 billHtml += `
                     <div class="bill-row">
-                        <span>${p.name} x ${qty}</span>
-                        <span>${itemSum.toLocaleString()} UZS</span>
+                        <span>${item.name} x ${cart[id]}</span>
+                        <span>${itemTotal.toLocaleString()} UZS</span>
                     </div>
                 `;
             });
-
+ 
             listOutput.innerHTML = listHtml;
             billOutput.innerHTML = billHtml;
-            totalPriceSum.innerText = totalSum.toLocaleString() + " UZS";
-            loadHistory();
+            document.getElementById('total-price-sum').innerText = totalSum.toLocaleString() + " UZS";
+            deliveryArea.style.display = "block";
+            
+            showOrderHistory();
         }
 
-        function loadHistory() {
+        function showOrderHistory() {
             const historyOutput = document.getElementById('history-output');
             let historyData = localStorage.getItem('stakan_history');
             const l = languages[currentLang];
 
             if (!historyData) {
-                historyOutput.innerHTML = `<div style="font-size: 13px; color: #6b7280; padding: 5px;">${l.noHistory}</div>`;
+                historyOutput.innerHTML = `<div style="color:#6b7280; font-size:13px;">${l.noHistory}</div>`;
                 return;
             }
 
             let orders = JSON.parse(historyData);
-            historyOutput.innerHTML = orders.map((o, idx) => `
-                <div class="history-item" onclick="repeatOrder(${idx})">
-                    <div style="display: flex; justify-content: space-between; color: #9ca3af; margin-bottom: 4px;">
-                        <span>📅 ${o.date}</span>
-                        <span style="color: var(--primary-yellow); font-weight: bold;">Takrorlash 🔁</span>
+            let html = "";
+            orders.forEach((order, index) => {
+                html += `
+                    <div class="history-item" onclick="loadOldOrder(${index})">
+                        <strong>в„–${index + 1} | ${order.date}</strong><br>
+                        <span style="color:#9ca3af;">${order.summary}</span>
                     </div>
-                    <div style="color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${o.summary}</div>
-                </div>
-            `).join('');
+                `;
+            });
+            historyOutput.innerHTML = html;
         }
 
-        function repeatOrder(idx) {
+        function loadOldOrder(index) {
             let historyData = localStorage.getItem('stakan_history');
-            if (!historyData) return;
-            let orders = JSON.parse(historyData);
-            if (orders[idx]) {
-                cart = JSON.parse(JSON.stringify(orders[idx].cart));
-                updateCartBadges();
-                initMenu();
+            if(historyData) {
+                let orders = JSON.parse(historyData);
+                cart = orders[index].cart;
+                updateDOM();
                 updateCartPage();
             }
         }
-
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => {
-                p.classList.remove('active');
-            });
-            document.querySelectorAll('nav a').forEach(a => {
-                a.classList.remove('active');
-            });
-            
-            const targetPage = document.getElementById(`page-${pageId}`);
-            if (targetPage) targetPage.classList.add('active');
-
-            const navDesktop = document.getElementById(`nav-${pageId}`);
-            if (navDesktop) navDesktop.classList.add('active');
-
-            const navMobile = document.getElementById(`m-nav-${pageId}`);
-            if (navMobile) navMobile.classList.add('active');
-        }
-
+ 
         function confirmOrder() {
-            const nameInput = document.getElementById('cust-name').value.trim();
-            const phoneInput = document.getElementById('cust-phone').value.trim();
+            const botToken = "8417416146:AAGc6wdf6E0mQaB9zH_tUNhBeIpfXFgP_BU";
+            const chatId = "7583392349";
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
             const l = languages[currentLang];
 
-            if (!nameInput || !phoneInput) {
+            if (!name || !phone) {
                 alert(l.alertFields);
                 return;
             }
-
-            let botToken = "7339798485:AAGZ8Qx2yZgLms_TfKz_7pM8b5-7n9T10_8"; 
-            let chatId = "6109405615"; 
-            let telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-            let message = `🛒 *YANGI BUYURTMA (STAKAN CAFE)*\n\n`;
-            message += `👤 *Mijoz:* ${nameInput}\n`;
-            message += `📞 *Telefon:* ${phoneInput}\n\n`;
-            message += `📦 *Maxsulotlar:*\n`;
-
+ 
+            const activeIds = Object.keys(cart);
+            if (activeIds.length === 0) { return; }
+ 
+            let message = `?? *YANGI BUYURTMA (STAKAN CAFE)*\n`;
+            message += `---------------\n`;
+            message += `?? *Mijoz:* ${name}\n`;
+            message += `?? *Tel:* ${phone}\n`;
+            message += `?? *Til:* ${currentLang.toUpperCase()}\n`;
+            message += `---------------\n`;
             let totalSum = 0;
             let summaryText = "";
 
-            Object.keys(cart).forEach(key => {
-                let p = products.find(prod => prod.id == key);
-                let qty = cart[key];
-                let itemSum = p.price * qty;
-                totalSum += itemSum;
-                message += `▪️ ${p.name} x ${qty} = ${itemSum.toLocaleString()} UZS\n`;
-                summaryText += `${p.name} (${qty}), `;
+            activeIds.forEach(id => {
+                const item = products.find(p => p.id == id);
+                const itemTotal = item.price * cart[id];
+                totalSum += itemTotal;
+                message += `?? *${item.name}*\n` + `   ${cart[id]} ta x ${item.price.toLocaleString()} = ${itemTotal.toLocaleString()} UZS\n\n`;
+                summaryText += `${item.name} (${cart[id]}x), `;
             });
-
-            message += `\n💵 *Umumiy summa:* ${totalSum.toLocaleString()} UZS`;
-
+            message += `---------------\n`;
+            message += `?? *Umumiy summa:* ${totalSum.toLocaleString()} UZS`;
+ 
+            const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
             fetch(telegramUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1237,9 +1246,7 @@
                     localStorage.setItem('stakan_history', JSON.stringify(orders));
 
                     cart = {};
-                    updateCartBadges();
-                    initMenu();
-                    updateCartPage();
+                    updateDOM();
                     switchPage('home');
                 }
             });
