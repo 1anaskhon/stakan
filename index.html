@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://api-maps.yandex.ru/2.1/?lang=uz_UZ" type="text/javascript"></script>
    
     <style>
         :root {
@@ -79,13 +77,14 @@
             font-weight: bold;
         }
  
-        nav {
+        /* Kompyuter uchun yuqori navigatsiya menyusi */
+        nav.desktop-nav {
             display: flex;
             gap: 25px;
             align-items: center;
         }
  
-        nav a {
+        nav.desktop-nav a {
             color: var(--text-light);
             text-decoration: none;
             font-weight: 700;
@@ -97,7 +96,7 @@
             gap: 6px;
         }
  
-        nav a:hover, nav a.active {
+        nav.desktop-nav a:hover, nav.desktop-nav a.active {
             color: var(--primary-yellow);
             transform: scale(1.05);
         }
@@ -135,10 +134,50 @@
             right: -5px;
         }
  
+        /* Mobil uchun pastki panel (Instagram kabi) */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #0b0e12;
+            border-top: 2px solid var(--primary-yellow);
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            z-index: 999;
+        }
+
+        .mobile-nav a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .mobile-nav a span {
+            font-size: 11px;
+        }
+
+        .mobile-nav a.active {
+            color: var(--primary-yellow);
+        }
+
+        .mobile-nav .mobile-cart-holder {
+            position: relative;
+        }
+ 
         main {
             flex: 1;
             position: relative;
             width: 100%;
+            padding-bottom: 70px; /* Mobil panel uchun bo'shliq */
         }
  
         .page {
@@ -153,6 +192,7 @@
             justify-content: center;
             opacity: 0;
             transition: opacity 0.4s ease-in-out;
+            overflow-y: auto;
         }
  
         .page.active {
@@ -344,41 +384,12 @@
             50% { transform: translateY(-10px); }
         }
  
-        .map-visual h4 {
-            font-family: var(--font-display);
-            font-size: 28px;
-            color: var(--text-light);
-            margin-bottom: 10px;
-        }
+        .map-visual h4 { font-family: var(--font-display); font-size: 28px; color: var(--text-light); margin-bottom: 10px; }
+        .map-visual p { color: #6b7280; font-size: 14px; }
+        .map-visual .pin { color: var(--accent-red); font-size: 24px; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
  
-        .map-visual p {
-            color: #6b7280;
-            font-size: 14px;
-        }
- 
-        .map-visual .pin {
-            color: var(--accent-red);
-            font-size: 24px;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
- 
-        .about-text h2 {
-            font-family: var(--font-display);
-            font-size: 36px;
-            color: var(--primary-yellow);
-            margin-bottom: 15px;
-        }
- 
-        .about-text p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #d1d5db;
-            margin-bottom: 15px;
-        }
+        .about-text h2 { font-family: var(--font-display); font-size: 36px; color: var(--primary-yellow); margin-bottom: 15px; }
+        .about-text p { font-size: 16px; line-height: 1.6; color: #d1d5db; margin-bottom: 15px; }
  
         .contact-card {
             background-color: var(--bg-card);
@@ -390,12 +401,7 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
  
-        .contact-card h2 { 
-            font-family: var(--font-display);
-            font-size: 32px;
-            color: var(--primary-yellow);
-            margin-bottom: 25px;
-        }
+        .contact-card h2 { font-family: var(--font-display); font-size: 32px; color: var(--primary-yellow); margin-bottom: 25px; }
  
         .contact-link {
             display: flex;
@@ -413,11 +419,7 @@
             border: 1px solid transparent;
         }
  
-        .contact-link:hover {
-            border-color: var(--primary-yellow);
-            transform: translateX(5px);
-        }
- 
+        .contact-link:hover { border-color: var(--primary-yellow); transform: translateX(5px); }
         .contact-link.insta i { color: #e1306c; }
         .contact-link.tg i { color: #0088cc; }
         .contact-link.phone i { color: #4caf50; }
@@ -458,19 +460,10 @@
             margin-bottom: 12px;
         }
  
-        .cart-item-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
- 
+        .cart-item-info { display: flex; align-items: center; gap: 15px; }
         .cart-item-info i { font-size: 24px; color: var(--primary-yellow); }
  
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        .cart-item-controls { display: flex; align-items: center; gap: 15px; }
  
         .qty-btn {
             background-color: #252f3e;
@@ -506,32 +499,13 @@
             padding-bottom: 10px;
         }
   
-        .bill-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 16px;
-        }
+        .bill-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 16px; }
  
-        .total-row {
-            border-top: 2px dashed #273142;
-            padding-top: 15px;
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--accent-red);
-        }
+        .total-row { border-top: 2px dashed #273142; padding-top: 15px; font-size: 20px; font-weight: bold; color: var(--accent-red); }
  
-        .delivery-section {
-            margin-top: 20px;
-            display: none;
-        }
+        .delivery-section { margin-top: 20px; display: none; }
 
-        .customer-inputs {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .customer-inputs { margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
 
         .customer-inputs input {
             width: 100%;
@@ -544,50 +518,60 @@
             outline: none;
         }
 
-        /* Raqamni qo'lda yozib bo'lmaydigan readonly dizayni */
-        .customer-inputs input[readonly] {
-            background-color: #0b0e12;
-            color: #a1a1aa;
-            border-color: #1e293b;
-            cursor: pointer;
-        }
+        .customer-inputs input:focus { border-color: var(--primary-yellow); }
 
-        .customer-inputs input:focus {
-            border-color: var(--primary-yellow);
-        }
-
-        /* INTERAKTIV XARITA DIVI */
-        #map-container {
-            width: 100%;
-            height: 200px;
-            border-radius: 12px;
-            border: 2px solid #252f3e;
-            margin-top: 10px;
-            margin-bottom: 15px;
-            display: none;
-        }
-
-        .btn-loc {
-            background-color: #1e293b;
-            color: white;
-            border: 1px solid #334155;
-            padding: 10px;
-            border-radius: 10px;
-            width: 100%;
-            font-weight: bold;
-            cursor: pointer;
+        /* Telefon varianti uchun tugmalar maydoni */
+        .phone-method-selector {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.3s;
-            margin-bottom: 10px;
+            gap: 10px;
+            margin-bottom: 5px;
         }
-        .btn-loc:hover {
-            border-color: var(--primary-yellow);
-            color: var(--primary-yellow);
+        .method-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #252f3e;
+            background-color: #171d26;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .method-btn.active {
+            background-color: var(--primary-yellow);
+            color: var(--bg-dark);
+            font-weight: bold;
         }
  
+        /* Eski buyurtmalar bo'limi */
+        .history-section {
+            margin-top: 20px;
+            background-color: #171d26;
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px dashed #252f3e;
+        }
+        .history-title {
+            font-size: 15px;
+            color: var(--primary-yellow);
+            margin-bottom: 10px;
+            font-family: var(--font-display);
+        }
+        .history-item {
+            background-color: #0f1319;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .history-item:hover {
+            border-color: var(--primary-yellow);
+            background-color: #141a22;
+        }
+
         footer {
             background-color: #0b0e12;
             text-align: center;
@@ -596,9 +580,87 @@
             color: #4b5563;
             border-top: 1px solid #1f2937;
         }
+
+        /* TILLARNI TANLASH MODAL OYNASI */
+        .lang-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .lang-box {
+            background-color: var(--bg-card);
+            border: 2px solid var(--primary-yellow);
+            border-radius: 25px;
+            padding: 35px;
+            text-align: center;
+            width: 340px;
+            box-shadow: 0 0 30px rgba(255,204,0,0.3);
+        }
+        .lang-box h3 {
+            font-family: var(--font-display);
+            color: white;
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-radius: 15px;
+            border: 2px solid #252f3e;
+            background-color: #0f1319;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-btn:hover {
+            border-color: var(--primary-yellow);
+            transform: scale(1.03);
+        }
+        .flag {
+            font-size: 24px;
+        }
+
+        /* RESPONSIVE (TELEFON VA KOMP VERSALARI) */
+        @media (max-width: 768px) {
+            header { padding: 10px 4%; }
+            nav.desktop-nav { display: none; } /* Yuqori menyu yo'qoladi */
+            .mobile-nav { display: flex; }    /* Pastki panel chiqadi */
+            .page { padding: 20px 4% 80px 4%; }
+            .home-grid, .about-content, .cart-page { grid-template-columns: 1fr; gap: 25px; }
+            .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .home-text h2 { font-size: 32px; }
+            .contact-card { width: 100%; padding: 20px; }
+            footer { display: none; } /* Mobil versiyada footer shart emas */
+        }
     </style>
 </head>
 <body>
+
+    <div class="lang-modal" id="languageModal">
+        <div class="lang-box">
+            <h3 id="lang-title">Choose Language / Тилни танlang</h3>
+            <button class="lang-btn" onclick="selectLanguage('uz')">
+                <span class="flag">????</span> O'zbekcha
+            </button>
+            <button class="lang-btn" onclick="selectLanguage('ru')">
+                <span class="flag">????</span> Русский
+            </button>
+            <button class="lang-btn" onclick="selectLanguage('en')">
+                <span class="flag">????</span> English
+            </button>
+        </div>
+    </div>
  
     <header>
         <div class="logo-area">
@@ -610,27 +672,37 @@
                 <span>CAFE</span>
             </div>
         </div>
-        <nav>
-            <a onclick="switchPage('home')" id="nav-home" class="active"><i class="fa-solid fa-house"></i> Bosh sahifa</a>
-            <a onclick="switchPage('menu')" id="nav-menu"><i class="fa-solid fa-utensils"></i> Menyu</a>
-            <a onclick="switchPage('about')" id="nav-about"><i class="fa-solid fa-circle-info"></i> Biz haqimizda</a>
-            <a onclick="switchPage('contact')" id="nav-contact"><i class="fa-solid fa-phone"></i> Bog'lanish</a>
+        <nav class="desktop-nav">
+            <a onclick="switchPage('home')" id="nav-home" class="active"><i class="fa-solid fa-house"></i> <span class="txt-home">Bosh sahifa</span></a>
+            <a onclick="switchPage('menu')" id="nav-menu"><i class="fa-solid fa-utensils"></i> <span class="txt-menu">Menyu</span></a>
+            <a onclick="switchPage('about')" id="nav-about"><i class="fa-solid fa-circle-info"></i> <span class="txt-about">Biz haqimizda</span></a>
+            <a onclick="switchPage('contact')" id="nav-contact"><i class="fa-solid fa-phone"></i> <span class="txt-contact">Bog'lanish</span></a>
             <button class="savat-btn" onclick="switchPage('cart')">
-                <i class="fa-solid fa-basket-shopping"></i> Savat
+                <i class="fa-solid fa-basket-shopping"></i> <span class="txt-cart">Savat</span>
                 <div class="badge" id="cart-badge">0</div>
             </button>
         </nav>
     </header>
+
+    <nav class="mobile-nav">
+        <a onclick="switchPage('home')" id="m-nav-home" class="active"><i class="fa-solid fa-house"></i><span class="txt-home">Bosh sahifa</span></a>
+        <a onclick="switchPage('menu')" id="m-nav-menu"><i class="fa-solid fa-utensils"></i><span class="txt-menu">Menyu</span></a>
+        <div class="mobile-cart-holder">
+            <a onclick="switchPage('cart')" id="m-nav-cart"><i class="fa-solid fa-basket-shopping"></i><span class="txt-cart">Savat</span></a>
+            <div class="badge" id="m-cart-badge" style="top: -5px; right: 2px;">0</div>
+        </div>
+        <a onclick="switchPage('about')" id="m-nav-about"><i class="fa-solid fa-circle-info"></i><span class="txt-about">Biz haqimizda</span></a>
+        <a onclick="switchPage('contact')" id="m-nav-contact"><i class="fa-solid fa-phone"></i><span class="txt-contact">Aloqa</span></a>
+    </nav>
  
     <main> 
         <div id="page-home" class="page active">
             <div class="home-grid">
                 <div class="home-text">
-                    <h2>STAKAN CAFE: Eng Mazali Tezkor Ovqat va Premium Kofe!</h2>
-                    <p>Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat, sifatli mahsulot va unutilmas shinam muhit.</p>
+                    <h2 id="main-hero-title">STAKAN CAFE: Eng Mazali Tezkor Ovqat va Premium Kofe!</h2>
+                    <p id="main-hero-desc">Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat, sifatli mahsulot va unutilmas shinam muhit.</p>
                     <div class="home-btns">
-                        <button class="btn-main btn-yellow" onclick="switchPage('menu')">Buyurtma berish</button>
-                        <button class="btn-main btn-outline" onclick="switchPage('menu')">Menyuni ko'rish</button>
+                        <button class="btn-main btn-yellow txt-order-btn" onclick="switchPage('menu')">Buyurtma berish</button>
                     </div>
                 </div>
                 <div class="home-illustrations">
@@ -648,7 +720,7 @@
  
         <div id="page-menu" class="page">
             <div class="menu-container">
-                <h2 class="menu-header">Bizning Menyu</h2>
+                <h2 class="menu-header txt-menu-title">Bizning Menyu</h2>
                 <div class="menu-grid" id="menu-items-output"></div>
             </div>
         </div>
@@ -660,22 +732,23 @@
                         <i class="fa-solid fa-gopuram building" title="Maxdumi A'zam Ziyoratgohi"></i>
                         <i class="fa-solid fa-shop cafe" title="Stakan Kafe"></i>
                     </div>
-                    <h4>Kosonsoy Tumani</h4>
-                    <p>Maxdumi A'zam tarixiy majmuasi yonida</p>
+                    <h4 class="txt-city">Kosonsoy Tumani</h4>
+                    <p class="txt-landmark">Maxdumi A'zam tarixiy majmuasi yonida</p>
                     <div class="pin">
-                        <i class="fa-solid fa-location-dot"></i> Namangan Viloyati
+                        <i class="fa-solid fa-location-dot"></i> <span class="txt-region">Namangan Viloyati</span>
                     </div>
                 </div>
                 <div class="about-text">
-                    <h2>Biz Haqimizda</h2>
-                    <p><strong>STAKAN CAFE</strong> - Namangan viloyati, Kosonsoy shahrining eng muqaddas va tarixiy go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi majmuasi yaqinida joyhazlangan zamonaviy fast-food maskanidir.</p>
+                    <h2 class="txt-about-h2">Biz Haqimizda</h2>
+                    <p id="about-p1"><strong>STAKAN CAFE</strong> - Namangan viloyati, Kosonsoy shahrining eng muqaddas va tarixiy go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi majmuasi yaqinida joylashgan zamonaviy fast-food maskanidir.</p>
+                    <p id="about-p2">Bizning maqsadimiz - har bir mijozga yuqori sifatli, tezkor va mazali taomlarni taqdim etish orqali unga a'lo kayfiyat ulashishdir.</p>
                 </div>
             </div>
         </div> 
  
         <div id="page-contact" class="page">
             <div class="contact-card">
-                <h2>Biz bilan aloqa</h2>
+                <h2 class="txt-contact-h2">Biz bilan aloqa</h2>
                 <a href="https://instagram.com" target="_blank" class="contact-link insta">
                     <i class="fa-brands fa-instagram"></i> @stakancafe_kosonsoy
                 </a>
@@ -691,15 +764,21 @@
         <div id="page-cart" class="page">
             <div class="cart-page">
                 <div class="cart-list-container">
-                    <h2 style="font-family: var(--font-display); color: var(--primary-yellow); margin-bottom: 15px;">Savatdagi mahsulotlar</h2>
+                    <h2 style="font-family: var(--font-display); color: var(--primary-yellow); margin-bottom: 15px;" class="txt-cart-h2">Savatdagi mahsulotlar</h2>
                     <div class="cart-items-scroll" id="cart-list-output"></div>
+                    
+                    <div class="history-section">
+                        <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> <span class="txt-history-title">Oxirgi buyurtmalarim (Tanlash uchun bosing):</span></div>
+                        <div id="history-output"></div>
+                    </div>
                 </div>
+                
                 <div class="checkout-box">
                     <div class="bill-details">
-                        <h3><i class="fa-solid fa-receipt"></i> Buyurtma Cheki</h3>
+                        <h3><i class="fa-solid fa-receipt"></i> <span class="txt-receipt">Buyurtma Cheki</span></h3>
                         <div id="bill-items"></div>
                         <div class="bill-row total-row">
-                            <span>Umumiy summa:</span>
+                            <span class="txt-total">Umumiy summa:</span>
                             <span id="total-price-sum">0 UZS</span>
                         </div>
                     </div>
@@ -708,32 +787,32 @@
                         <div class="customer-inputs">
                             <input type="text" id="cust-name" placeholder="Ismingizni kiriting..." required>
                             
-                            <input type="tel" id="cust-phone" placeholder="?? Telefoningizni avto-tanlang" autocomplete="tel" readonly onclick="alert('Iltimos, telefoningiz taklif etayotgan o\'z raqamingizni bosing!')" required>
+                            <div class="phone-method-selector">
+                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">? Auto</button>
+                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">?? Qolda</button>
+                            </div>
+                            
+                            <input type="tel" id="cust-phone" placeholder="Telefon raqamingiz..." required>
                         </div>
 
-                        <button type="button" class="btn-loc" onclick="initXarita()"><i class="fa-solid fa-map-location-dot"></i> Yetkazib berish joyini aniqlash</button>
-                        <div id="map-container"></div>
-                        <div id="selected-coords-text" style="font-size:12px; color:#4caf50; margin-bottom:10px; display:none; text-align:center;"><i class="fa-solid fa-circle-check"></i> Geolokatsiya tanlandi!</div>
-
+                        <div class="bill-row" style="color: #4caf50; font-weight: bold; margin-bottom: 15px;">
+                            <span><i class="fa-solid fa-truck"></i> <span class="txt-our-phone">Aloqa raqamimiz:</span></span>
+                            <span>+998 (33) 626-22-23</span>
+                        </div>
                         <button class="btn-main btn-yellow" style="width: 100%;" onclick="confirmOrder()">
-                            <i class="fa-solid fa-circle-check"></i> Buyurtmani Tasdiqlash
+                            <i class="fa-solid fa-circle-check"></i> <span class="txt-confirm">Buyurtmani Tasdiqlash</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
- 
     </main>
- 
-    <footer>
-        � 2026 STAKAN CAFE. Anaskhon Karakhujayev. Barcha huquqlar himoyalangan.
-    </footer>
  
     <script>
         const products = [
             { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, icon: "fa-burger" }, 
             { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, icon: "fa-scroll" },
-            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun, aytish", price: 18000, icon: "fa-pizza-slice" },
+            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, icon: "fa-pizza-slice" },
             { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, icon: "fa-mug-hot" },
             { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, icon: "fa-mug-saucer" },
             { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, icon: "fa-ice-cream" },
@@ -741,12 +820,102 @@
             { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, icon: "fa-bread-slice" }
         ];
  
-        // SAVATNI LOCALSTORAGE'DAN O'QISH (Eslab qolish funksiyasi)
-        let cart = JSON.parse(localStorage.getItem('stakan_cart')) || {};
-        let myMap = null;
-        let myPlacemark = null;
-        let selectedLatitude = null;
-        let selectedLongitude = null;
+        let cart = {};
+        let currentLang = 'uz';
+        let phoneMethod = 'auto'; // 'auto' yoki 'manual'
+
+        // Ko'p tilli lug'at matnlari
+        const languages = {
+            uz: {
+                home: "Bosh sahifa", menu: "Menyu", about: "Biz haqimizda", contact: "Bog'lanish", cart: "Savat",
+                heroTitle: "STAKAN CAFE: Eng Mazali Fast-Food va Premium Kofe!", heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat va unutilmas shinam muhit.",
+                orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", city: "Kosonsoy Tumani", landmark: "Maxdumi A'zam majmuasi yaqinida",
+                region: "Namangan Viloyati", aboutH2: "Biz Haqimizda", contactH2: "Biz bilan aloqa", cartH2: "Savatdagi mahsulotlar",
+                receipt: "Buyurtma Cheki", total: "Umumiy summa:", ourPhone: "Aloqa raqami:", confirm: "Tasdiqlash",
+                historyTitle: "Oxirgi buyurtmalarim (Tanlash uchun bosing):", emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!",
+                noItems: "Mahsulot tanlanmagan", placeholderName: "Ismingizni kiriting...", alertFields: "Iltimos, ism va telefonni kiriting!",
+                alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
+            },
+            ru: {
+                home: "Главная", menu: "Меню", about: "О нас", contact: "Контакты", cart: "Корзина",
+                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!", heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
+                orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", city: "Касансайский район", landmark: "Рядом с комплексом Махдуми Аъзам",
+                region: "Наманганская область", aboutH2: "О Нас", contactH2: "Связаться с нами", cartH2: "Товары в корзине",
+                receipt: "Чек заказа", total: "Общая сумма:", ourPhone: "Наш телефон:", confirm: "Подтвердить заказ",
+                historyTitle: "Мои последние заказы (Нажмите для выбора):", emptyCart: "Корзина пуста. Добавьте блюда из меню!",
+                noItems: "Товары не выбраны", placeholderName: "Введите ваше имя...", alertFields: "Пожалуйста, введите имя и телефон!",
+                alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.", noHistory: "Нет предыдущих заказов."
+            },
+            en: {
+                home: "Home", menu: "Menu", about: "About Us", contact: "Contact", cart: "Cart",
+                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!", heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
+                orderBtn: "Order Now", menuTitle: "Our Menu", city: "Kasansay District", landmark: "Near Maxdumi A'zam complex",
+                region: "Namangan Region", aboutH2: "About Us", contactH2: "Contact Us", cartH2: "Items in Cart",
+                receipt: "Receipt Details", total: "Total Amount:", ourPhone: "Our Phone:", confirm: "Confirm Order",
+                historyTitle: "My Recent Orders (Click to choose):", emptyCart: "Cart is empty. Add items from Menu!",
+                noItems: "No items selected", placeholderName: "Enter your name...", alertFields: "Please enter name and phone number!",
+                alertSuccess: "Thank you! Your order has been sent to Telegram.", noHistory: "No history found."
+            }
+        };
+
+        // Tilni tanlash funksiyasi
+        function selectLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('languageModal').style.display = 'none';
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            const l = languages[currentLang];
+            document.querySelectorAll('.txt-home').forEach(el => el.innerText = l.home);
+            document.querySelectorAll('.txt-menu').forEach(el => el.innerText = l.menu);
+            document.querySelectorAll('.txt-about').forEach(el => el.innerText = l.about);
+            document.querySelectorAll('.txt-contact').forEach(el => el.innerText = l.contact);
+            document.querySelectorAll('.txt-cart').forEach(el => el.innerText = l.cart);
+            
+            document.getElementById('main-hero-title').innerText = l.heroTitle;
+            document.getElementById('main-hero-desc').innerText = l.heroDesc;
+            document.querySelector('.txt-order-btn').innerText = l.orderBtn;
+            document.querySelector('.txt-menu-title').innerText = l.menuTitle;
+            document.querySelector('.txt-city').innerText = l.city;
+            document.querySelector('.txt-landmark').innerText = l.landmark;
+            document.querySelector('.txt-region').innerText = l.region;
+            document.querySelector('.txt-about-h2').innerText = l.aboutH2;
+            document.querySelector('.txt-contact-h2').innerText = l.contactH2;
+            document.querySelector('.txt-cart-h2').innerText = l.cartH2;
+            document.querySelector('.txt-receipt').innerText = l.receipt;
+            document.querySelector('.txt-total').innerText = l.total;
+            document.querySelector('.txt-our-phone').innerText = l.ourPhone;
+            document.querySelector('.txt-confirm').innerText = l.confirm;
+            document.querySelector('.txt-history-title').innerText = l.historyTitle;
+            
+            document.getElementById('cust-name').placeholder = l.placeholderName;
+            
+            initMenu();
+            updateCartPage();
+        }
+
+        // Telefon kiritish usulini boshqarish (Auto / Qo'lda)
+        function setPhoneMethod(method) {
+            phoneMethod = method;
+            document.getElementById('btn-method-auto').classList.remove('active');
+            document.getElementById('btn-method-manual').classList.remove('active');
+            
+            const phoneInput = document.getElementById('cust-phone');
+            
+            if (method === 'auto') {
+                document.getElementById('btn-method-auto').classList.add('active');
+                phoneInput.value = "+998 (33) 626-22-23";
+                phoneInput.readOnly = true;
+                phoneInput.style.opacity = "0.7";
+            } else {
+                document.getElementById('btn-method-manual').classList.add('active');
+                phoneInput.value = "+998";
+                phoneInput.readOnly = false;
+                phoneInput.style.opacity = "1";
+                phoneInput.focus();
+            }
+        }
  
         function initMenu() {
             const container = document.getElementById('menu-items-output');
@@ -760,7 +929,7 @@
                     <p>${p.desc}</p>
                     <div class="price">${p.price.toLocaleString()} UZS</div>
                     <button class="btn-main btn-yellow" style="font-size: 14px; padding: 8px 20px;" onclick="addToCart(${p.id})">
-                        <i class="fa-solid fa-cart-plus"></i> Savatga qo'shish
+                        <i class="fa-solid fa-cart-plus"></i> ${currentLang === 'uz' ? 'Savatga qo\'shish' : currentLang === 'ru' ? 'В корзину' : 'Add to Cart'}
                     </button>
                 </div>
             `).join('');
@@ -772,17 +941,21 @@
             document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
  
             document.getElementById(`page-${pageId}`).classList.add('active');
-            const navLink = document.getElementById(`nav-${pageId}`);
-            if (navLink) navLink.classList.add('active');
             
+            // Desktop va mobil menularda klasslarni yangilash
+            const navLinkDesktop = document.getElementById(`nav-${pageId}`);
+            if (navLinkDesktop) navLinkDesktop.classList.add('active');
+            
+            const navLinkMobile = document.getElementById(`m-nav-${pageId}`);
+            if (navLinkMobile) navLinkMobile.classList.add('active');
+
             if(pageId === 'cart') {
                 updateCartPage();
             }
         }
  
         function addToCart(id) {
-            cart[id] = (cart[id] || 0) + 1;
-            saveCart();
+            if (cart[id]) { cart[id]++; } else { cart[id] = 1; }
             updateDOM();
         }
  
@@ -791,13 +964,8 @@
                 cart[id] += delta;
                 if (cart[id] <= 0) delete cart[id];
             }
-            saveCart();
             updateDOM();
             updateCartPage();
-        }
-
-        function saveCart() {
-            localStorage.setItem('stakan_cart', JSON.stringify(cart));
         }
  
         function updateDOM() {
@@ -815,12 +983,14 @@
                 }
             });
             document.getElementById('cart-badge').innerText = totalItems;
+            document.getElementById('m-cart-badge').innerText = totalItems;
         }
  
         function updateCartPage() {
             const listOutput = document.getElementById('cart-list-output');
             const billOutput = document.getElementById('bill-items');
             const deliveryArea = document.getElementById('delivery-area');
+            const l = languages[currentLang];
             
             let totalSum = 0;
             let listHtml = "";
@@ -828,10 +998,11 @@
             const activeIds = Object.keys(cart);
  
             if (activeIds.length === 0) {
-                listOutput.innerHTML = `<div style="text-align:center; padding:50px; color:#6b7280;">Savat bo'sh.<br>Menyu bo'limidan taom qo'shing!</div>`;
-                billOutput.innerHTML = `<div style="color:#6b7280; font-size:14px;">Mahsulot tanlanmagan</div>`;
+                listOutput.innerHTML = `<div style="text-align:center; padding:30px; color:#6b7280;">${l.emptyCart}</div>`;
+                billOutput.innerHTML = `<div style="color:#6b7280; font-size:14px;">${l.noItems}</div>`;
                 document.getElementById('total-price-sum').innerText = "0 UZS";
                 deliveryArea.style.display = "none";
+                showOrderHistory();
                 return;
             }
  
@@ -869,64 +1040,43 @@
             billOutput.innerHTML = billHtml;
             document.getElementById('total-price-sum').innerText = totalSum.toLocaleString() + " UZS";
             deliveryArea.style.display = "block";
+            
+            showOrderHistory();
         }
 
-        // YANDEX XARITANI ISHGA TUSHIRISH (Yandex Taxi kabi suriladigan marker)
-        function initXarita() {
-            document.getElementById('map-container').style.display = "block";
-            if (myMap) {
-                myMap.container.fitToViewport();
-                centrlashtirish();
+        // Tarixdagi eski buyurtmalarni ekranga chiqarish
+        function showOrderHistory() {
+            const historyOutput = document.getElementById('history-output');
+            let historyData = localStorage.getItem('stakan_history');
+            const l = languages[currentLang];
+
+            if (!historyData) {
+                historyOutput.innerHTML = `<div style="color:#6b7280; font-size:13px;">${l.noHistory}</div>`;
                 return;
             }
-            let defaultCoords = [41.2581, 71.5506]; // Kosonsoy koordinatasi
 
-            ymaps.ready(function () {
-                myMap = new ymaps.Map('map-container', {
-                    center: defaultCoords,
-                    zoom: 15,
-                    controls: ['zoomControl', 'geolocationControl']
-                });
-
-                myPlacemark = new ymaps.Placemark(defaultCoords, {
-                    balloonContent: 'Yetkazib berish joyingiz'
-                }, {
-                    preset: 'islands#redFoodIcon',
-                    draggable: true // Markerni qimirlatishga ruxsat berish
-                });
-
-                myMap.geoObjects.add(myPlacemark);
-
-                // Marker surilishi tugaganda koordinatani olish
-                myPlacemark.events.add('dragend', function () {
-                    let coords = myPlacemark.geometry.getCoordinates();
-                    saqlashKoordinata(coords[0], coords[1]);
-                });
-
-                centrlashtirish();
+            let orders = JSON.parse(historyData);
+            let html = "";
+            orders.forEach((order, index) => {
+                html += `
+                    <div class="history-item" onclick="loadOldOrder(${index})">
+                        <strong>№${index + 1} | ${order.date}</strong><br>
+                        <span style="color:#9ca3af;">${order.summary}</span>
+                    </div>
+                `;
             });
+            historyOutput.innerHTML = html;
         }
 
-        function centrlashtirish() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    let lat = position.coords.latitude;
-                    let lon = position.coords.longitude;
-                    if(myMap && myPlacemark) {
-                        myMap.setCenter([lat, lon], 16);
-                        myPlacemark.geometry.setCoordinates([lat, lon]);
-                        saqlashKoordinata(lat, lon);
-                    }
-                }, function(error) {
-                    saqlashKoordinata(41.2581, 71.5506);
-                });
+        // Tanlangan eski buyurtmani savatga yuklash (To'g'ridan-to'g'ri qayta buyurtma qilish uchun)
+        function loadOldOrder(index) {
+            let historyData = localStorage.getItem('stakan_history');
+            if(historyData) {
+                let orders = JSON.parse(historyData);
+                cart = orders[index].cart;
+                updateDOM();
+                updateCartPage();
             }
-        }
-
-        function saqlashKoordinata(lat, lon) {
-            selectedLatitude = lat;
-            selectedLongitude = lon;
-            document.getElementById('selected-coords-text').style.display = "block";
         }
  
         function confirmOrder() {
@@ -934,35 +1084,34 @@
             const chatId = "7583392349";
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
+            const l = languages[currentLang];
 
-            if (!name) { alert("Iltimos, ismingizni kiriting!"); return; }
-            if (!phone) { alert("Iltimos, telefon raqamingiz ustiga bosib, uni avtomatik kiriting!"); return; }
-            if (!selectedLatitude || !selectedLongitude) { alert("Iltimos, 'Yetkazib berish joyini aniqlash' tugmasini bosib joyingizni belgilang!"); return; }
+            if (!name || !phone) {
+                alert(l.alertFields);
+                return;
+            }
  
             const activeIds = Object.keys(cart);
-            if (activeIds.length === 0) { alert("Savat bo'sh!"); return; }
+            if (activeIds.length === 0) { return; }
  
-            const googleMapsLink = `https://maps.google.com/?q=${selectedLatitude},${selectedLongitude}`;
-            const yandexMapsLink = `https://yandex.com/maps/?ll=${selectedLongitude},${selectedLatitude}&z=16&pt=${selectedLongitude},${selectedLatitude},pm2rdm`;
-
             let message = `?? *YANGI BUYURTMA (STAKAN CAFE)*\n`;
             message += `---------------\n`;
             message += `?? *Mijoz:* ${name}\n`;
             message += `?? *Tel:* ${phone}\n`;
+            message += `?? *Til:* ${currentLang.toUpperCase()}\n`;
             message += `---------------\n`;
             let totalSum = 0;
+            let summaryText = "";
+
             activeIds.forEach(id => {
                 const item = products.find(p => p.id == id);
                 const itemTotal = item.price * cart[id];
                 totalSum += itemTotal;
                 message += `?? *${item.name}*\n` + `   ${cart[id]} ta x ${item.price.toLocaleString()} = ${itemTotal.toLocaleString()} UZS\n\n`;
+                summaryText += `${item.name} (${cart[id]}x), `;
             });
             message += `---------------\n`;
-            message += `?? *Umumiy summa:* ${totalSum.toLocaleString()} UZS\n`;
-            message += `---------------\n`;
-            message += `?? *ETKAZIB BERISH MANZILI (LOKATSIYA):*\n`;
-            message += `?? [Google Maps orqali ko'rish](${googleMapsLink})\n`;
-            message += `??? [Yandex Maps orqali ko'rish](${yandexMapsLink})`;
+            message += `?? *Umumiy summa:* ${totalSum.toLocaleString()} UZS`;
  
             const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
             fetch(telegramUrl, {
@@ -972,23 +1121,37 @@
             })
             .then(response => {
                 if (response.ok) {
-                    alert("Rahmat! Buyurtmangiz va aniq lokatsiyangiz muvaffaqiyatli qabul qilindi.");
+                    alert(l.alertSuccess);
+                    
+                    // LocalStorage'ga buyurtmani saqlash tizimi
+                    let historyData = localStorage.getItem('stakan_history');
+                    let orders = historyData ? JSON.parse(historyData) : [];
+                    
+                    let now = new Date();
+                    let dateStr = `${now.getDate()}.${now.getMonth()+1} ${now.getHours()}:${now.getMinutes()}`;
+                    
+                    orders.unshift({
+                        date: dateStr,
+                        cart: cart,
+                        summary: summaryText.substring(0, summaryText.length - 2) + " = " + totalSum.toLocaleString() + " UZS"
+                    });
+                    
+                    // Maksimal 5 ta oxirgi buyurtmani saqlaymiz
+                    if(orders.length > 5) orders.pop();
+                    localStorage.setItem('stakan_history', JSON.stringify(orders));
+
                     cart = {};
-                    saveCart();
                     updateDOM();
                     switchPage('home');
-                    document.getElementById('cust-name').value = "";
-                    document.getElementById('cust-phone').value = "";
-                    document.getElementById('map-container').style.display = "none";
-                    document.getElementById('selected-coords-text').style.display = "none";
-                } else {
-                    alert("Xatolik yuz berdi. Bot sozlamalarini tekshiring.");
                 }
-            })
-            .catch(error => { alert("Internet aloqasini tekshiring!"); });
+            });
         }
  
-        window.onload = () => { initMenu(); };
+        window.onload = () => {
+            // Birinchi kirishda til tanlash oynasini ochib turadi
+            document.getElementById('languageModal').style.display = 'flex';
+            setPhoneMethod('auto'); // Dastlab avtomatik rejimda bo'ladi
+        };
     </script>
 </body>
 </html>
