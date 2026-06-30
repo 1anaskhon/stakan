@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
    
     <style>
         :root {
@@ -77,6 +79,7 @@
             font-weight: bold;
         }
  
+        /* Kompyuter uchun navigatsiya menyusi */
         nav.desktop-nav {
             display: flex;
             gap: 25px;
@@ -133,6 +136,7 @@
             right: -5px;
         }
  
+        /* Mobil uchun teng proporsiyali pastki panel */
         .mobile-nav {
             display: none;
             position: fixed;
@@ -171,6 +175,7 @@
             color: var(--primary-yellow);
         }
 
+        /* Savat tugmasi roppa-rosa o'rtada ajralib turadi */
         .mobile-nav .mobile-cart-holder {
             grid-column: 3;
             position: relative;
@@ -269,6 +274,7 @@
         .btn-yellow { background-color: var(--primary-yellow); color: var(--bg-dark); font-weight: 700; }
         .btn-yellow:hover { background-color: #e6b800; box-shadow: 0 0 20px rgba(255, 204, 0, 0.4); }
  
+        /* 3D Ruletka / Slayder Oynasi */
         .roulette-container {
             width: 100%;
             height: 350px;
@@ -433,23 +439,46 @@
         }
  
         .about-content {
-            display: block; /* To'liq matnli dizayn uchun blok holatiga keltirildi */
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
             width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
+            align-items: center;
         }
  
-        .about-text h2 { font-family: var(--font-display); font-size: 36px; color: var(--primary-yellow); margin-bottom: 20px; text-align: center; }
-        .about-text p { font-size: 17px; line-height: 1.8; color: #d1d5db; margin-bottom: 15px; text-align: justify; }
-        .about-developer {
-            margin-top: 30px;
-            border-top: 1px dashed #252f3e;
-            padding-top: 15px;
-            text-align: right;
-            font-size: 14px;
-            color: #9ca3af;
-            font-style: italic;
+        .map-visual {
+            background: linear-gradient(135deg, #1b2330, #0b0e12);
+            border: 3px solid var(--primary-yellow);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
         }
+ 
+        .landmark-illustration {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 75px;
+            margin-bottom: 20px;
+        }
+ 
+        .landmark-illustration .building { color: #a1887f; animation: float 3s ease-in-out infinite; }
+        .landmark-illustration .cafe { color: var(--primary-yellow); animation: float 3s ease-in-out infinite 1.5s; }
+ 
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+ 
+        .map-visual h4 { font-family: var(--font-display); font-size: 28px; color: var(--text-light); margin-bottom: 10px; }
+        .map-visual p { color: #6b7280; font-size: 14px; }
+        .map-visual .pin { color: var(--accent-red); font-size: 24px; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+ 
+        .about-text h2 { font-family: var(--font-display); font-size: 36px; color: var(--primary-yellow); margin-bottom: 15px; }
+        .about-text p { font-size: 16px; line-height: 1.6; color: #d1d5db; margin-bottom: 15px; }
  
         .contact-card {
             background-color: var(--bg-card);
@@ -546,8 +575,7 @@
             padding: 25px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            gap: 20px;
+            justify-content: space-between;
             height: 100%;
             overflow-y: auto;
         }
@@ -564,45 +592,45 @@
  
         .total-row { border-top: 2px dashed #273142; padding-top: 15px; font-size: 20px; font-weight: bold; color: var(--accent-red); }
  
-        .delivery-section { margin-top: 10px; display: none; }
+        .delivery-section { margin-top: 20px; display: none; }
 
-        .customer-inputs { margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .customer-inputs label { font-size: 14px; color: var(--primary-yellow); font-weight: bold; margin-bottom: -4px; }
+        .customer-inputs { margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
 
         .customer-inputs input {
             width: 100%;
             background-color: #171d26;
             border: 1px solid #252f3e;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border-radius: 10px;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
         }
 
         .customer-inputs input:focus { border-color: var(--primary-yellow); }
 
-        .btn-location {
-            width: 100%;
-            background-color: #252f3e;
-            border: 1px solid #374151;
-            padding: 12px;
-            border-radius: 10px;
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
+        .phone-method-selector {
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 10px;
-            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .method-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #252f3e;
+            background-color: #171d26;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
             transition: 0.3s;
         }
-        .btn-location.success {
-            background-color: #2e7d32;
-            border-color: #4caf50;
+        .method-btn.active {
+            background-color: var(--primary-yellow);
+            color: var(--bg-dark);
+            font-weight: bold;
         }
-
+ 
         .history-section {
             margin-top: 20px;
             background-color: #171d26;
@@ -626,7 +654,10 @@
             transition: 0.2s;
             border: 1px solid transparent;
         }
-        .history-item:hover { border-color: var(--primary-yellow); background-color: #141a22; }
+        .history-item:hover {
+            border-color: var(--primary-yellow);
+            background-color: #141a22;
+        }
 
         footer {
             background-color: #0b0e12;
@@ -655,7 +686,12 @@
             width: 340px;
             box-shadow: 0 0 30px rgba(255,204,0,0.3);
         }
-        .lang-box h3 { font-family: var(--font-display); color: white; font-size: 22px; margin-bottom: 25px; }
+        .lang-box h3 {
+            font-family: var(--font-display);
+            color: white;
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
         .lang-btn {
             display: flex;
             align-items: center;
@@ -673,59 +709,45 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .lang-btn:hover { border-color: var(--primary-yellow); transform: scale(1.03); }
+        .lang-btn:hover {
+            border-color: var(--primary-yellow);
+            transform: scale(1.03);
+        }
 
-        /* Maxsus Xatolik Oynasi */
-        .custom-alert-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-        }
-        .custom-alert-box {
-            background-color: var(--bg-card);
-            border: 2px solid var(--primary-yellow);
-            border-radius: 16px;
-            width: 320px;
-            padding: 25px 20px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            animation: popIn 0.3s ease-out;
-        }
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .custom-alert-close {
-            position: absolute;
-            top: 10px; right: 10px;
-            width: 24px; height: 24px;
-            background-color: var(--accent-red);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-        }
-        .custom-alert-icon {
-            font-size: 45px;
+        /* ----------------------------------------------------
+           XARITA UCHUN YANGI QO'SHILGAN STIL (Dizayn buzilmaydi)
+        ------------------------------------------------------- */
+        .map-delivery-title {
+            font-size: 14px;
             color: var(--primary-yellow);
-            margin-bottom: 15px;
-            display: inline-block;
+            margin: 10px 0 5px 0;
+            font-weight: bold;
         }
-        .custom-alert-message {
-            font-size: 15px;
-            color: var(--text-light);
-            line-height: 1.5;
-            font-family: var(--font-sans);
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            border: 2px solid #252f3e;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        #delivery-map {
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+        /* Yandex uslubidagi qimirlamaydigan markaziy pin marker */
+        .center-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -100%);
+            z-index: 10;
+            font-size: 28px;
+            color: var(--accent-red);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none; /* xaritani to'sib qo'ymaydi */
         }
 
         /* RESPONSIVE */
@@ -733,12 +755,8 @@
             header { padding: 10px 4%; }
             nav.desktop-nav { display: none; }
             .mobile-nav { display: grid; }
-            .page { padding: 20px 4% 100px 4%; height: auto; min-height: 100%; overflow-y: visible; }
-            main { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-            .home-grid, .about-content, .cart-page { grid-template-columns: 1fr; gap: 25px; height: auto; }
-            .checkout-box { height: auto; overflow-y: visible; padding: 20px; margin-bottom: 20px; }
-            .cart-list-container { height: auto; }
-            .cart-items-scroll { max-height: 300px; }
+            .page { padding: 20px 4% 90px 4%; }
+            .home-grid, .about-content, .cart-page { grid-template-columns: 1fr; gap: 25px; }
             .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .home-text h2 { font-size: 32px; text-align: center; }
             .home-text p { text-align: center; font-size: 16px; }
@@ -751,28 +769,18 @@
 </head>
 <body>
 
-    <div class="custom-alert-overlay" id="customAlert">
-        <div class="custom-alert-box">
-            <button class="custom-alert-close" onclick="closeCustomAlert()">✕</button>
-            <div class="custom-alert-icon">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
-            <div class="custom-alert-message" id="customAlertMsg">Xatolik yuz berdi.</div>
-        </div>
-    </div>
-
     <div class="lang-modal" id="languageModal">
         <div class="lang-box">
             <h3 id="lang-title">Choose Language / Тилni tanlang</h3>
-            <button class="lang-btn" onclick="selectLanguage('uz')">🇺🇿 O'zbekcha</button>
-            <button class="lang-btn" onclick="selectLanguage('ru')">🇷🇺 Русский</button>
-            <button class="lang-btn" onclick="selectLanguage('en')">🇬🇧 English</button>
+            <button class="lang-btn" onclick="selectLanguage('uz')">???? O'zbekcha</button>
+            <button class="lang-btn" onclick="selectLanguage('ru')">???? Русский</button>
+            <button class="lang-btn" onclick="selectLanguage('en')">???? English</button>
         </div>
     </div>
  
     <header>
         <div class="logo-area">
-            <div class="logo-icon">☕</div>
+            <div class="logo-icon">?</div>
             <div class="logo-text">
                 <h1>STAKAN</h1>
                 <span>CAFE</span>
@@ -783,7 +791,10 @@
             <a onclick="switchPage('menu')" id="nav-menu"><i class="fa-solid fa-utensils"></i> <span class="txt-menu">Menyu</span></a>
             <a onclick="switchPage('about')" id="nav-about"><i class="fa-solid fa-circle-info"></i> <span class="txt-about">Biz haqimizda</span></a>
             <a onclick="switchPage('contact')" id="nav-contact"><i class="fa-solid fa-phone"></i> <span class="txt-contact">Bog'lanish</span></a>
-            <button class="savat-btn" onclick="switchPage('cart')"> 🛒 <span class="txt-cart">Savat</span> <div class="badge" id="cart-badge">0</div> </button>
+            <button class="savat-btn" onclick="switchPage('cart')">
+                ?? <span class="txt-cart">Savat</span>
+                <div class="badge" id="cart-badge">0</div>
+            </button>
         </nav>
     </header>
 
@@ -791,7 +802,7 @@
         <a onclick="switchPage('home')" id="m-nav-home" class="active"><i class="fa-solid fa-house"></i><span class="txt-home">Bosh sahifa</span></a>
         <a onclick="switchPage('menu')" id="m-nav-menu"><i class="fa-solid fa-utensils"></i><span class="txt-menu">Menyu</span></a>
         <div class="mobile-cart-holder">
-            <a onclick="switchPage('cart')" id="m-nav-cart">🛒</a>
+            <a onclick="switchPage('cart')" id="m-nav-cart">??</a>
             <div class="badge" id="m-cart-badge" style="top: -22px; right: 18px; z-index: 1000;">0</div>
         </div>
         <a onclick="switchPage('about')" id="m-nav-about"><i class="fa-solid fa-circle-info"></i><span class="txt-about">Biz haqimizda</span></a>
@@ -823,11 +834,21 @@
  
         <div id="page-about" class="page">
             <div class="about-content">
+                <div class="map-visual">
+                    <div class="landmark-illustration">
+                        <i class="fa-solid fa-gopuram building" title="Maxdumi A'zam Ziyoratgohi"></i>
+                        <span>??</span>
+                    </div>
+                    <h4 class="txt-city">Kosonsoy Tumani</h4>
+                    <p class="txt-landmark">Maxdumi A'zam tarixiy majmuasi yonida</p>
+                    <div class="pin">
+                        <i class="fa-solid fa-location-dot"></i> <span class="txt-region">Namangan Viloyati</span>
+                    </div>
+                </div>
                 <div class="about-text">
                     <h2 class="txt-about-h2">Biz Haqimizda</h2>
-                    <p id="about-p1"><strong>STAKAN CAFE</strong> - Namangan viloyati, Kosonsoy shahrining eng muqaddas va tarixiy go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi majmuasi yaqinida joylashgan zamonaviy fast-food maskanidir. Biz mijozlarimizga har doim eng sara mahsulotlardan tayyorlangan issiq va lazzatli taomlarni ulashishdan faxrlanamiz.</p>
-                    <p id="about-p2">Bizning maqsadimiz - har bir mijozga yuqori sifatli, tezkor va mazali taomlarni taqdim etish orqali unga a'lo kayfiyat ulashishdir. Kafeimizda siz oilangiz va yaqinlaringiz bilan birgalikda eng shinam muhit va betakror taomlar hamda premium darajadagi kofedan bahramand bo'lishingiz mumkin. Biz har bir buyurtmaga alohida mehr bilan yondashamiz va qulayliklarni ta'minlashga doimo intilamiz.</p>
-                    <div class="about-developer">Sayt ishlab chiqaruvchi: Karakhujayev Anaskhon Mirzokhonovich</div>
+                    <p id="about-p1"><strong>STAKAN CAFE</strong> - Namangan viloyati, Kosonsoy shahrining eng muqaddas va tarixiy go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi majmuasi yaqinida joyhaz zamonaviy fast-food maskanidir.</p>
+                    <p id="about-p2">Bizning maqsadimiz - har bir mijozga yuqori sifatli, tezkor va mazali taomlarni taqdim etish orqali unga a'lo kayfiyat ulashishdir.</p>
                 </div>
             </div>
         </div> 
@@ -835,9 +856,15 @@
         <div id="page-contact" class="page">
             <div class="contact-card">
                 <h2 class="txt-contact-h2">Biz bilan aloqa</h2>
-                <a href="https://instagram.com" target="_blank" class="contact-link insta"> <i class="fa-brands fa-instagram"></i> @stakancafe_kosonsoy </a>
-                <a href="https://t.me" target="_blank" class="contact-link tg"> <i class="fa-brands fa-telegram"></i> Telegram Kanalimiz </a>
-                <a href="tel:+998336262223" class="contact-link phone"> <i class="fa-solid fa-phone"></i> +998 (33) 626-22-23 </a>
+                <a href="https://instagram.com" target="_blank" class="contact-link insta">
+                    <i class="fa-brands fa-instagram"></i> @stakancafe_kosonsoy
+                </a>
+                <a href="https://t.me" target="_blank" class="contact-link tg">
+                    <i class="fa-brands fa-telegram"></i> Telegram Kanalimiz
+                </a>
+                <a href="tel:+998336262223" class="contact-link phone">
+                    <i class="fa-solid fa-phone"></i> +998 (33) 626-22-23
+                </a>
             </div>
         </div>
  
@@ -846,11 +873,13 @@
                 <div class="cart-list-container">
                     <h2 style="font-family: var(--font-display); color: var(--primary-yellow); margin-bottom: 15px;" class="txt-cart-h2">Savatdagi mahsulotlar</h2>
                     <div class="cart-items-scroll" id="cart-list-output"></div>
+                    
                     <div class="history-section">
                         <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> <span class="txt-history-title">Oxirgi buyurtmalarim:</span></div>
                         <div id="history-output"></div>
                     </div>
                 </div>
+                
                 <div class="checkout-box">
                     <div class="bill-details">
                         <h3><i class="fa-solid fa-receipt"></i> <span class="txt-receipt">Buyurtma Cheki</span></h3>
@@ -860,17 +889,23 @@
                             <span id="total-price-sum">0 UZS</span>
                         </div>
                     </div>
+                    
                     <div class="delivery-section" id="delivery-area">
                         <div class="customer-inputs">
                             <input type="text" id="cust-name" placeholder="Ismingizni kiriting..." required>
-                            
-                            <label id="lbl-phone-title">Telefon raqamingizni kiriting:</label>
-                            <input type="tel" id="cust-phone" placeholder="+998 (__) ___ ____" required>
-                            
-                            <button type="button" class="btn-location" id="btn-get-location" onclick="getLocation()">
-                                <i class="fa-solid fa-map-location-dot"></i> <span id="txt-loc-btn">Lokatsiyani belgilash</span>
-                            </button>
+                            <div class="phone-method-selector">
+                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">? Avto</button>
+                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">?? Qo'lda</button>
+                            </div>
+                            <input type="tel" id="cust-phone" name="telephone" placeholder="Telefon raqamingiz..." autocomplete="tel" inputmode="tel" required>
                         </div>
+
+                        <div class="map-delivery-title"><i class="fa-solid fa-map-location-dot"></i> Yetkazish manzili (Xaritani suring):</div>
+                        <div class="map-wrapper">
+                            <div id="delivery-map"></div>
+                            <div class="center-pin"><i class="fa-solid fa-location-dot"></i></div>
+                        </div>
+
                         <div class="bill-row" style="color: #4caf50; font-weight: bold; margin-bottom: 15px;">
                             <span><i class="fa-solid fa-truck"></i> <span class="txt-our-phone">Aloqa raqamimiz:</span></span>
                             <span>+998 (33) 626-22-23</span>
@@ -884,73 +919,64 @@
         </div>
     </main>
 
+    <footer>
+        <p>&copy; 2026 Stakan Cafe Kosonsoy. Barcha huquqlar himoyalangan.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
+        // Mahsulotlar ro'yxati
         const products = [
-            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "🍔" },
-            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "🌯" },
-            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "🍕" },
-            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "☕" },
-            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "🥛" },
-            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "🥤" },
-            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "🍔" },
-            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "🥪" }
+            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "??" },
+            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "??" },
+            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "??" },
+            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "?" },
+            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "?" },
+            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "??" },
+            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "??" },
+            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "??" }
         ];
 
         let cart = {};
         let currentLang = 'uz';
+        let phoneMethod = 'auto';
         let rouletteIndex = 0;
-        let userLocation = null;
+        let map, centerMarkerCoords;
+
+        // Bot sozlamalari (BOT TOKEN va CHAT ID'ni kiriting!)
+        const botToken = "BOT_TOKEN_SHU_YERGA_YOZILADI"; 
+        const chatId = "CHAT_ID_SHU_YERGA_YOZILADI"; 
 
         const languages = {
             uz: {
                 home: "Bosh sahifa", menu: "Menyu", about: "Biz haqimizda", contact: "Bog'lanish", cart: "Savat",
-                heroTitle: "STAKAN CAFE: Eng Mazali Tezkor Ovqat va Premium Kofe!",
-                heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat, sifatli mahsulot va unutilmas shinam muhit.",
-                orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", aboutH2: "Biz Haqimizda", contactH2: "Biz bilan aloqa",
-                cartH2: "Savatdagi mahsulotlar", receipt: "Buyurtma Cheki", total: "Umumiy summa:", ourPhone: "Aloqa raqami:",
-                confirm: "Tasdiqlash", historyTitle: "Oxirgi buyurtmalarim:", emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!",
-                noItems: "Mahsulot tanlanmagan", placeholderName: "Ismingizni kiriting...",
-                alertFields: "Iltimos, ism va telefonni kiriting!", alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.",
-                noHistory: "Eski buyurtmalar mavjud emas.", phoneTitle: "Telefon raqamingizni kiriting:",
-                locBtn: "Lokatsiyani belgilash", locSuccess: "Lokatsiya belgilandi ✅", errNoName: "Iltimos, ismingizni kiriting!",
-                errPhoneLength: "Telefon raqamini to'liq kiriting!", errNoLoc: "Iltimos, lokatsiyangizni belgilang!", errGeo: "Internet yoki GPS orqali lokatsiya aniqlanmadi!"
+                heroTitle: "STAKAN CAFE: Eng Mazali Fast-Food va Premium Kofe!", heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat va unutilmas shinam muhit.",
+                orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", city: "Kosonsoy Tumani", landmark: "Maxdumi A'zam majmuasi yaqinida", region: "Namangan Viloyati",
+                aboutH2: "Biz Haqimizda", contactH2: "Biz bilan aloqa", cartH2: "Savatdagi mahsulotlar", receipt: "Buyurtma Cheki", total: "Umumiy summa:",
+                ourPhone: "Aloqa raqami:", confirm: "Tasdiqlash", historyTitle: "Oxirgi buyurtmalarim (Qayta buyurtma uchun bosing):",
+                emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!", noItems: "Mahsulot tanlanmagan", placeholderName: "Ismingizni kiriting...",
+                alertFields: "Iltimos, ism va telefonni kiriting!", alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
             },
             ru: {
                 home: "Главная", menu: "Меню", about: "О нас", contact: "Контакты", cart: "Корзина",
-                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!",
-                heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
-                orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", aboutH2: "О Нас", contactH2: "Связаться с нами",
-                cartH2: "Товары в корзине", receipt: "Чек заказа", total: "Общая сумма:", ourPhone: "Наш телефон:",
-                confirm: "Подтвердить заказ", historyTitle: "Мои последние заказы:", emptyCart: "Корзина пуста. Добавьте блюда из меню!",
-                noItems: "Товары не выбраны", placeholderName: "Введите ваше имя...",
-                alertFields: "Пожалуйста, введите имя и телефон!", alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.",
-                noHistory: "Нет предыдущих заказов.", phoneTitle: "Введите ваш номер телефона:",
-                locBtn: "Указать локацию", locSuccess: "Локация указана ✅", errNoName: "Пожалуйста, введите ваше имя!",
-                errPhoneLength: "Введите номер телефона полностью!", errNoLoc: "Пожалуйста, укажите вашу локацию!", errGeo: "Не удалось определить локацию. Проверьте GPS или интернет!"
+                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!", heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
+                orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", city: "Касансайский район", landmark: "Рядом с комплексом Махдуми Аъзам", region: "Наманганская область",
+                aboutH2: "О Нас", contactH2: "Связаться с нами", cartH2: "Товары в корзине", receipt: "Чек заказа", total: "Общая сумма:",
+                ourPhone: "Наш телефон:", confirm: "Подтвердить заказ", historyTitle: "Мои последние заказы (Нажмите для повтора):",
+                emptyCart: "Корзина пуста. Добавьте блюда из меню!", noItems: "Товары не выбраны", placeholderName: "Введите ваше имя...",
+                alertFields: "Пожалуйста, введите имя и телефон!", alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.", noHistory: "Нет предыдущих заказов."
             },
             en: {
                 home: "Home", menu: "Menu", about: "About Us", contact: "Contact", cart: "Cart",
-                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!",
-                heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
-                orderBtn: "Order Now", menuTitle: "Our Menu", aboutH2: "About Us", contactH2: "Contact Us",
-                cartH2: "Items in Cart", receipt: "Receipt Details", total: "Total Amount:", ourPhone: "Our Phone:",
-                confirm: "Confirm Order", historyTitle: "My Recent Orders:", emptyCart: "Cart is empty. Add items from Menu!",
-                noItems: "No items selected", placeholderName: "Enter your name...",
-                alertFields: "Please enter name and phone number!", alertSuccess: "Thank you! Your order has been sent to Telegram.",
-                noHistory: "No history found.", phoneTitle: "Enter your phone number:",
-                locBtn: "Set Location", locSuccess: "Location set ✅", errNoName: "Please enter your name!",
-                errPhoneLength: "Please enter the full phone number!", errNoLoc: "Please set your location!", errGeo: "Could not get location. Check internet/GPS!"
+                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!", heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
+                orderBtn: "Order Now", menuTitle: "Our Menu", city: "Kasansay District", landmark: "Near Maxdumi A'zam complex", region: "Namangan Region",
+                aboutH2: "About Us", contactH2: "Contact Us", cartH2: "Items in Cart", receipt: "Receipt Details", total: "Total Amount:",
+                ourPhone: "Our Phone:", confirm: "Confirm Order", historyTitle: "My Recent Orders (Click to reorder):",
+                emptyCart: "Cart is empty. Add items from Menu!", noItems: "No items selected", placeholderName: "Enter your name...",
+                alertFields: "Please enter name and phone number!", alertSuccess: "Thank you! Your order has been sent to Telegram.", noHistory: "No history found."
             }
         };
-
-        function showCustomAlert(msg) {
-            document.getElementById('customAlertMsg').innerText = msg;
-            document.getElementById('customAlert').style.display = 'flex';
-        }
-
-        function closeCustomAlert() {
-            document.getElementById('customAlert').style.display = 'none';
-        }
 
         function selectLanguage(lang) {
             currentLang = lang;
@@ -969,6 +995,9 @@
             document.getElementById('main-hero-desc').innerText = l.heroDesc;
             document.querySelector('.txt-order-btn').innerText = l.orderBtn;
             document.querySelector('.txt-menu-title').innerText = l.menuTitle;
+            document.querySelector('.txt-city').innerText = l.city;
+            document.querySelector('.txt-landmark').innerText = l.landmark;
+            document.querySelector('.txt-region').innerText = l.region;
             document.querySelector('.txt-about-h2').innerText = l.aboutH2;
             document.querySelector('.txt-contact-h2').innerText = l.contactH2;
             document.querySelector('.txt-cart-h2').innerText = l.cartH2;
@@ -978,78 +1007,79 @@
             document.querySelector('.txt-confirm').innerText = l.confirm;
             document.querySelector('.txt-history-title').innerText = l.historyTitle;
             document.getElementById('cust-name').placeholder = l.placeholderName;
-            document.getElementById('lbl-phone-title').innerText = l.phoneTitle;
-            
-            let locBtn = document.getElementById('btn-get-location');
-            if(!userLocation) {
-                document.getElementById('txt-loc-btn').innerText = l.locBtn;
-            } else {
-                document.getElementById('txt-loc-btn').innerText = l.locSuccess;
-            }
-            
             initMenu();
             initRoulette();
             updateCartPage();
         }
 
-        // Telefonga +998 (__) ___ ____ maskasi o'rnatish
-        const phoneInput = document.getElementById('cust-phone');
-        phoneInput.addEventListener('input', (e) => {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})/);
-            
-            if (!x[1]) {
-                e.target.value = '+998 ';
-                return;
-            }
-            if (x[1] !== '998') {
-                x[2] = x[1].substring(3) + (x[2] || '');
-                x[1] = '998';
-            }
-            
-            let formatted = '+998';
-            if (x[2]) formatted += ' (' + x[2];
-            if (x[2] && x[2].length === 2) formatted += ') ';
-            if (x[3]) formatted += x[3];
-            if (x[3] && x[3].length === 3) formatted += ' ';
-            if (x[4]) formatted += x[4];
-            if (x[4] && x[4].length === 2) formatted += ' ';
-            if (x[5]) formatted += x[5];
-            
-            e.target.value = formatted.trim().substring(0, 19);
-        });
-
-        phoneInput.addEventListener('keydown', (e) => {
-            if (e.target.value.length <= 5 && e.key === 'Backspace') {
-                e.preventDefault();
-            }
-        });
-
-        phoneInput.addEventListener('focus', (e) => {
-            if (!e.target.value || e.target.value === '') {
-                e.target.value = '+998 ';
-            }
-        });
-
-        function getLocation() {
-            const l = languages[currentLang];
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        userLocation = {
-                            lat: position.coords.latitude,
-                            lon: position.coords.longitude
-                        };
-                        let btn = document.getElementById('btn-get-location');
-                        btn.classList.add('success');
-                        document.getElementById('txt-loc-btn').innerText = l.locSuccess;
-                    },
-                    (error) => {
-                        showCustomAlert(l.errGeo);
-                    }
-                );
+        function setPhoneMethod(method) {
+            phoneMethod = method;
+            document.getElementById('btn-method-auto').classList.remove('active');
+            document.getElementById('btn-method-manual').classList.remove('active');
+            const phoneInput = document.getElementById('cust-phone');
+            if (method === 'auto') {
+                document.getElementById('btn-method-auto').classList.add('active');
+                phoneInput.value = "";
+                phoneInput.placeholder = "Telefon raqamingizni bosing...";
+                phoneInput.focus();
             } else {
-                showCustomAlert(l.errGeo);
+                document.getElementById('btn-method-manual').classList.add('active');
+                phoneInput.value = "+998";
+                phoneInput.placeholder = "Kiritish...";
+                phoneInput.focus();
             }
+        }
+
+        function initRoulette() {
+            const track = document.getElementById('roulette-track-output');
+            track.innerHTML = products.map((p, idx) => `
+                <div class="roulette-card" id="roulette-card-${idx}">
+                    <span class="food-emoji">${p.emoji}</span>
+                    <h4>${p.name}</h4>
+                </div>
+            `).join('');
+            animateRoulette();
+            setInterval(() => {
+                rouletteIndex = (rouletteIndex + 1) % products.length;
+                animateRoulette();
+            }, 2500);
+        }
+
+        function animateRoulette() {
+            const len = products.length;
+            products.forEach((_, idx) => {
+                const card = document.getElementById(`roulette-card-${idx}`);
+                if (!card) return;
+                card.className = "roulette-card";
+                if (idx === rouletteIndex) {
+                    card.classList.add("active-center");
+                } else if (idx === (rouletteIndex - 1 + len) % len) {
+                    card.classList.add("active-left");
+                } else if (idx === (rouletteIndex + 1) % len) {
+                    card.classList.add("active-right");
+                } else if (idx < rouletteIndex) {
+                    card.classList.add("hidden-left");
+                } else {
+                    card.classList.add("hidden-right");
+                }
+            });
+        }
+
+        function initMenu() {
+            const grid = document.getElementById('menu-items-output');
+            grid.innerHTML = products.map(p => {
+                const count = cart[p.id] || 0;
+                return `
+                    <div class="menu-item">
+                        <div class="count-badge" id="badge-${p.id}" style="display: ${count > 0 ? 'flex' : 'none'}">${count}</div>
+                        <div class="menu-item-emoji">${p.emoji}</div>
+                        <h3>${p.name}</h3>
+                        <p>${p.desc}</p>
+                        <div class="price">${p.price.toLocaleString()} UZS</div>
+                        <button class="btn-main btn-yellow" style="padding: 8px 20px; font-size:14px;" onclick="addToCart(${p.id})">+ Qo'shish</button>
+                    </div>
+                `;
+            }).join('');
         }
 
         function switchPage(pageId) {
@@ -1059,265 +1089,278 @@
             });
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
             
-            const targetPage = document.getElementById('page-' + pageId);
-            targetPage.style.display = (pageId === 'cart') ? 'grid' : 'flex';
-            setTimeout(() => targetPage.classList.add('active'), 50);
-            
-            let dNav = document.getElementById('nav-' + pageId);
-            let mNav = document.getElementById('m-nav-' + pageId);
-            if(dNav) dNav.classList.add('active');
-            if(mNav) mNav.classList.add('active');
+            const activePage = document.getElementById(`page-${pageId}`);
+            if (activePage) {
+                activePage.style.display = 'flex';
+                setTimeout(() => activePage.classList.add('active'), 50);
+            }
 
-            if(pageId === 'cart') updateCartPage();
-        }
+            const navD = document.getElementById(`nav-${pageId}`);
+            if (navD) navD.classList.add('active');
+            const navM = document.getElementById(`m-nav-${pageId}`);
+            if (navM) navM.classList.add('active');
 
-        function initMenu() {
-            let out = "";
-            products.forEach(p => {
-                let count = cart[p.id] || 0;
-                let badgeStyle = count > 0 ? "display:flex" : "display:none";
-                out += `
-                    <div class="menu-item" onclick="addToCart(${p.id})">
-                        <div class="count-badge" id="badge-${p.id}" style="${badgeStyle}">${count}</div>
-                        <div class="menu-item-emoji">${p.emoji}</div>
-                        <h3>${p.name}</h3>
-                        <p>${p.desc}</p>
-                        <div class="price">${p.price.toLocaleString()} UZS</div>
-                    </div>
-                `;
-            });
-            document.getElementById('menu-items-output').innerHTML = out;
-        }
-
-        function initRoulette() {
-            let out = "";
-            products.forEach((p, idx) => {
-                out += `
-                    <div class="roulette-card" id="r-card-${idx}">
-                        <span class="food-emoji">${p.emoji}</span>
-                        <h4>${p.name}</h4>
-                    </div>
-                `;
-            });
-            document.getElementById('roulette-track-output').innerHTML = out;
-            updateRouletteDOM();
-        }
-
-        function updateRouletteDOM() {
-            let total = products.length;
-            for(let i=0; i<total; i++) {
-                let el = document.getElementById(`r-card-${i}`);
-                if(!el) continue;
-                el.className = "roulette-card";
-                
-                if(i === rouletteIndex) el.classList.add('active-center');
-                else if(i === (rouletteIndex - 1 + total) % total) el.classList.add('active-left');
-                else if(i === (rouletteIndex + 1) % total) el.classList.add('active-right');
-                else if(i < rouletteIndex) el.classList.add('hidden-left');
-                else el.classList.add('hidden-right');
+            if (pageId === 'cart') {
+                updateCartPage();
+                // Sahifa to'liq yuklangandan keyin xaritani initsializatsiya qilish
+                setTimeout(() => { initDeliveryMap(); }, 200);
             }
         }
 
-        setInterval(() => {
-            rouletteIndex = (rouletteIndex + 1) % products.length;
-            updateRouletteDOM();
-        }, 3000);
+        // Xaritani yaratish va Yandex uslubida boshqarish funksiyasi
+        function initDeliveryMap() {
+            // Agar xarita allaqachon yaratilgan bo'lsa shunchaki o'lchamini yangilaymiz
+            if (map) {
+                map.invalidateSize();
+                return;
+            }
+
+            // Kosonsoy markazi koordinatalari: 41.258, 71.550
+            const startLat = 41.258;
+            const startLng = 71.550;
+            centerMarkerCoords = { lat: startLat, lng: startLng };
+
+            map = L.map('delivery-map', {
+                center: [startLat, startLng],
+                zoom: 15,
+                zoomControl: false
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            // Foydalanuvchi xaritani yurgizganda (drag) markaziy koordinatani aniqlash
+            map.on('move', function () {
+                const center = map.getCenter();
+                centerMarkerCoords = { lat: center.lat, lng: center.lng };
+            });
+
+            // Foydalanuvchi turgan joyni aniqlash (Ruxsat berilsa xarita o'sha yerga boradi)
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const uLat = position.coords.latitude;
+                    const uLng = position.coords.longitude;
+                    map.setView([uLat, uLng], 16);
+                    centerMarkerCoords = { lat: uLat, lng: uLng };
+                }, () => {
+                    console.log("Geolokatsiyaga ruxsat berilmadi, default koordinata tanlandi.");
+                });
+            }
+        }
 
         function addToCart(id) {
             cart[id] = (cart[id] || 0) + 1;
             updateDOM();
         }
 
-        function changeQty(id, delta) {
-            if(cart[id]) {
-                cart[id] += delta;
-                if(cart[id] <= 0) delete cart[id];
-                updateDOM();
-                updateCartPage();
-            }
-        }
-
-        function updateDOM() {
-            let totalItems = 0;
-            for(let id in cart) { totalItems += cart[id]; }
-            document.getElementById('cart-badge').innerText = totalItems;
-            document.getElementById('m-cart-badge').innerText = totalItems;
-            
-            products.forEach(p => {
-                let b = document.getElementById(`badge-${p.id}`);
-                if(b) {
-                    let count = cart[p.id] || 0;
-                    b.innerText = count;
-                    b.style.display = count > 0 ? "display:flex" : "none";
-                }
-            });
-        }
-
-        function updateCartPage() {
-            const l = languages[currentLang];
-            let listOut = document.getElementById('cart-list-output');
-            let billOut = document.getElementById('bill-items');
-            let delArea = document.getElementById('delivery-area');
-            
-            let hasItems = Object.keys(cart).length > 0;
-            
-            if(!hasItems) {
-                listOut.innerHTML = `<p style='color:#6b7280; text-align:center; padding:30px;'>${l.emptyCart}</p>`;
-                billOut.innerHTML = `<p style='color:#6b7280; font-size:14px;'>${l.noItems}</p>`;
-                document.getElementById('total-price-sum').innerText = "0 UZS";
-                delArea.style.display = "none";
-                loadHistory();
-                return;
-            }
-            
-            delArea.style.display = "block";
-            let listHtml = "";
-            let billHtml = "";
-            let totalSum = 0;
-            
-            for(let id in cart) {
-                let p = products.find(prod => prod.id == id);
-                let itemSum = p.price * cart[id];
-                totalSum += itemSum;
-                
-                listHtml += `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <span class="item-emoji">${p.emoji}</span>
-                            <div>
-                                <h4 style="font-family:var(--font-display); color:var(--primary-yellow);">${p.name}</h4>
-                                <span style="font-size:13px; color:#9ca3af;">${p.price.toLocaleString()} UZS</span>
-                            </div>
-                        </div>
-                        <div class="cart-item-controls">
-                            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
-                            <span style="font-weight:bold; width:20px; text-align:center;">${cart[id]}</span>
-                            <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
-                        </div>
-                    </div>
-                `;
-                
-                billHtml += `
-                    <div class="bill-row" style="font-size:14px; color:#9ca3af;">
-                        <span>${p.name} x ${cart[id]}</span>
-                        <span>${itemSum.toLocaleString()} UZS</span>
-                    </div>
-                `;
-            }
-            
-            listOut.innerHTML = listHtml;
-            billOut.innerHTML = billHtml;
-            document.getElementById('total-price-sum').innerText = totalSum.toLocaleString() + " UZS";
-            loadHistory();
-        }
-
-        function loadHistory() {
-            const l = languages[currentLang];
-            let historyData = localStorage.getItem('stakan_history');
-            let out = document.getElementById('history-output');
-            if(!historyData) {
-                out.innerHTML = `<p style='color:#6b7280; font-size:12px;'>${l.noHistory}</p>`;
-                return;
-            }
-            let orders = JSON.parse(historyData);
-            let html = "";
-            orders.forEach(o => {
-                html += `
-                    <div class="history-item" onclick="repeatOrder(${JSON.stringify(o.cart).replace(/"/g, '&quot;')})">
-                        <div style="display:flex; justify-content:space-between; font-weight:bold; color:var(--primary-yellow); margin-bottom:4px;">
-                            <span>📅 ${o.date}</span>
-                        </div>
-                        <div style="color:#9ca3af; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${o.summary}</div>
-                    </div>
-                `;
-            });
-            out.innerHTML = html;
-        }
-
-        function repeatOrder(oldCart) {
-            cart = oldCart;
+        function updateQty(id, delta) {
+            if (!cart[id]) return;
+            cart[id] += delta;
+            if (cart[id] <= 0) delete cart[id];
             updateDOM();
             updateCartPage();
         }
 
-        function confirmOrder() {
+        function updateDOM() {
+            let totalItems = 0;
+            products.forEach(p => {
+                const count = cart[p.id] || 0;
+                totalItems += count;
+                const badge = document.getElementById(`badge-${p.id}`);
+                if (badge) {
+                    badge.innerText = count;
+                    badge.style.display = count > 0 ? 'flex' : 'none';
+                }
+            });
+            document.getElementById('cart-badge').innerText = totalItems;
+            document.getElementById('m-cart-badge').innerText = totalItems;
+        }
+
+        function updateCartPage() {
+            const listOutput = document.getElementById('cart-list-output');
+            const billOutput = document.getElementById('bill-items');
+            const deliveryArea = document.getElementById('delivery-area');
+            const totalSumEl = document.getElementById('total-price-sum');
             const l = languages[currentLang];
-            let name = document.getElementById('cust-name').value.trim();
-            let phone = document.getElementById('cust-phone').value.trim();
+
+            let hasItems = Object.keys(cart).length > 0;
             
-            if(!name) {
-                showCustomAlert(l.errNoName);
+            if (!hasItems) {
+                listOutput.innerHTML = `<div style="padding:20px; text-align:center; color:#9ca3af;">${l.emptyCart}</div>`;
+                billOutput.innerHTML = `<div style="padding:10px; color:#9ca3af;">${l.noItems}</div>`;
+                deliveryArea.style.display = 'none';
+                totalSumEl.innerText = "0 UZS";
+                loadHistoryDOM();
                 return;
             }
-            // Maska uzunligi +998 (XX) XXX XX XX shaklida aniq 19 ta belgi bo'lishi kerak
-            if(phone.length < 19) {
-                showCustomAlert(l.errPhoneLength);
-                return;
-            }
-            if(!userLocation) {
-                showCustomAlert(l.errNoLoc);
-                return;
-            }
-            
+
+            deliveryArea.style.display = 'block';
+            let listHTML = "";
+            let billHTML = "";
             let totalSum = 0;
-            let summaryText = "";
-            for(let id in cart) {
-                let p = products.find(prod => prod.id == id);
-                totalSum += p.price * cart[id];
-                summaryText += `${p.name} (${cart[id]}x), `;
+
+            products.forEach(p => {
+                const qty = cart[p.id];
+                if (qty > 0) {
+                    const itemSum = p.price * qty;
+                    totalSum += itemSum;
+
+                    listHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <span class="item-emoji">${p.emoji}</span>
+                                <div>
+                                    <h4 style="font-size:16px;">${p.name}</h4>
+                                    <span style="font-size:13px; color:#9ca3af;">${p.price.toLocaleString()} UZS</span>
+                                </div>
+                            </div>
+                            <div class="cart-item-controls">
+                                <button class="qty-btn" onclick="updateQty(${p.id}, -1)">-</button>
+                                <span style="font-weight:bold; font-size:16px; width:20px; text-align:center;">${qty}</span>
+                                <button class="qty-btn" onclick="updateQty(${p.id}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+
+                    billHTML += `
+                        <div class="bill-row">
+                            <span>${p.name} x ${qty}</span>
+                            <span>${itemSum.toLocaleString()} UZS</span>
+                        </div>
+                    `;
+                }
+            });
+
+            listOutput.innerHTML = listHTML;
+            billOutput.innerHTML = billHTML;
+            totalSumEl.innerText = totalSum.toLocaleString() + " UZS";
+            loadHistoryDOM();
+        }
+
+        // Tarixni yuklash va DOMga chiqarish funksiyasi
+        function loadHistoryDOM() {
+            const historyOutput = document.getElementById('history-output');
+            const l = languages[currentLang];
+            let historyData = localStorage.getItem('stakan_history');
+            let orders = historyData ? JSON.parse(historyData) : [];
+
+            if (orders.length === 0) {
+                historyOutput.innerHTML = `<div style="font-size:12px; color:#6b7280; padding:5px;">${l.noHistory}</div>`;
+                return;
             }
+
+            historyOutput.innerHTML = orders.map((item, index) => `
+                <div class="history-item" onclick="repeatOrder(${index})">
+                    <div style="font-weight:bold; color:var(--primary-yellow); margin-bottom:4px; font-size:12px;">?? ${item.date}</div>
+                    <div style="color:#d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.summary}</div>
+                </div>
+            `).join('');
+        }
+
+        // Tarixdagi buyurtmani qaytadan savatga yuklash funksiyasi
+        function repeatOrder(index) {
+            let historyData = localStorage.getItem('stakan_history');
+            if (!historyData) return;
+            let orders = JSON.parse(historyData);
+            let selectedOrder = orders[index];
             
-            let message = `🛒 *YANGI BUYURTMA!*\n\n`;
-            message += `👤 *Mijoz:* ${name}\n`;
-            message += `📞 *Tel:* ${phone}\n\n`;
-            message += `📦 *Maxsulotlar:* ${summaryText.substring(0, summaryText.length - 2)}\n`;
-            message += `💰 *Umumiy summa:* ${totalSum.toLocaleString()} UZS\n\n`;
-            message += `📍 *Lokatsiya:* https://maps.google.com/?q=${userLocation.lat},${userLocation.lon}`;
+            if (selectedOrder && selectedOrder.cart) {
+                cart = JSON.parse(JSON.stringify(selectedOrder.cart)); // Savatni yangilash
+                updateDOM();
+                updateCartPage();
+                alert(currentLang === 'uz' ? "Buyurtma qayta savatga qo'shildi!" : (currentLang === 'ru' ? "Заказ повторно добавлен в корзину!" : "Order re-added to cart!"));
+            }
+        }
+
+        // Buyurtmani yakunlash va Telegram botga jo'natish funksiyasi
+        function confirmOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const l = languages[currentLang];
+
+            if (!name || !phone) {
+                alert(l.alertFields);
+                return;
+            }
+
+            let summaryText = "";
+            let totalSum = 0;
+
+            products.forEach(p => {
+                const qty = cart[p.id];
+                if (qty > 0) {
+                    summaryText += `${p.emoji} ${p.name} x ${qty}, `;
+                    totalSum += p.price * qty;
+                }
+            });
+
+            // Telegram xabar tayyorlash (Markdown formatida)
+            let message = `?? *YANGI BUYURTMA (STAKAN CAFE)*\n\n`;
+            message += `?? *Mijoz:* ${name}\n`;
+            message += `?? *Telefon:* ${phone}\n\n`;
+            message += `?? *Maxsulotlar:*\n`;
             
-            let botToken = "7449576404:AAGH7F6pZpW9rE9RjXN0p-VbIWhg8Kk9-6Y"; 
-            let chatId = "6190861053";
-            let telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            products.forEach(p => {
+                const qty = cart[p.id];
+                if (qty > 0) {
+                    message += `  ?? ${p.name} x ${qty} = ${(p.price * qty).toLocaleString()} UZS\n`;
+                }
+            });
             
+            message += `\n?? *Umumiy summa:* ${totalSum.toLocaleString()} UZS\n`;
+            
+            // Xaritadan olingan koordinatalar va Yandex/Google xarita linki
+            if (centerMarkerCoords) {
+                const mapLink = `https://www.google.com/maps/search/?api=1&query=${centerMarkerCoords.lat},${centerMarkerCoords.lng}`;
+                message += `?? *Lokatsiya:* [Xaritada ko'rish](${mapLink})\n`;
+                message += `?? *Koordinatalar:* \`${centerMarkerCoords.lat.toFixed(6)}, ${centerMarkerCoords.lng.toFixed(6)}\``;
+            }
+
+            const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
             fetch(telegramUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
+                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown", disable_web_page_preview: false })
             })
             .then(response => {
                 if (response.ok) {
                     alert(l.alertSuccess);
                     
+                    // Buyurtmani tarixga yozish logikasi (Maksimal 5 ta)
                     let historyData = localStorage.getItem('stakan_history');
                     let orders = historyData ? JSON.parse(historyData) : [];
                     
                     let now = new Date();
-                    let dateStr = `${now.getDate()}.${now.getMonth()+1} ${now.getHours()}:${now.getMinutes()}`;
+                    let dateStr = `${now.getDate().toString().padStart(2, '0')}.${(now.getMonth()+1).toString().padStart(2, '0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
                     
                     orders.unshift({
                         date: dateStr,
-                        cart: cart,
+                        cart: JSON.parse(JSON.stringify(cart)), // Savat holatini nusxalash
                         summary: summaryText.substring(0, summaryText.length - 2) + " = " + totalSum.toLocaleString() + " UZS"
                     });
                     
-                    if(orders.length > 5) orders.pop();
+                    if (orders.length > 5) orders.pop();
                     localStorage.setItem('stakan_history', JSON.stringify(orders));
 
+                    // Savatni tozalash va bosh sahifaga qaytish
                     cart = {};
-                    userLocation = null;
-                    let locBtn = document.getElementById('btn-get-location');
-                    locBtn.classList.remove('success');
-                    document.getElementById('txt-loc-btn').innerText = l.locBtn;
-                    document.getElementById('cust-name').value = "";
-                    document.getElementById('cust-phone').value = "+998 ";
-                    
                     updateDOM();
                     switchPage('home');
+                } else {
+                    alert("Telegramga yuborishda xatolik! Bot token yoki Chat ID xato kiritilgan bo'lishi mumkin.");
                 }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Tarmoq xatoligi sodir bo'ldi!");
             });
         }
  
         window.onload = () => {
             document.getElementById('languageModal').style.display = 'flex';
+            setPhoneMethod('auto');
         };
     </script>
 </body>
