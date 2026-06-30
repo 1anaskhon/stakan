@@ -566,19 +566,16 @@
         }
  
         .qty-btn:hover { background-color: var(--primary-yellow); color: var(--bg-dark); }
- 
-        .checkout-box {
+.checkout-box {
     background-color: #0b0e12;
     border: 2px solid #252f3e;
     border-radius: 20px;
     padding: 25px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;  /* ? BU QILAD */
     height: 100%;
-    overflow-y: auto;
-}
- 
+    overflow-y: auto;           /* ? BUNI O'CHIRIB TASHLANG */
+} 
         .bill-details h3 {
             font-family: var(--font-display);
             color: var(--primary-yellow);
@@ -591,7 +588,13 @@
  
         .total-row { border-top: 2px dashed #273142; padding-top: 15px; font-size: 20px; font-weight: bold; color: var(--accent-red); }
  
-        .delivery-section { margin-top: 20px; display: none; }
+        .delivery-section { 
+    margin-top: 20px; 
+    display: none;
+    flex: 1;                    /* ? QO'SHING */
+    overflow-y: auto;          /* ? QO'SHING */
+    padding-right: 8px;        /* ? QO'SHING */
+}
 
         .customer-inputs { margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
 
