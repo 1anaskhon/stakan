@@ -737,16 +737,16 @@
 
     <div class="lang-modal" id="languageModal">
         <div class="lang-box">
-            <h3 id="lang-title">Choose Language / Тилni tanlang</h3>
-            <button class="lang-btn" onclick="selectLanguage('uz')">🇺🇿 O'zbekcha</button>
-            <button class="lang-btn" onclick="selectLanguage('ru')">🇷🇺 Русский</button>
-            <button class="lang-btn" onclick="selectLanguage('en')">🇬🇧 English</button>
+            <h3 id="lang-title">Choose Language / РўРёР»ni tanlang</h3>
+            <button class="lang-btn" onclick="selectLanguage('uz')">рџ‡єрџ‡ї O'zbekcha</button>
+            <button class="lang-btn" onclick="selectLanguage('ru')">рџ‡·рџ‡є Р СѓСЃСЃРєРёР№</button>
+            <button class="lang-btn" onclick="selectLanguage('en')">рџ‡¬рџ‡§ English</button>
         </div>
     </div>
  
     <header>
         <div class="logo-area">
-            <div class="logo-icon">☕</div>
+            <div class="logo-icon">в•</div>
             <div class="logo-text">
                 <h1>STAKAN</h1>
                 <span>CAFE</span>
@@ -758,7 +758,7 @@
             <a onclick="switchPage('about')" id="nav-about"><i class="fa-solid fa-circle-info"></i> <span class="txt-about">Biz haqimizda</span></a>
             <a onclick="switchPage('contact')" id="nav-contact"><i class="fa-solid fa-phone"></i> <span class="txt-contact">Bog'lanish</span></a>
             <button class="savat-btn" onclick="switchPage('cart')">
-                🛒 <span class="txt-cart">Savat</span>
+                рџ›’ <span class="txt-cart">Savat</span>
                 <div class="badge" id="cart-badge">0</div>
             </button>
         </nav>
@@ -769,7 +769,7 @@
         <a onclick="switchPage('menu')" id="m-nav-menu"><i class="fa-solid fa-utensils"></i><span class="txt-menu">Menyu</span></a>
         
         <div class="mobile-cart-holder">
-            <a onclick="switchPage('cart')" id="m-nav-cart">🛒</a>
+            <a onclick="switchPage('cart')" id="m-nav-cart">рџ›’</a>
             <div class="badge" id="m-cart-badge" style="top: -22px; right: 18px; z-index: 1000;">0</div>
         </div>
         
@@ -805,7 +805,7 @@
                 <div class="map-visual">
                     <div class="landmark-illustration">
                         <i class="fa-solid fa-gopuram building" title="Maxdumi A'zam Ziyoratgohi"></i>
-                        <span>☕</span>
+                        <span>в•</span>
                     </div>
                     <h4 class="txt-city">Kosonsoy Tumani</h4>
                     <p class="txt-landmark">Maxdumi A'zam tarixiy majmuasi yonida</p>
@@ -863,8 +863,8 @@
                             <input type="text" id="cust-name" placeholder="Ismingizni kiriting..." required>
                             
                             <div class="phone-method-selector">
-                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">✨ Avto</button>
-                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">✍️ Qo'lda</button>
+                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">вњЁ Avto</button>
+                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">вњЌпёЏ Qo'lda</button>
                             </div>
                             
                             <input type="tel" id="cust-phone" name="telephone" placeholder="Telefon raqamingiz..." autocomplete="tel" inputmode="tel" required>
@@ -886,14 +886,14 @@
     <script>
         // Aniq va chiroyli haqiqiy Emojilar o'rnatildi
         const products = [
-            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "🍔" }, 
-            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "🌯" },
-            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "🍕" },
-            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "☕" },
-            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "🥤" },
-            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "🧋" },
-            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "🍔" },
-            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "🥪" }
+            { id: 1, name: "Stakan Burger", desc: "Mol go'shti, pishloq, yangi salat", price: 15000, emoji: "рџЌ”" }, 
+            { id: 2, name: "Lavash Klassik", desc: "Tortilla, go'sht, sara sabzavotlar", price: 12000, emoji: "рџЊЇ" },
+            { id: 3, name: "Pitsa Marinara", desc: "Pomidor, pishloq, zaytun", price: 18000, emoji: "рџЌ•" },
+            { id: 4, name: "Espresso", desc: "Premium kuchli italyan kofesi", price: 5000, emoji: "в•" },
+            { id: 5, name: "Kapuchino", desc: "Yumshoq ko'pikli sut va qahva", price: 6000, emoji: "рџҐ¤" },
+            { id: 6, name: "Shakoli Shake", desc: "Toza sut va tabiiy shokolad", price: 7000, emoji: "рџ§‹" },
+            { id: 7, name: "Gamburger mini", desc: "Klassik kichik kotletli burger", price: 10000, emoji: "рџЌ”" },
+            { id: 8, name: "Klab Sendvich", desc: "Tost non, tovuq go'shti, sous", price: 14000, emoji: "рџҐЄ" }
         ];
  
         let cart = {};
@@ -913,14 +913,14 @@
                 alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
             },
             ru: {
-                home: "Главная", menu: "Меню", about: "О нас", contact: "Контакты", cart: "Корзина",
-                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премилия Кофе!", heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
-                orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", city: "Касансайский район", landmark: "Рядом с комплексом Махдуми Аъзам",
-                region: "Наманганская область", aboutH2: "О Нас", contactH2: "Связаться с нами", cartH2: "Товары в корзине",
-                receipt: "Чек заказа", total: "Общая сумма:", ourPhone: "Наш телефон:", confirm: "Подтвердить заказ",
-                historyTitle: "Мои последние заказы (Нажмите для выбора):", emptyCart: "Корзина пуста. Добавьте блюда из меню!",
-                noItems: "Товары не выбраны", placeholderName: "Введите ваше имя...", alertFields: "Пожалуйста, введите имя и телефон!",
-                alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.", noHistory: "Нет предыдущих заказов."
+                home: "Р“Р»Р°РІРЅР°СЏ", menu: "РњРµРЅСЋ", about: "Рћ РЅР°СЃ", contact: "РљРѕРЅС‚Р°РєС‚С‹", cart: "РљРѕСЂР·РёРЅР°",
+                heroTitle: "STAKAN CAFE: Р’РєСѓСЃРЅС‹Р№ Р¤Р°СЃС‚-Р¤СѓРґ Рё РџСЂРµРјРёР»РёСЏ РљРѕС„Рµ!", heroDesc: "Р›СѓС‡С€РёРµ Рё РґРѕСЃС‚СѓРїРЅС‹Рµ Р±Р»СЋРґР°, РєРѕС‚РѕСЂС‹Рµ РІР°Рј РїРѕРЅСЂР°РІСЏС‚СЃСЏ. Р‘С‹СЃС‚СЂС‹Р№ СЃРµСЂРІРёСЃ Рё СѓСЋС‚РЅР°СЏ Р°С‚РјРѕСЃС„РµСЂР°.",
+                orderBtn: "Р—Р°РєР°Р·Р°С‚СЊ СЃРµР№С‡Р°СЃ", menuTitle: "РќР°С€Рµ РњРµРЅСЋ", city: "РљР°СЃР°РЅСЃР°Р№СЃРєРёР№ СЂР°Р№РѕРЅ", landmark: "Р СЏРґРѕРј СЃ РєРѕРјРїР»РµРєСЃРѕРј РњР°С…РґСѓРјРё РђСЉР·Р°Рј",
+                region: "РќР°РјР°РЅРіР°РЅСЃРєР°СЏ РѕР±Р»Р°СЃС‚СЊ", aboutH2: "Рћ РќР°СЃ", contactH2: "РЎРІСЏР·Р°С‚СЊСЃСЏ СЃ РЅР°РјРё", cartH2: "РўРѕРІР°СЂС‹ РІ РєРѕСЂР·РёРЅРµ",
+                receipt: "Р§РµРє Р·Р°РєР°Р·Р°", total: "РћР±С‰Р°СЏ СЃСѓРјРјР°:", ourPhone: "РќР°С€ С‚РµР»РµС„РѕРЅ:", confirm: "РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РєР°Р·",
+                historyTitle: "РњРѕРё РїРѕСЃР»РµРґРЅРёРµ Р·Р°РєР°Р·С‹ (РќР°Р¶РјРёС‚Рµ РґР»СЏ РІС‹Р±РѕСЂР°):", emptyCart: "РљРѕСЂР·РёРЅР° РїСѓСЃС‚Р°. Р”РѕР±Р°РІСЊС‚Рµ Р±Р»СЋРґР° РёР· РјРµРЅСЋ!",
+                noItems: "РўРѕРІР°СЂС‹ РЅРµ РІС‹Р±СЂР°РЅС‹", placeholderName: "Р’РІРµРґРёС‚Рµ РІР°С€Рµ РёРјСЏ...", alertFields: "РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ РёРјСЏ Рё С‚РµР»РµС„РѕРЅ!",
+                alertSuccess: "РЎРїР°СЃРёР±Рѕ! Р’Р°С€ Р·Р°РєР°Р· РѕС‚РїСЂР°РІР»РµРЅ РІ Telegram.", noHistory: "РќРµС‚ РїСЂРµРґС‹РґСѓС‰РёС… Р·Р°РєР°Р·РѕРІ."
             },
             en: {
                 home: "Home", menu: "Menu", about: "About Us", contact: "Contact", cart: "Cart",
@@ -1042,7 +1042,7 @@
                     <p>${p.desc}</p>
                     <div class="price">${p.price.toLocaleString()} UZS</div>
                     <button class="btn-main btn-yellow" style="font-size: 14px; padding: 8px 20px;" onclick="addToCart(${p.id})">
-                        🛒 ${currentLang === 'uz' ? 'Savatga qo\'shish' : currentLang === 'ru' ? 'В корзину' : 'Add to Cart'}
+                        рџ›’ ${currentLang === 'uz' ? 'Savatga qo\'shish' : currentLang === 'ru' ? 'Р’ РєРѕСЂР·РёРЅСѓ' : 'Add to Cart'}
                     </button>
                 </div>
             `).join('');
@@ -1171,7 +1171,7 @@
             orders.forEach((order, index) => {
                 html += `
                     <div class="history-item" onclick="loadOldOrder(${index})">
-                        <strong>№${index + 1} | ${order.date}</strong><br>
+                        <strong>в„–${index + 1} | ${order.date}</strong><br>
                         <span style="color:#9ca3af;">${order.summary}</span>
                     </div>
                 `;
