@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://api-maps.yandex.ru/2.1/?lang=uz_UZ" type="text/javascript"></script>
    
     <style>
         :root {
@@ -31,10 +33,10 @@
             font-family: var(--font-sans);
             background-color: var(--bg-dark);
             color: var(--text-light);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-x: hidden;
         }
  
         header {
@@ -77,7 +79,6 @@
             font-weight: bold;
         }
  
-        /* Kompyuter uchun yuqori navigatsiya menyusi */
         nav.desktop-nav {
             display: flex;
             gap: 25px;
@@ -117,11 +118,6 @@
             transition: 0.3s;
         }
  
-        .savat-btn:hover {
-            background-color: #ff3333;
-            box-shadow: 0 0 15px rgba(255, 82, 82, 0.4);
-        }
- 
         .badge {
             background-color: var(--primary-yellow);
             color: var(--bg-dark);
@@ -134,7 +130,6 @@
             right: -5px;
         }
  
-        /* Mobil uchun pastki panel (Instagram kabi) */
         .mobile-nav {
             display: none;
             position: fixed;
@@ -161,43 +156,24 @@
             cursor: pointer;
         }
 
-        .mobile-nav a span {
-            font-size: 11px;
-        }
-
-        .mobile-nav a.active {
-            color: var(--primary-yellow);
-        }
-
-        .mobile-nav .mobile-cart-holder {
-            position: relative;
-        }
+        .mobile-nav a span { font-size: 11px; }
+        .mobile-nav a.active { color: var(--primary-yellow); }
+        .mobile-nav .mobile-cart-holder { position: relative; }
  
         main {
             flex: 1;
-            position: relative;
             width: 100%;
-            padding-bottom: 70px; /* Mobil panel uchun bo'shliq */
+            position: relative;
         }
  
         .page {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            padding: 40px 5%;
+            padding: 30px 5% 100px 5%;
             display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-            overflow-y: auto;
         }
  
         .page.active {
-            display: flex;
-            opacity: 1;
+            display: block;
         }
  
         .home-grid {
@@ -206,11 +182,12 @@
             gap: 40px;
             width: 100%;
             align-items: center;
+            padding-top: 20px;
         }
  
         .home-text h2 {
             font-family: var(--font-display);
-            font-size: 48px;
+            font-size: 42px;
             color: var(--primary-yellow);
             margin-bottom: 20px;
             line-height: 1.2;
@@ -221,11 +198,6 @@
             color: #9ca3af;
             margin-bottom: 30px;
             line-height: 1.6;
-        }
- 
-        .home-btns {
-            display: flex;
-            gap: 20px;
         }
  
         .btn-main {
@@ -240,14 +212,8 @@
  
         .btn-yellow { background-color: var(--primary-yellow); color: var(--bg-dark); font-weight: 700; }
         .btn-yellow:hover { background-color: #e6b800; box-shadow: 0 0 20px rgba(255, 204, 0, 0.4); }
-        .btn-outline { background: transparent; color: var(--primary-yellow); border: 2px solid var(--primary-yellow); }
-        .btn-outline:hover { background: rgba(255, 204, 0, 0.1); }
  
-        .home-illustrations {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
+        .home-illustrations { display: flex; gap: 20px; justify-content: center; }
  
         .promo-card {
             background: linear-gradient(145deg, var(--bg-card), #1e2530);
@@ -257,40 +223,21 @@
             text-align: center;
             width: 180px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            transition: 0.3s;
         }
-        .promo-card:hover { transform: translateY(-10px); border-color: var(--primary-yellow); }
         .promo-card i { font-size: 60px; margin-bottom: 15px; display: block; }
         .promo-card.burger i { color: #ffa726; }
         .promo-card.coffee i { color: #8d6e63; }
         .promo-card span { font-family: var(--font-display); font-size: 16px; font-weight: 600; }
  
-        .menu-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
- 
-        .menu-header {
-            font-family: var(--font-display);
-            font-size: 32px;
-            color: var(--primary-yellow);
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        .menu-container { width: 100%; display: flex; flex-direction: column; }
+        .menu-header { font-family: var(--font-display); font-size: 32px; color: var(--primary-yellow); margin-bottom: 20px; text-align: center; }
  
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            overflow-y: auto;
-            padding-right: 10px;
-            flex: 1;
+            width: 100%;
         }
- 
-        .menu-grid::-webkit-scrollbar { width: 6px; }
-        .menu-grid::-webkit-scrollbar-thumb { background: #252f3e; border-radius: 10px; }
  
         .menu-item {
             background-color: var(--bg-card);
@@ -301,89 +248,32 @@
             transition: 0.3s;
             position: relative;
         }
- 
-        .menu-item:hover {
-            border-color: var(--primary-yellow);
-            transform: translateY(-5px);
-        }
- 
-        .menu-item-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
- 
-        .menu-item h3 {
-            font-family: var(--font-display);
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
- 
-        .menu-item p {
-            font-size: 14px;
-            color: #9ca3af;
-            margin-bottom: 15px;
-            height: 40px;
-        }
- 
-        .menu-item .price {
-            color: var(--accent-red);
-            font-weight: 900;
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
+        .menu-item:hover { border-color: var(--primary-yellow); transform: translateY(-5px); }
+        .menu-item-icon { font-size: 50px; margin-bottom: 15px; }
+        .menu-item h3 { font-family: var(--font-display); font-size: 20px; margin-bottom: 8px; }
+        .menu-item p { font-size: 14px; color: #9ca3af; margin-bottom: 15px; height: 40px; }
+        .menu-item .price { color: var(--accent-red); font-weight: 900; font-size: 18px; margin-bottom: 15px; }
  
         .count-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 15px; right: 15px;
             background-color: var(--primary-yellow);
             color: var(--bg-dark);
-            font-weight: 900;
-            font-size: 14px;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-weight: 900; font-size: 14px;
+            width: 26px; height: 26px;
+            border-radius: 50%; display: none;
+            align-items: center; justify-content: center;
         }
  
-        .about-content {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 40px;
-            width: 100%;
-            align-items: center;
-        }
- 
+        .about-content { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; width: 100%; align-items: center; }
         .map-visual {
             background: linear-gradient(135deg, #1b2330, #0b0e12);
             border: 3px solid var(--primary-yellow);
-            border-radius: 30px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
+            border-radius: 30px; padding: 30px; text-align: center;
         }
- 
-        .landmark-illustration {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            font-size: 75px;
-            margin-bottom: 20px;
-        }
- 
-        .landmark-illustration .building { color: #a1887f; animation: float 3s ease-in-out infinite; }
-        .landmark-illustration .cafe { color: var(--primary-yellow); animation: float 3s ease-in-out infinite 1.5s; }
- 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
- 
+        .landmark-illustration { display: flex; justify-content: center; gap: 20px; font-size: 75px; margin-bottom: 20px; }
+        .landmark-illustration .building { color: #a1887f; }
+        .landmark-illustration .cafe { color: var(--primary-yellow); }
         .map-visual h4 { font-family: var(--font-display); font-size: 28px; color: var(--text-light); margin-bottom: 10px; }
         .map-visual p { color: #6b7280; font-size: 14px; }
         .map-visual .pin { color: var(--accent-red); font-size: 24px; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -392,44 +282,24 @@
         .about-text p { font-size: 16px; line-height: 1.6; color: #d1d5db; margin-bottom: 15px; }
  
         .contact-card {
-            background-color: var(--bg-card);
-            border-radius: 24px;
-            padding: 40px;
-            width: 450px;
-            text-align: center;
-            border: 2px solid #252f3e;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            background-color: var(--bg-card); border-radius: 24px;
+            padding: 40px; width: 450px; margin: 0 auto; text-align: center; border: 2px solid #252f3e;
         }
- 
         .contact-card h2 { font-family: var(--font-display); font-size: 32px; color: var(--primary-yellow); margin-bottom: 25px; }
- 
         .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background-color: #0f1319;
-            padding: 15px 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 700;
-            transition: 0.3s;
-            border: 1px solid transparent;
+            display: flex; align-items: center; gap: 15px; background-color: #0f1319;
+            padding: 15px 20px; border-radius: 15px; margin-bottom: 15px; color: white; text-decoration: none; font-size: 18px; font-weight: 700;
         }
- 
-        .contact-link:hover { border-color: var(--primary-yellow); transform: translateX(5px); }
         .contact-link.insta i { color: #e1306c; }
         .contact-link.tg i { color: #0088cc; }
         .contact-link.phone i { color: #4caf50; }
  
+        /* SAVAT VA BUYURTMA BO'LIMI DIZAYNI (SVAYP TO'LIQ TUZATILDI) */
         .cart-page {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
             gap: 30px;
             width: 100%;
-            height: 100%;
         }
  
         .cart-list-container {
@@ -438,210 +308,92 @@
             padding: 25px;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            margin-bottom: 20px;
         }
- 
-        .cart-items-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
- 
-        .cart-items-scroll::-webkit-scrollbar { width: 5px; }
-        .cart-items-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
  
         .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #0f1319;
-            padding: 15px 20px;
-            border-radius: 15px;
-            margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            background-color: #0f1319; padding: 15px 20px; border-radius: 15px; margin-bottom: 12px;
         }
- 
         .cart-item-info { display: flex; align-items: center; gap: 15px; }
         .cart-item-info i { font-size: 24px; color: var(--primary-yellow); }
- 
         .cart-item-controls { display: flex; align-items: center; gap: 15px; }
  
         .qty-btn {
-            background-color: #252f3e;
-            border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
+            background-color: #252f3e; border: none; color: white;
+            width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px;
         }
- 
-        .qty-btn:hover { background-color: var(--primary-yellow); color: var(--bg-dark); }
  
         .checkout-box {
             background-color: #0b0e12;
             border: 2px solid #252f3e;
             border-radius: 20px;
             padding: 25px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            overflow-y: auto;
         }
  
         .bill-details h3 {
-            font-family: var(--font-display);
-            color: var(--primary-yellow);
-            margin-bottom: 20px;
-            border-bottom: 2px dashed #273142;
-            padding-bottom: 10px;
+            font-family: var(--font-display); color: var(--primary-yellow);
+            margin-bottom: 20px; border-bottom: 2px dashed #273142; padding-bottom: 10px;
         }
-  
         .bill-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 16px; }
- 
         .total-row { border-top: 2px dashed #273142; padding-top: 15px; font-size: 20px; font-weight: bold; color: var(--accent-red); }
  
         .delivery-section { margin-top: 20px; display: none; }
-
         .customer-inputs { margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
-
         .customer-inputs input {
-            width: 100%;
-            background-color: #171d26;
-            border: 1px solid #252f3e;
-            padding: 10px 15px;
-            border-radius: 10px;
-            color: white;
-            font-size: 15px;
-            outline: none;
+            width: 100%; background-color: #171d26; border: 1px solid #252f3e;
+            padding: 12px 15px; border-radius: 10px; color: white; font-size: 15px; outline: none;
         }
 
-        .customer-inputs input:focus { border-color: var(--primary-yellow); }
-
-        /* Telefon varianti uchun tugmalar maydoni */
-        .phone-method-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 5px;
-        }
+        .phone-method-selector { display: flex; gap: 10px; margin-bottom: 5px; }
         .method-btn {
-            flex: 1;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #252f3e;
-            background-color: #171d26;
-            color: white;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.3s;
+            flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #252f3e;
+            background-color: #171d26; color: white; font-size: 13px; cursor: pointer;
         }
-        .method-btn.active {
-            background-color: var(--primary-yellow);
-            color: var(--bg-dark);
-            font-weight: bold;
-        }
+        .method-btn.active { background-color: var(--primary-yellow); color: var(--bg-dark); font-weight: bold; }
  
-        /* Eski buyurtmalar bo'limi */
-        .history-section {
-            margin-top: 20px;
-            background-color: #171d26;
-            border-radius: 15px;
-            padding: 15px;
-            border: 1px dashed #252f3e;
+        /* INTERAKTIV XARITA JINGALAKLARI */
+        #map-container {
+            width: 100%; height: 220px; border-radius: 12px;
+            border: 2px solid var(--primary-yellow); margin-top: 10px; margin-bottom: 15px;
         }
-        .history-title {
-            font-size: 15px;
-            color: var(--primary-yellow);
-            margin-bottom: 10px;
-            font-family: var(--font-display);
-        }
-        .history-item {
-            background-color: #0f1319;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid transparent;
-        }
-        .history-item:hover {
-            border-color: var(--primary-yellow);
-            background-color: #141a22;
+        .btn-loc {
+            background-color: #1e293b; color: white; border: 1px solid #334155;
+            padding: 12px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;
         }
 
-        footer {
-            background-color: #0b0e12;
-            text-align: center;
-            padding: 12px;
-            font-size: 14px;
-            color: #4b5563;
-            border-top: 1px solid #1f2937;
-        }
+        .history-section { margin-top: 20px; background-color: #171d26; border-radius: 15px; padding: 15px; border: 1px dashed #252f3e; }
+        .history-title { font-size: 15px; color: var(--primary-yellow); margin-bottom: 10px; font-family: var(--font-display); }
+        .history-item { background-color: #0f1319; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 8px; cursor: pointer; }
 
-        /* TILLARNI TANLASH MODAL OYNASI */
+        footer { background-color: #0b0e12; text-align: center; padding: 15px; font-size: 14px; color: #4b5563; border-top: 1px solid #1f2937; }
+
+        /* TIL MODAL OYNASI */
         .lang-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.85);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999;
         }
-        .lang-box {
-            background-color: var(--bg-card);
-            border: 2px solid var(--primary-yellow);
-            border-radius: 25px;
-            padding: 35px;
-            text-align: center;
-            width: 340px;
-            box-shadow: 0 0 30px rgba(255,204,0,0.3);
-        }
-        .lang-box h3 {
-            font-family: var(--font-display);
-            color: white;
-            font-size: 22px;
-            margin-bottom: 25px;
-        }
+        .lang-box { background-color: var(--bg-card); border: 2px solid var(--primary-yellow); border-radius: 25px; padding: 35px; text-align: center; width: 340px; }
+        .lang-box h3 { font-family: var(--font-display); color: white; font-size: 22px; margin-bottom: 25px; }
         .lang-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 12px;
-            border-radius: 15px;
-            border: 2px solid #252f3e;
-            background-color: #0f1319;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 15px;
+            border: 2px solid #252f3e; background-color: #0f1319; color: white; font-size: 18px; font-weight: bold; cursor: pointer;
         }
-        .lang-btn:hover {
-            border-color: var(--primary-yellow);
-            transform: scale(1.03);
-        }
-        .flag {
-            font-size: 24px;
-        }
+        .lang-btn img { width: 30px; height: 20px; border-radius: 4px; object-fit: cover; }
 
-        /* RESPONSIVE (TELEFON VA KOMP VERSALARI) */
+        /* RESPONSIVE CSS - MOBIL MOBILLASHTIRISH */
         @media (max-width: 768px) {
             header { padding: 10px 4%; }
-            nav.desktop-nav { display: none; } /* Yuqori menyu yo'qoladi */
-            .mobile-nav { display: flex; }    /* Pastki panel chiqadi */
-            .page { padding: 20px 4% 80px 4%; }
-            .home-grid, .about-content, .cart-page { grid-template-columns: 1fr; gap: 25px; }
+            nav.desktop-nav { display: none; }
+            .mobile-nav { display: flex; }
+            .page { padding: 15px 4% 120px 4%; }
+            .home-grid, .about-content, .cart-page { grid-template-columns: 1fr; gap: 20px; }
             .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .home-text h2 { font-size: 32px; }
-            .contact-card { width: 100%; padding: 20px; }
-            footer { display: none; } /* Mobil versiyada footer shart emas */
+            .home-text h2 { font-size: 28px; }
+            .contact-card { width: 100%; }
+            footer { display: none; }
         }
     </style>
 </head>
@@ -649,28 +401,23 @@
 
     <div class="lang-modal" id="languageModal">
         <div class="lang-box">
-            <h3 id="lang-title">Choose Language / Тилни танlang</h3>
+            <h3 id="lang-title">Tilni tanlang / Choose Language</h3>
             <button class="lang-btn" onclick="selectLanguage('uz')">
-                <span class="flag">????</span> O'zbekcha
+                <img src="https://flagcdn.com/w40/uz.png" alt="Uzbekistan"> O'zbekcha
             </button>
             <button class="lang-btn" onclick="selectLanguage('ru')">
-                <span class="flag">????</span> Русский
+                <img src="https://flagcdn.com/w40/ru.png" alt="Russia"> Русский
             </button>
             <button class="lang-btn" onclick="selectLanguage('en')">
-                <span class="flag">????</span> English
+                <img src="https://flagcdn.com/w40/gb.png" alt="Great Britain"> English
             </button>
         </div>
     </div>
  
     <header>
         <div class="logo-area">
-            <div class="logo-icon">
-                <i class="fa-solid fa-mug-hot"></i>
-            </div>
-            <div class="logo-text">
-                <h1>STAKAN</h1>
-                <span>CAFE</span>
-            </div>
+            <div class="logo-icon"><i class="fa-solid fa-mug-hot"></i></div>
+            <div class="logo-text"><h1>STAKAN</h1><span>CAFE</span></div>
         </div>
         <nav class="desktop-nav">
             <a onclick="switchPage('home')" id="nav-home" class="active"><i class="fa-solid fa-house"></i> <span class="txt-home">Bosh sahifa</span></a>
@@ -701,19 +448,11 @@
                 <div class="home-text">
                     <h2 id="main-hero-title">STAKAN CAFE: Eng Mazali Tezkor Ovqat va Premium Kofe!</h2>
                     <p id="main-hero-desc">Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat, sifatli mahsulot va unutilmas shinam muhit.</p>
-                    <div class="home-btns">
-                        <button class="btn-main btn-yellow txt-order-btn" onclick="switchPage('menu')">Buyurtma berish</button>
-                    </div>
+                    <button class="btn-main btn-yellow txt-order-btn" onclick="switchPage('menu')">Buyurtma berish</button>
                 </div>
                 <div class="home-illustrations">
-                    <div class="promo-card burger">
-                        <i class="fa-solid fa-burger"></i>
-                        <span>Stakan Burger</span>
-                    </div>
-                    <div class="promo-card coffee">
-                        <i class="fa-solid fa-mug-saucer"></i>
-                        <span>Premium Kofe</span>
-                    </div>
+                    <div class="promo-card burger"><i class="fa-solid fa-burger"></i><span>Stakan Burger</span></div>
+                    <div class="promo-card coffee"><i class="fa-solid fa-mug-saucer"></i><span>Premium Kofe</span></div>
                 </div>
             </div>
         </div>
@@ -729,19 +468,16 @@
             <div class="about-content">
                 <div class="map-visual">
                     <div class="landmark-illustration">
-                        <i class="fa-solid fa-gopuram building" title="Maxdumi A'zam Ziyoratgohi"></i>
-                        <i class="fa-solid fa-shop cafe" title="Stakan Kafe"></i>
+                        <i class="fa-solid fa-gopuram building"></i>
+                        <i class="fa-solid fa-shop cafe"></i>
                     </div>
                     <h4 class="txt-city">Kosonsoy Tumani</h4>
                     <p class="txt-landmark">Maxdumi A'zam tarixiy majmuasi yonida</p>
-                    <div class="pin">
-                        <i class="fa-solid fa-location-dot"></i> <span class="txt-region">Namangan Viloyati</span>
-                    </div>
+                    <div class="pin"><i class="fa-solid fa-location-dot"></i> <span class="txt-region">Namangan Viloyati</span></div>
                 </div>
                 <div class="about-text">
                     <h2 class="txt-about-h2">Biz Haqimizda</h2>
-                    <p id="about-p1"><strong>STAKAN CAFE</strong> - Namangan viloyati, Kosonsoy shahrining eng muqaddas va tarixiy go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi majmuasi yaqinida joylashgan zamonaviy fast-food maskanidir.</p>
-                    <p id="about-p2">Bizning maqsadimiz - har bir mijozga yuqori sifatli, tezkor va mazali taomlarni taqdim etish orqali unga a'lo kayfiyat ulashishdir.</p>
+                    <p id="about-p1"><strong>STAKAN CAFE</strong> - Kosonsoy shahrining eng muqaddas go'shalaridan biri bo'lgan Maxdumi A'zam ziyoratgohi yaqinida joylashgan zamonaviy fast-food maskanidir.</p>
                 </div>
             </div>
         </div> 
@@ -749,15 +485,9 @@
         <div id="page-contact" class="page">
             <div class="contact-card">
                 <h2 class="txt-contact-h2">Biz bilan aloqa</h2>
-                <a href="https://instagram.com" target="_blank" class="contact-link insta">
-                    <i class="fa-brands fa-instagram"></i> @stakancafe_kosonsoy
-                </a>
-                <a href="https://t.me" target="_blank" class="contact-link tg">
-                    <i class="fa-brands fa-telegram"></i> Telegram Kanalimiz
-                </a>
-                <a href="tel:+998336262223" class="contact-link phone">
-                    <i class="fa-solid fa-phone"></i> +998 (33) 626-22-23
-                </a>
+                <a href="https://instagram.com" target="_blank" class="contact-link insta"><i class="fa-brands fa-instagram"></i> @stakancafe_kosonsoy</a>
+                <a href="https://t.me" target="_blank" class="contact-link tg"><i class="fa-brands fa-telegram"></i> Telegram Kanalimiz</a>
+                <a href="tel:+998336262223" class="contact-link phone"><i class="fa-solid fa-phone"></i> +998 (33) 626-22-23</a>
             </div>
         </div>
  
@@ -765,10 +495,10 @@
             <div class="cart-page">
                 <div class="cart-list-container">
                     <h2 style="font-family: var(--font-display); color: var(--primary-yellow); margin-bottom: 15px;" class="txt-cart-h2">Savatdagi mahsulotlar</h2>
-                    <div class="cart-items-scroll" id="cart-list-output"></div>
+                    <div id="cart-list-output"></div>
                     
                     <div class="history-section">
-                        <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> <span class="txt-history-title">Oxirgi buyurtmalarim (Tanlash uchun bosing):</span></div>
+                        <div class="history-title"><i class="fa-solid fa-clock-rotate-left"></i> <span class="txt-history-title">Oxirgi buyurtmalarim:</span></div>
                         <div id="history-output"></div>
                     </div>
                 </div>
@@ -786,19 +516,17 @@
                     <div class="delivery-section" id="delivery-area">
                         <div class="customer-inputs">
                             <input type="text" id="cust-name" placeholder="Ismingizni kiriting..." required>
-                            
                             <div class="phone-method-selector">
-                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">? Auto</button>
-                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">?? Qolda</button>
+                                <button type="button" class="method-btn active" id="btn-method-auto" onclick="setPhoneMethod('auto')">⚡ Auto</button>
+                                <button type="button" class="method-btn" id="btn-method-manual" onclick="setPhoneMethod('manual')">✍️ Qo'lda</button>
                             </div>
-                            
                             <input type="tel" id="cust-phone" placeholder="Telefon raqamingiz..." required>
                         </div>
 
-                        <div class="bill-row" style="color: #4caf50; font-weight: bold; margin-bottom: 15px;">
-                            <span><i class="fa-solid fa-truck"></i> <span class="txt-our-phone">Aloqa raqamimiz:</span></span>
-                            <span>+998 (33) 626-22-23</span>
-                        </div>
+                        <button type="button" class="btn-loc" onclick="initXarita()"><i class="fa-solid fa-map-location-dot"></i> Xaritadan lokatsiyani belgilash</button>
+                        <div id="map-container" style="display:none;"></div>
+                        <div id="selected-coords-text" style="font-size:13px; color:#4caf50; margin-bottom:15px; display:none; text-align:center; font-weight:bold;"><i class="fa-solid fa-circle-check"></i> Geolokatsiya muvaffaqiyatli tanlandi!</div>
+
                         <button class="btn-main btn-yellow" style="width: 100%;" onclick="confirmOrder()">
                             <i class="fa-solid fa-circle-check"></i> <span class="txt-confirm">Buyurtmani Tasdiqlash</span>
                         </button>
@@ -822,43 +550,45 @@
  
         let cart = {};
         let currentLang = 'uz';
-        let phoneMethod = 'auto'; // 'auto' yoki 'manual'
+        let phoneMethod = 'auto';
+        let myMap = null;
+        let myPlacemark = null;
+        let selectedLatitude = null;
+        let selectedLongitude = null;
 
-        // Ko'p tilli lug'at matnlari
         const languages = {
             uz: {
                 home: "Bosh sahifa", menu: "Menyu", about: "Biz haqimizda", contact: "Bog'lanish", cart: "Savat",
                 heroTitle: "STAKAN CAFE: Eng Mazali Fast-Food va Premium Kofe!", heroDesc: "Sizga yoqadigan eng yaxshi va hamyonbop taomlar. Tezkor xizmat va unutilmas shinam muhit.",
                 orderBtn: "Buyurtma berish", menuTitle: "Bizning Menyu", city: "Kosonsoy Tumani", landmark: "Maxdumi A'zam majmuasi yaqinida",
                 region: "Namangan Viloyati", aboutH2: "Biz Haqimizda", contactH2: "Biz bilan aloqa", cartH2: "Savatdagi mahsulotlar",
-                receipt: "Buyurtma Cheki", total: "Umumiy summa:", ourPhone: "Aloqa raqami:", confirm: "Tasdiqlash",
+                receipt: "Buyurtma Cheki", total: "Umumiy summa:", confirm: "Tasdiqlash",
                 historyTitle: "Oxirgi buyurtmalarim (Tanlash uchun bosing):", emptyCart: "Savat bo'sh. Menyudan biror narsa qo'shing!",
-                noItems: "Mahsulot tanlanmagan", placeholderName: "Ismingizni kiriting...", alertFields: "Iltimos, ism va telefonni kiriting!",
-                alertSuccess: "Rahmat! Buyurtmangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
+                noItems: "Mahsulot tanlanmagan", placeholderName: "Ismingizni kiriting...", alertFields: "Iltimos, ism, telefon va lokatsiyani kiriting!",
+                alertSuccess: "Rahmat! Buyurtmangiz va lokatsiyangiz Telegramga yuborildi.", noHistory: "Eski buyurtmalar mavjud emas."
             },
             ru: {
                 home: "Главная", menu: "Меню", about: "О нас", contact: "Контакты", cart: "Корзина",
-                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!", heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис и уютная атмосфера.",
+                heroTitle: "STAKAN CAFE: Вкусный Фаст-Фуд и Премиум Кофе!", heroDesc: "Лучшие и доступные блюда, которые вам понравятся. Быстрый сервис.",
                 orderBtn: "Заказать сейчас", menuTitle: "Наше Меню", city: "Касансайский район", landmark: "Рядом с комплексом Махдуми Аъзам",
                 region: "Наманганская область", aboutH2: "О Нас", contactH2: "Связаться с нами", cartH2: "Товары в корзине",
-                receipt: "Чек заказа", total: "Общая сумма:", ourPhone: "Наш телефон:", confirm: "Подтвердить заказ",
-                historyTitle: "Мои последние заказы (Нажмите для выбора):", emptyCart: "Корзина пуста. Добавьте блюда из меню!",
-                noItems: "Товары не выбраны", placeholderName: "Введите ваше имя...", alertFields: "Пожалуйста, введите имя и телефон!",
-                alertSuccess: "Спасибо! Ваш заказ отправлен в Telegram.", noHistory: "Нет предыдущих заказов."
+                receipt: "Чек заказа", total: "Общая сумма:", confirm: "Подтвердить заказ",
+                historyTitle: "Мои последние заказы:", emptyCart: "Корзина пуста. Добавьте блюда!",
+                noItems: "Товары не выбраны", placeholderName: "Введите ваше имя...", alertFields: "Пожалуйста, введите имя, телефон и локацию!",
+                alertSuccess: "Спасибо! Ваш заказ и геолокация отправлены.", noHistory: "Нет предыдущих заказов."
             },
             en: {
                 home: "Home", menu: "Menu", about: "About Us", contact: "Contact", cart: "Cart",
-                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!", heroDesc: "The best and affordable dishes you will love. Fast service and a cozy atmosphere.",
+                heroTitle: "STAKAN CAFE: Delicious Fast-Food & Premium Coffee!", heroDesc: "The best and affordable dishes you will love.",
                 orderBtn: "Order Now", menuTitle: "Our Menu", city: "Kasansay District", landmark: "Near Maxdumi A'zam complex",
                 region: "Namangan Region", aboutH2: "About Us", contactH2: "Contact Us", cartH2: "Items in Cart",
-                receipt: "Receipt Details", total: "Total Amount:", ourPhone: "Our Phone:", confirm: "Confirm Order",
-                historyTitle: "My Recent Orders (Click to choose):", emptyCart: "Cart is empty. Add items from Menu!",
-                noItems: "No items selected", placeholderName: "Enter your name...", alertFields: "Please enter name and phone number!",
-                alertSuccess: "Thank you! Your order has been sent to Telegram.", noHistory: "No history found."
+                receipt: "Receipt Details", total: "Total Amount:", confirm: "Confirm Order",
+                historyTitle: "My Recent Orders:", emptyCart: "Cart is empty. Add items from Menu!",
+                noItems: "No items selected", placeholderName: "Enter your name...", alertFields: "Please enter name, phone and location!",
+                alertSuccess: "Thank you! Your order has been sent.", noHistory: "No history found."
             }
         };
 
-        // Tilni tanlash funksiyasi
         function selectLanguage(lang) {
             currentLang = lang;
             document.getElementById('languageModal').style.display = 'none';
@@ -872,7 +602,6 @@
             document.querySelectorAll('.txt-about').forEach(el => el.innerText = l.about);
             document.querySelectorAll('.txt-contact').forEach(el => el.innerText = l.contact);
             document.querySelectorAll('.txt-cart').forEach(el => el.innerText = l.cart);
-            
             document.getElementById('main-hero-title').innerText = l.heroTitle;
             document.getElementById('main-hero-desc').innerText = l.heroDesc;
             document.querySelector('.txt-order-btn').innerText = l.orderBtn;
@@ -885,34 +614,26 @@
             document.querySelector('.txt-cart-h2').innerText = l.cartH2;
             document.querySelector('.txt-receipt').innerText = l.receipt;
             document.querySelector('.txt-total').innerText = l.total;
-            document.querySelector('.txt-our-phone').innerText = l.ourPhone;
             document.querySelector('.txt-confirm').innerText = l.confirm;
             document.querySelector('.txt-history-title').innerText = l.historyTitle;
-            
             document.getElementById('cust-name').placeholder = l.placeholderName;
-            
             initMenu();
             updateCartPage();
         }
 
-        // Telefon kiritish usulini boshqarish (Auto / Qo'lda)
         function setPhoneMethod(method) {
             phoneMethod = method;
             document.getElementById('btn-method-auto').classList.remove('active');
             document.getElementById('btn-method-manual').classList.remove('active');
-            
             const phoneInput = document.getElementById('cust-phone');
-            
             if (method === 'auto') {
                 document.getElementById('btn-method-auto').classList.add('active');
                 phoneInput.value = "+998 (33) 626-22-23";
                 phoneInput.readOnly = true;
-                phoneInput.style.opacity = "0.7";
             } else {
                 document.getElementById('btn-method-manual').classList.add('active');
                 phoneInput.value = "+998";
                 phoneInput.readOnly = false;
-                phoneInput.style.opacity = "1";
                 phoneInput.focus();
             }
         }
@@ -922,14 +643,12 @@
             container.innerHTML = products.map(p => `
                 <div class="menu-item">
                     <div class="count-badge" id="badge-${p.id}">0</div>
-                    <div class="menu-item-icon" style="color: ${p.icon.includes('burger') ? '#ffa726' : p.icon.includes('mug') ? '#8d6e63' : p.icon.includes('pizza') ? '#ff5252' : '#e0e0e0'}">
-                        <i class="fa-solid ${p.icon}"></i>
-                    </div>
+                    <div class="menu-item-icon" style="color:#ffa726"><i class="fa-solid ${p.icon}"></i></div>
                     <h3>${p.name}</h3>
                     <p>${p.desc}</p>
                     <div class="price">${p.price.toLocaleString()} UZS</div>
-                    <button class="btn-main btn-yellow" style="font-size: 14px; padding: 8px 20px;" onclick="addToCart(${p.id})">
-                        <i class="fa-solid fa-cart-plus"></i> ${currentLang === 'uz' ? 'Savatga qo\'shish' : currentLang === 'ru' ? 'В корзину' : 'Add to Cart'}
+                    <button class="btn-main btn-yellow" style="font-size:14px; padding:8px 20px;" onclick="addToCart(${p.id})">
+                        <i class="fa-solid fa-cart-plus"></i> ${currentLang === 'uz' ? 'Qo\'shish' : 'Добавить'}
                     </button>
                 </div>
             `).join('');
@@ -939,47 +658,24 @@
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
- 
             document.getElementById(`page-${pageId}`).classList.add('active');
             
-            // Desktop va mobil menularda klasslarni yangilash
-            const navLinkDesktop = document.getElementById(`nav-${pageId}`);
-            if (navLinkDesktop) navLinkDesktop.classList.add('active');
-            
-            const navLinkMobile = document.getElementById(`m-nav-${pageId}`);
-            if (navLinkMobile) navLinkMobile.classList.add('active');
+            const navD = document.getElementById(`nav-${pageId}`); if (navD) navD.classList.add('active');
+            const navM = document.getElementById(`m-nav-${pageId}`); if (navM) navM.classList.add('active');
 
-            if(pageId === 'cart') {
-                updateCartPage();
-            }
+            if(pageId === 'cart') { updateCartPage(); window.scrollTo({top: 0, behavior: 'smooth'}); }
         }
  
-        function addToCart(id) {
-            if (cart[id]) { cart[id]++; } else { cart[id] = 1; }
-            updateDOM();
-        }
- 
-        function changeQty(id, delta) {
-            if (cart[id]) {
-                cart[id] += delta;
-                if (cart[id] <= 0) delete cart[id];
-            }
-            updateDOM();
-            updateCartPage();
-        }
+        function addToCart(id) { cart[id] = (cart[id] || 0) + 1; updateDOM(); }
+        function changeQty(id, delta) { if (cart[id]) { cart[id] += delta; if (cart[id] <= 0) delete cart[id]; } updateDOM(); updateCartPage(); }
  
         function updateDOM() {
             let totalItems = 0;
             products.forEach(p => {
-                const countBadge = document.getElementById(`badge-${p.id}`);
-                if (countBadge) {
-                    if (cart[p.id] && cart[p.id] > 0) {
-                        countBadge.innerText = cart[p.id];
-                        countBadge.style.display = "flex";
-                        totalItems += cart[p.id];
-                    } else {
-                        countBadge.style.display = "none";
-                    }
+                const badge = document.getElementById(`badge-${p.id}`);
+                if (badge) {
+                    if (cart[p.id] > 0) { badge.innerText = cart[p.id]; badge.style.display = "flex"; totalItems += cart[p.id]; }
+                    else { badge.style.display = "none"; }
                 }
             });
             document.getElementById('cart-badge').innerText = totalItems;
@@ -992,91 +688,82 @@
             const deliveryArea = document.getElementById('delivery-area');
             const l = languages[currentLang];
             
-            let totalSum = 0;
-            let listHtml = "";
-            let billHtml = "";
+            let totalSum = 0; let listHtml = ""; let billHtml = "";
             const activeIds = Object.keys(cart);
  
             if (activeIds.length === 0) {
-                listOutput.innerHTML = `<div style="text-align:center; padding:30px; color:#6b7280;">${l.emptyCart}</div>`;
-                billOutput.innerHTML = `<div style="color:#6b7280; font-size:14px;">${l.noItems}</div>`;
+                listOutput.innerHTML = `<div style="text-align:center; padding:20px; color:#6b7280;">${l.emptyCart}</div>`;
+                billOutput.innerHTML = `<div style="color:#6b7280;">${l.noItems}</div>`;
                 document.getElementById('total-price-sum').innerText = "0 UZS";
                 deliveryArea.style.display = "none";
-                showOrderHistory();
-                return;
+                showOrderHistory(); return;
             }
  
             activeIds.forEach(id => {
-                const item = products.find(p => p.id == id); 
-                const itemTotal = item.price * cart[id];
-                totalSum += itemTotal;
- 
+                const item = products.find(p => p.id == id); let itemTotal = item.price * cart[id]; totalSum += itemTotal;
                 listHtml += `
                     <div class="cart-item">
-                        <div class="cart-item-info">
-                            <i class="fa-solid ${item.icon}"></i>
-                            <div>
-                                <h4 style="font-family: var(--font-display);">${item.name}</h4>
-                                <span style="color:var(--accent-red); font-weight:700;">${item.price.toLocaleString()} UZS</span>
-                            </div>
-                        </div>
+                        <div class="cart-item-info"><h4>${item.name}</h4></div>
                         <div class="cart-item-controls">
                             <button class="qty-btn" onclick="changeQty(${id}, -1)">-</button>
-                            <span style="font-weight:bold; width:20px; text-align:center;">${cart[id]}</span>
+                            <span>${cart[id]}</span>
                             <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
                         </div>
-                    </div>
-                `;
- 
-                billHtml += `
-                    <div class="bill-row">
-                        <span>${item.name} x ${cart[id]}</span>
-                        <span>${itemTotal.toLocaleString()} UZS</span>
-                    </div>
-                `;
+                    </div>`;
+                billHtml += `<div class="bill-row"><span>${item.name} x ${cart[id]}</span><span>${itemTotal.toLocaleString()} UZS</span></div>`;
             });
  
-            listOutput.innerHTML = listHtml;
-            billOutput.innerHTML = billHtml;
+            listOutput.innerHTML = listHtml; billOutput.innerHTML = billHtml;
             document.getElementById('total-price-sum').innerText = totalSum.toLocaleString() + " UZS";
             deliveryArea.style.display = "block";
-            
             showOrderHistory();
         }
 
-        // Tarixdagi eski buyurtmalarni ekranga chiqarish
+        // INTERAKTIV YANDEX XARITANI ISHGA TUSHIRISH
+        function initXarita() {
+            document.getElementById('map-container').style.display = "block";
+            if (myMap) { myMap.container.fitToViewport(); return; }
+            
+            let defaultCoords = [41.2581, 71.5506]; // Kosonsoy
+            ymaps.ready(function () {
+                myMap = new ymaps.Map('map-container', { center: defaultCoords, zoom: 14, controls: ['zoomControl'] });
+                myPlacemark = new ymaps.Placemark(defaultCoords, {}, { preset: 'islands#redFoodIcon', draggable: true });
+                myMap.geoObjects.add(myPlacemark);
+
+                myPlacemark.events.add('dragend', function () {
+                    let coords = myPlacemark.geometry.getCoordinates();
+                    saqlashKoordinata(coords[0], coords[1]);
+                });
+                
+                // Telefon GPS tizimi orqali avtomatik aniqlash
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        let lat = position.coords.latitude; let lon = position.coords.longitude;
+                        myMap.setCenter([lat, lon], 16); myPlacemark.geometry.setCoordinates([lat, lon]);
+                        saqlashKoordinata(lat, lon);
+                    });
+                }
+            });
+        }
+
+        function saqlashKoordinata(lat, lon) {
+            selectedLatitude = lat; selectedLongitude = lon;
+            document.getElementById('selected-coords-text').style.display = "block";
+        }
+
         function showOrderHistory() {
-            const historyOutput = document.getElementById('history-output');
-            let historyData = localStorage.getItem('stakan_history');
-            const l = languages[currentLang];
-
-            if (!historyData) {
-                historyOutput.innerHTML = `<div style="color:#6b7280; font-size:13px;">${l.noHistory}</div>`;
-                return;
-            }
-
-            let orders = JSON.parse(historyData);
-            let html = "";
+            const historyOutput = document.getElementById('history-output'); let historyData = localStorage.getItem('stakan_history');
+            if (!historyData) { historyOutput.innerHTML = "Eski buyurtmalar yo'q"; return; }
+            let orders = JSON.parse(historyData); let html = "";
             orders.forEach((order, index) => {
-                html += `
-                    <div class="history-item" onclick="loadOldOrder(${index})">
-                        <strong>№${index + 1} | ${order.date}</strong><br>
-                        <span style="color:#9ca3af;">${order.summary}</span>
-                    </div>
-                `;
+                html += `<div class="history-item" onclick="loadOldOrder(${index})"><b>№${index + 1}</b> | ${order.summary}</div>`;
             });
             historyOutput.innerHTML = html;
         }
 
-        // Tanlangan eski buyurtmani savatga yuklash (To'g'ridan-to'g'ri qayta buyurtma qilish uchun)
         function loadOldOrder(index) {
-            let historyData = localStorage.getItem('stakan_history');
-            if(historyData) {
-                let orders = JSON.parse(historyData);
-                cart = orders[index].cart;
-                updateDOM();
-                updateCartPage();
-            }
+            let orders = JSON.parse(localStorage.getItem('stakan_history'));
+            if(orders) { cart = orders[index].cart; updateDOM(); updateCartPage(); }
         }
  
         function confirmOrder() {
@@ -1086,72 +773,39 @@
             const phone = document.getElementById('cust-phone').value.trim();
             const l = languages[currentLang];
 
-            if (!name || !phone) {
-                alert(l.alertFields);
-                return;
-            }
+            if (!name || !phone || !selectedLatitude) { alert(l.alertFields); return; }
  
-            const activeIds = Object.keys(cart);
-            if (activeIds.length === 0) { return; }
- 
-            let message = `?? *YANGI BUYURTMA (STAKAN CAFE)*\n`;
-            message += `---------------\n`;
-            message += `?? *Mijoz:* ${name}\n`;
-            message += `?? *Tel:* ${phone}\n`;
-            message += `?? *Til:* ${currentLang.toUpperCase()}\n`;
-            message += `---------------\n`;
-            let totalSum = 0;
-            let summaryText = "";
+            const googleMapsLink = `https://maps.google.com/maps?q=${selectedLatitude},${selectedLongitude}&ll=${selectedLatitude},${selectedLongitude}&z=16`;
+            const yandexMapsLink = `https://yandex.com/maps/?ll=${selectedLongitude},${selectedLatitude}&z=16&pt=${selectedLongitude},${selectedLatitude},pm2rdm`;
 
-            activeIds.forEach(id => {
-                const item = products.find(p => p.id == id);
-                const itemTotal = item.price * cart[id];
-                totalSum += itemTotal;
-                message += `?? *${item.name}*\n` + `   ${cart[id]} ta x ${item.price.toLocaleString()} = ${itemTotal.toLocaleString()} UZS\n\n`;
+            let message = `🚀 *YANGI BUYURTMA (STAKAN CAFE)*\n`;
+            message += `👤 *Mijoz:* ${name}\n📞 *Tel:* ${phone}\n`;
+            message += `---------------\n`;
+            let totalSum = 0; let summaryText = "";
+            Object.keys(cart).forEach(id => {
+                const item = products.find(p => p.id == id); let itemTotal = item.price * cart[id]; totalSum += itemTotal;
+                message += `🍔 *${item.name}* (${cart[id]} ta) = ${itemTotal.toLocaleString()} UZS\n`;
                 summaryText += `${item.name} (${cart[id]}x), `;
             });
-            message += `---------------\n`;
-            message += `?? *Umumiy summa:* ${totalSum.toLocaleString()} UZS`;
+            message += `---------------\n💰 *Jami:* ${totalSum.toLocaleString()} UZS\n`;
+            message += `📍 *LOKATSIYA:*\n🌐 [Google Maps](${googleMapsLink})\n🗺️ [Yandex Maps](${yandexMapsLink})`;
  
-            const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            fetch(telegramUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "Markdown" })
             })
-            .then(response => {
-                if (response.ok) {
+            .then(res => {
+                if (res.ok) {
                     alert(l.alertSuccess);
-                    
-                    // LocalStorage'ga buyurtmani saqlash tizimi
-                    let historyData = localStorage.getItem('stakan_history');
-                    let orders = historyData ? JSON.parse(historyData) : [];
-                    
-                    let now = new Date();
-                    let dateStr = `${now.getDate()}.${now.getMonth()+1} ${now.getHours()}:${now.getMinutes()}`;
-                    
-                    orders.unshift({
-                        date: dateStr,
-                        cart: cart,
-                        summary: summaryText.substring(0, summaryText.length - 2) + " = " + totalSum.toLocaleString() + " UZS"
-                    });
-                    
-                    // Maksimal 5 ta oxirgi buyurtmani saqlaymiz
-                    if(orders.length > 5) orders.pop();
-                    localStorage.setItem('stakan_history', JSON.stringify(orders));
-
-                    cart = {};
-                    updateDOM();
-                    switchPage('home');
+                    let historyData = localStorage.getItem('stakan_history'); let orders = historyData ? JSON.parse(historyData) : [];
+                    orders.unshift({ cart: cart, summary: summaryText + totalSum.toLocaleString() + " UZS" });
+                    if(orders.length > 5) orders.pop(); localStorage.setItem('stakan_history', JSON.stringify(orders));
+                    cart = {}; updateDOM(); switchPage('home');
                 }
             });
         }
  
-        window.onload = () => {
-            // Birinchi kirishda til tanlash oynasini ochib turadi
-            document.getElementById('languageModal').style.display = 'flex';
-            setPhoneMethod('auto'); // Dastlab avtomatik rejimda bo'ladi
-        };
+        window.onload = () => { document.getElementById('languageModal').style.display = 'flex'; setPhoneMethod('auto'); };
     </script>
 </body>
 </html>
