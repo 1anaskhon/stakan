@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <title>Stakan Cafe</title>
-<meta name="description" content="Stakan Cafe вЂ” tezkor va mazali cafe xizmati. Burgerlar, pitsalar, ichimliklar va boshqa lazzatli taomlar bir joyda.">
+<meta name="description" content="Stakan Cafe — tezkor va mazali cafe xizmati. Burgerlar, pitsalar, ichimliklar va boshqa lazzatli taomlar bir joyda.">
 <meta name="theme-color" content="#0f1319">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23c9c3f0'/%3E%3Cpath d='M22 30 L78 30 L70 88 Q50 96 30 88 Z' fill='%23c9c3f0' stroke='%230f1319' stroke-width='4'/%3E%3Crect x='16' y='16' width='68' height='16' rx='8' fill='%23c9c3f0' stroke='%230f1319' stroke-width='4'/%3E%3Crect x='34' y='46' width='32' height='24' rx='4' fill='%230f1319'/%3E%3Cpath d='M50 51 C46 55 46 60 50 64 C54 60 54 55 50 51 Z' fill='%23b7d84a'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iVB0B2X4DSN9lMj4rcCVMlIw96jhcpuRC//dqTfsFCUlSuU/tTeFcE64Q==" crossorigin="anonymous" referrerpolicy="no-referrer">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
@@ -104,13 +104,29 @@
 
   .desktop-nav{display:flex; align-items:center; gap:4px;}
   .desktop-nav button{
-    display:flex; align-items:center; gap:8px;
-    padding:10px 16px; border-radius:12px; font-weight:600; font-size:14.5px;
+    display:flex; align-items:center; gap:9px;
+    padding:8px 16px 8px 8px; border-radius:12px; font-weight:600; font-size:14.5px;
     color:var(--muted); transition:.25s var(--ease);
   }
   .desktop-nav button i{font-size:15px; width:16px; text-align:center;}
   .desktop-nav button:hover{color:var(--text); background:var(--card);}
   .desktop-nav button.active{color:#171308; background:var(--yellow); box-shadow:var(--shadow-yellow);}
+
+  /* ============ NAV ICON STICKERS ============ */
+  .nav-ico{
+    width:28px; height:28px; border-radius:9px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; box-shadow:0 4px 10px -4px rgba(0,0,0,.5);
+    transition:.25s var(--ease);
+  }
+  [data-view="home"] .nav-ico{background:linear-gradient(150deg,#8fb0ff,#4a6fe0); color:#0d1730;}
+  [data-view="menu"] .nav-ico{background:linear-gradient(150deg,#ffb84d,#e6841a); color:#2a1400;}
+  [data-view="cart"] .nav-ico{background:linear-gradient(150deg,var(--yellow),#e6a800); color:#191308;}
+  [data-view="history"] .nav-ico{background:linear-gradient(150deg,#d19bff,#8a4fe0); color:#1c0a30;}
+  .desktop-nav button.active .nav-ico, .mnav-btn.active .nav-ico{transform:scale(1.08); box-shadow:0 6px 14px -4px rgba(0,0,0,.6);}
+  .mnav-btn .nav-ico{width:24px; height:24px; border-radius:8px; margin-bottom:1px;}
+  .nav-ico i{font-size:13px;}
+  .mnav-btn .nav-ico i{font-size:11.5px;}
 
   .header-actions{display:flex; align-items:center; gap:10px;}
   .icon-btn{
@@ -140,6 +156,7 @@
 
   @media (max-width:880px){
     .desktop-nav{display:none;}
+    #desktopActions{display:none;}
     .mobile-topbar{display:flex; align-items:center; gap:10px;}
   }
 
@@ -455,7 +472,7 @@
     display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:14px;
     background:var(--card-2); border:1.5px solid var(--border); transition:.22s var(--ease); text-align:left;
   }
-  .lang-opt .flag{width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px; flex-shrink:0;}
+  .lang-opt .flag{width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; background:var(--card); border:1px solid var(--border); overflow:hidden;}
   .lang-opt b{font-size:14.5px; display:block;}
   .lang-opt small{color:var(--muted); font-size:11.5px;}
   .lang-opt:hover{border-color:var(--yellow); background:rgba(255,204,0,.06); transform:translateX(3px);}
@@ -513,9 +530,9 @@
     <h2 id="langModalTitle">Tilni tanlang</h2>
     <p class="sub" id="langModalSub">Stakan Cafe ilovasidan foydalanish uchun tilni tanlang</p>
     <div class="lang-list">
-      <button class="lang-opt uz" data-lang="uz"><span class="flag">UZ</span><span><b>O'zbekcha</b><small>Uzbek</small></span></button>
-      <button class="lang-opt ru" data-lang="ru"><span class="flag">RU</span><span><b>Р СѓСЃСЃРєРёР№</b><small>Russian</small></span></button>
-      <button class="lang-opt en" data-lang="en"><span class="flag">EN</span><span><b>English</b><small>English</small></span></button>
+      <button class="lang-opt uz" data-lang="uz"><span class="flag">????</span><span><b>O'zbekcha</b><small>Uzbek</small></span></button>
+      <button class="lang-opt ru" data-lang="ru"><span class="flag">????</span><span><b>Русский</b><small>Russian</small></span></button>
+      <button class="lang-opt en" data-lang="en"><span class="flag">????</span><span><b>English</b><small>English</small></span></button>
     </div>
   </div>
 </div>
@@ -560,10 +577,10 @@
     </div>
 
     <nav class="desktop-nav" id="desktopNav">
-      <button data-view="home" class="active"><i class="fa-solid fa-house"></i><span data-i18n="navHome">Bosh sahifa</span></button>
-      <button data-view="menu"><i class="fa-solid fa-utensils"></i><span data-i18n="navMenu">Menyu</span></button>
-      <button data-view="cart"><i class="fa-solid fa-cart-shopping"></i><span data-i18n="navCart">Savat</span></button>
-      <button data-view="history"><i class="fa-solid fa-clock-rotate-left"></i><span data-i18n="navHistory">Tarix</span></button>
+      <button data-view="home" class="active"><span class="nav-ico"><i class="fa-solid fa-house"></i></span><span data-i18n="navHome">Bosh sahifa</span></button>
+      <button data-view="menu"><span class="nav-ico"><i class="fa-solid fa-utensils"></i></span><span data-i18n="navMenu">Menyu</span></button>
+      <button data-view="cart"><span class="nav-ico"><i class="fa-solid fa-cart-shopping"></i></span><span data-i18n="navCart">Savat</span></button>
+      <button data-view="history"><span class="nav-ico"><i class="fa-solid fa-clock-rotate-left"></i></span><span data-i18n="navHistory">Tarix</span></button>
     </nav>
 
     <div class="header-actions" id="desktopActions">
@@ -587,14 +604,12 @@
         <div>
           <span class="eyebrow"><i class="fa-solid fa-bolt"></i> <span data-i18n="heroEyebrow">30 daqiqada yetkazamiz</span></span>
           <h1 data-i18n-html="heroTitle">Nafsingiz tortgan <span>lazzatni</span> buyurtma qiling</h1>
-          <p class="lead" data-i18n="heroLead">Menda вЂ” tezkor fast-food xizmati. Eng mazali burgerlar, pitsalar va ichimliklar endi bir necha bosishda uyingizga yetib boradi.</p>
+          <p class="lead" data-i18n="heroLead">Menda — tezkor fast-food xizmati. Eng mazali burgerlar, pitsalar va ichimliklar endi bir necha bosishda uyingizga yetib boradi.</p>
           <div class="hero-ctas">
             <button class="btn btn-primary" data-view="menu"><i class="fa-solid fa-bag-shopping"></i><span data-i18n="heroCta">Buyurtma berish</span></button>
-            <button class="btn btn-ghost" data-view="menu"><i class="fa-solid fa-book-open"></i><span data-i18n="heroCta2">Menyuni ko'rish</span></button>
           </div>
           <div class="hero-stats">
             <div class="hero-stat"><b>15+</b><span data-i18n="statDishes">Xil taomlar</span></div>
-            <div class="hero-stat"><b>4.9</b><span data-i18n="statRating">O'rtacha baho</span></div>
             <div class="hero-stat"><b>30 <span data-i18n="statMin">daq</span></b><span data-i18n="statDelivery">Yetkazib berish</span></div>
           </div>
         </div>
@@ -716,15 +731,15 @@
     </div>
   </section>
 
-  <div class="footer-note">Stakan Cafe &copy; 2026 В· Made with <i class="fa-solid fa-heart"></i> in Tashkent</div>
+  <div class="footer-note">Stakan Cafe &copy; 2026 · Made with <i class="fa-solid fa-heart"></i> by Karakhujayev Anaskhon</div>
 </main>
 
 <!-- ======================= MOBILE BOTTOM NAV ======================= -->
 <nav class="mobile-nav" id="mobileNav">
-  <button class="mnav-btn active" data-view="home"><i class="fa-solid fa-house"></i><span data-i18n="navHome">Bosh sahifa</span></button>
-  <button class="mnav-btn" data-view="menu"><i class="fa-solid fa-utensils"></i><span data-i18n="navMenu">Menyu</span></button>
-  <button class="mnav-btn" data-view="cart"><i class="fa-solid fa-cart-shopping"></i><span class="badge hidden" id="cartBadgeMobile">0</span><span data-i18n="navCart">Savat</span></button>
-  <button class="mnav-btn" data-view="history"><i class="fa-solid fa-clock-rotate-left"></i><span data-i18n="navHistory">Tarix</span></button>
+  <button class="mnav-btn active" data-view="home"><span class="nav-ico"><i class="fa-solid fa-house"></i></span><span data-i18n="navHome">Bosh sahifa</span></button>
+  <button class="mnav-btn" data-view="menu"><span class="nav-ico"><i class="fa-solid fa-utensils"></i></span><span data-i18n="navMenu">Menyu</span></button>
+  <button class="mnav-btn" data-view="cart"><span class="nav-ico"><i class="fa-solid fa-cart-shopping"></i></span><span class="badge hidden" id="cartBadgeMobile">0</span><span data-i18n="navCart">Savat</span></button>
+  <button class="mnav-btn" data-view="history"><span class="nav-ico"><i class="fa-solid fa-clock-rotate-left"></i></span><span data-i18n="navHistory">Tarix</span></button>
 </nav>
 
 <script>
@@ -732,7 +747,7 @@
 "use strict";
 
 /* =========================================================
-   CONFIG вЂ” Telegram Bot sozlamalari
+   CONFIG — Telegram Bot sozlamalari
    Bu yerga o'zingizning bot tokeningiz va chat_id ni kiriting.
 ========================================================= */
 const CONFIG = {
@@ -750,9 +765,9 @@ const I18N = {
     navHome:"Bosh sahifa", navMenu:"Menyu", navCart:"Savat", navHistory:"Tarix",
     heroEyebrow:"30 daqiqada yetkazamiz",
     heroTitle:"Nafsingiz tortgan <span>lazzatni</span> buyurtma qiling",
-    heroLead:"Stakan Cafe вЂ” tezkor fast-food xizmati. Eng mazali burgerlar, pitsalar va ichimliklar endi bir necha bosishda uyingizga yetib boradi.",
-    heroCta:"Buyurtma berish", heroCta2:"Menyuni ko'rish",
-    statDishes:"Xil taomlar", statRating:"O'rtacha baho", statMin:"daq", statDelivery:"Yetkazib berish",
+    heroLead:"Stakan Cafe — tezkor fast-food xizmati. Eng mazali burgerlar, pitsalar va ichimliklar endi bir necha bosishda uyingizga yetib boradi.",
+    heroCta:"Buyurtma berish",
+    statDishes:"Xil taomlar", statMin:"daq", statDelivery:"Yetkazib berish",
     popularTitle:"Mashhur taomlar", popularSub:"Mijozlarimiz eng ko'p tanlagan taomlar", seeAll:"Barchasini ko'rish",
     menuTitle:"Menyu", menuSub:"Sevimli taomingizni tanlang",
     cartTitle:"Savat", cartSub:"Buyurtmangizni tekshirib, tasdiqlang",
@@ -779,44 +794,44 @@ const I18N = {
     toastLocationRequired:"Iltimos, xaritadan joylashuvni tanlang", toastPhoneInvalid:"Telefon raqamni to'liq kiriting"
   },
   ru:{
-    navHome:"Р“Р»Р°РІРЅР°СЏ", navMenu:"РњРµРЅСЋ", navCart:"РљРѕСЂР·РёРЅР°", navHistory:"РСЃС‚РѕСЂРёСЏ",
-    heroEyebrow:"Р”РѕСЃС‚Р°РІРёРј Р·Р° 30 РјРёРЅСѓС‚",
-    heroTitle:"Р—Р°РєР°Р¶РёС‚Рµ <span>РІРєСѓСЃ</span>, РєРѕС‚РѕСЂС‹Р№ РІС‹ С…РѕС‚РёС‚Рµ",
-    heroLead:"Stakan Cafe вЂ” СЃРµСЂРІРёСЃ Р±С‹СЃС‚СЂРѕРіРѕ РїРёС‚Р°РЅРёСЏ. РЎР°РјС‹Рµ РІРєСѓСЃРЅС‹Рµ Р±СѓСЂРіРµСЂС‹, РїРёС†С†Р° Рё РЅР°РїРёС‚РєРё С‚РµРїРµСЂСЊ РґРѕСЃС‚СѓРїРЅС‹ РІ РїР°СЂСѓ РєР»РёРєРѕРІ.",
-    heroCta:"РЎРґРµР»Р°С‚СЊ Р·Р°РєР°Р·", heroCta2:"РЎРјРѕС‚СЂРµС‚СЊ РјРµРЅСЋ",
-    statDishes:"Р’РёРґРѕРІ Р±Р»СЋРґ", statRating:"РЎСЂРµРґРЅРёР№ СЂРµР№С‚РёРЅРі", statMin:"РјРёРЅ", statDelivery:"Р”РѕСЃС‚Р°РІРєР°",
-    popularTitle:"РџРѕРїСѓР»СЏСЂРЅС‹Рµ Р±Р»СЋРґР°", popularSub:"РЎР°РјС‹Рµ Р·Р°РєР°Р·С‹РІР°РµРјС‹Рµ Р±Р»СЋРґР° РЅР°С€РёС… РєР»РёРµРЅС‚РѕРІ", seeAll:"РЎРјРѕС‚СЂРµС‚СЊ РІСЃРµ",
-    menuTitle:"РњРµРЅСЋ", menuSub:"Р’С‹Р±РµСЂРёС‚Рµ Р»СЋР±РёРјРѕРµ Р±Р»СЋРґРѕ",
-    cartTitle:"РљРѕСЂР·РёРЅР°", cartSub:"РџСЂРѕРІРµСЂСЊС‚Рµ Рё РїРѕРґС‚РІРµСЂРґРёС‚Рµ Р·Р°РєР°Р·",
-    cartEmptyTitle:"РљРѕСЂР·РёРЅР° РїСѓСЃС‚Р°", cartEmptyText:"Р’С‹Р±РµСЂРёС‚Рµ РїРѕРЅСЂР°РІРёРІС€РёРµСЃСЏ Р±Р»СЋРґР° РёР· РјРµРЅСЋ Рё РґРѕР±Р°РІСЊС‚Рµ РІ РєРѕСЂР·РёРЅСѓ", goToMenu:"РџРµСЂРµР№С‚Рё РІ РјРµРЅСЋ",
-    orderSummary:"РС‚РѕРі Р·Р°РєР°Р·Р°", subtotal:"РЎСѓРјРјР° С‚РѕРІР°СЂРѕРІ", deliveryFee:"Р”РѕСЃС‚Р°РІРєР°", total:"РС‚РѕРіРѕ",
-    deliveryTitle:"РЎРїРѕСЃРѕР± РґРѕСЃС‚Р°РІРєРё", deliveryOpt:"Р”РѕСЃС‚Р°РІРєР°", pickupOpt:"РЎР°РјРѕРІС‹РІРѕР·",
-    nameLabel:"Р’Р°С€Рµ РёРјСЏ", phoneLabel:"РќРѕРјРµСЂ С‚РµР»РµС„РѕРЅР°", addressLabel:"РђРґСЂРµСЃ", commentLabel:"РљРѕРјРјРµРЅС‚Р°СЂРёР№ (РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅРѕ)",
-    confirmOrder:"РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РєР°Р·", reqField:"Р­С‚Рѕ РїРѕР»Рµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ",
-    historyTitle:"РСЃС‚РѕСЂРёСЏ Р·Р°РєР°Р·РѕРІ", historySub:"Р’Р°С€Рё РїРѕСЃР»РµРґРЅРёРµ 5 Р·Р°РєР°Р·РѕРІ",
-    historyEmptyTitle:"РСЃС‚РѕСЂРёСЏ РїСѓСЃС‚Р°", historyEmptyText:"РЎРґРµР»Р°Р№С‚Рµ РїРµСЂРІС‹Р№ Р·Р°РєР°Р·, Рё РѕРЅ СЃРѕС…СЂР°РЅРёС‚СЃСЏ Р·РґРµСЃСЊ",
-    reorderLabel:"РџРѕРІС‚РѕСЂРёС‚СЊ Р·Р°РєР°Р·",
-    addToCartTip:"Р”РѕР±Р°РІРёС‚СЊ РІ РєРѕСЂР·РёРЅСѓ",
-    toastAdded:"Р”РѕР±Р°РІР»РµРЅРѕ РІ РєРѕСЂР·РёРЅСѓ", toastRemoved:"РЈРґР°Р»РµРЅРѕ РёР· РєРѕСЂР·РёРЅС‹",
-    toastOrderSuccess:"Р—Р°РєР°Р· РїСЂРёРЅСЏС‚!", toastOrderSuccessSub:"РњС‹ СЃРєРѕСЂРѕ СЃ РІР°РјРё СЃРІСЏР¶РµРјСЃСЏ",
-    toastReorder:"Р—Р°РєР°Р· Р·Р°РіСЂСѓР¶РµРЅ РІ РєРѕСЂР·РёРЅСѓ", toastFillFields:"РџРѕР¶Р°Р»СѓР№СЃС‚Р°, Р·Р°РїРѕР»РЅРёС‚Рµ РѕР±СЏР·Р°С‚РµР»СЊРЅС‹Рµ РїРѕР»СЏ",
-    toastCartEmpty:"РЎРЅР°С‡Р°Р»Р° РґРѕР±Р°РІСЊС‚Рµ С‚РѕРІР°СЂ РІ РєРѕСЂР·РёРЅСѓ", toastTelegramFail:"Р—Р°РєР°Р· СЃРѕС…СЂР°РЅС‘РЅ, РЅРѕ СЃРѕРѕР±С‰РµРЅРёРµ Р±РѕС‚Сѓ РЅРµ РѕС‚РїСЂР°РІР»РµРЅРѕ",
-    langModalTitle:"Р’С‹Р±РµСЂРёС‚Рµ СЏР·С‹Рє", langModalSub:"Р’С‹Р±РµСЂРёС‚Рµ СЏР·С‹Рє РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ Stakan Cafe",
-    orderNumLabel:"Р—Р°РєР°Р·", pieces:"С€С‚",
-    cat_all:"Р’СЃРµ", cat_burger:"Р‘СѓСЂРіРµСЂС‹", cat_pizza:"РџРёС†С†Р°", cat_drink:"РќР°РїРёС‚РєРё", cat_side:"Р“Р°СЂРЅРёСЂС‹", cat_dessert:"Р”РµСЃРµСЂС‚С‹", cat_combo:"РљРѕРјР±Рѕ",
-    chooseOnMap:"Р’С‹Р±РµСЂРёС‚Рµ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ РЅР° РєР°СЂС‚Рµ", chooseLocationTitle:"Р’С‹Р±РµСЂРёС‚Рµ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ",
-    useMyLocation:"РћРїСЂРµРґРµР»РёС‚СЊ РјРѕС‘ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ", confirmLocation:"РџРѕРґС‚РІРµСЂРґРёС‚СЊ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ",
-    dragMapHint:"РџРµСЂРµРґРІРёРЅСЊС‚Рµ РєР°СЂС‚Сѓ, С‡С‚РѕР±С‹ СѓРєР°Р·Р°С‚СЊ С‚РѕС‡РєСѓ РІ С†РµРЅС‚СЂРµ", locating:"РћРїСЂРµРґРµР»РµРЅРёРµ Р°РґСЂРµСЃР°...",
-    toastGeoUnsupported:"Р’Р°С€Рµ СѓСЃС‚СЂРѕР№СЃС‚РІРѕ РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ РѕРїСЂРµРґРµР»РµРЅРёРµ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёСЏ", toastGeoFail:"РќРµ СѓРґР°Р»РѕСЃСЊ РѕРїСЂРµРґРµР»РёС‚СЊ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ",
-    toastLocationRequired:"РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІС‹Р±РµСЂРёС‚Рµ РјРµСЃС‚РѕРїРѕР»РѕР¶РµРЅРёРµ РЅР° РєР°СЂС‚Рµ", toastPhoneInvalid:"Р’РІРµРґРёС‚Рµ РЅРѕРјРµСЂ С‚РµР»РµС„РѕРЅР° РїРѕР»РЅРѕСЃС‚СЊСЋ"
+    navHome:"Главная", navMenu:"Меню", navCart:"Корзина", navHistory:"История",
+    heroEyebrow:"Доставим за 30 минут",
+    heroTitle:"Закажите <span>вкус</span>, который вы хотите",
+    heroLead:"Stakan Cafe — сервис быстрого питания. Самые вкусные бургеры, пицца и напитки теперь доступны в пару кликов.",
+    heroCta:"Сделать заказ",
+    statDishes:"Видов блюд", statMin:"мин", statDelivery:"Доставка",
+    popularTitle:"Популярные блюда", popularSub:"Самые заказываемые блюда наших клиентов", seeAll:"Смотреть все",
+    menuTitle:"Меню", menuSub:"Выберите любимое блюдо",
+    cartTitle:"Корзина", cartSub:"Проверьте и подтвердите заказ",
+    cartEmptyTitle:"Корзина пуста", cartEmptyText:"Выберите понравившиеся блюда из меню и добавьте в корзину", goToMenu:"Перейти в меню",
+    orderSummary:"Итог заказа", subtotal:"Сумма товаров", deliveryFee:"Доставка", total:"Итого",
+    deliveryTitle:"Способ доставки", deliveryOpt:"Доставка", pickupOpt:"Самовывоз",
+    nameLabel:"Ваше имя", phoneLabel:"Номер телефона", addressLabel:"Адрес", commentLabel:"Комментарий (необязательно)",
+    confirmOrder:"Подтвердить заказ", reqField:"Это поле обязательно",
+    historyTitle:"История заказов", historySub:"Ваши последние 5 заказов",
+    historyEmptyTitle:"История пуста", historyEmptyText:"Сделайте первый заказ, и он сохранится здесь",
+    reorderLabel:"Повторить заказ",
+    addToCartTip:"Добавить в корзину",
+    toastAdded:"Добавлено в корзину", toastRemoved:"Удалено из корзины",
+    toastOrderSuccess:"Заказ принят!", toastOrderSuccessSub:"Мы скоро с вами свяжемся",
+    toastReorder:"Заказ загружен в корзину", toastFillFields:"Пожалуйста, заполните обязательные поля",
+    toastCartEmpty:"Сначала добавьте товар в корзину", toastTelegramFail:"Заказ сохранён, но сообщение боту не отправлено",
+    langModalTitle:"Выберите язык", langModalSub:"Выберите язык для использования Stakan Cafe",
+    orderNumLabel:"Заказ", pieces:"шт",
+    cat_all:"Все", cat_burger:"Бургеры", cat_pizza:"Пицца", cat_drink:"Напитки", cat_side:"Гарниры", cat_dessert:"Десерты", cat_combo:"Комбо",
+    chooseOnMap:"Выберите местоположение на карте", chooseLocationTitle:"Выберите местоположение",
+    useMyLocation:"Определить моё местоположение", confirmLocation:"Подтвердить местоположение",
+    dragMapHint:"Передвиньте карту, чтобы указать точку в центре", locating:"Определение адреса...",
+    toastGeoUnsupported:"Ваше устройство не поддерживает определение местоположения", toastGeoFail:"Не удалось определить местоположение",
+    toastLocationRequired:"Пожалуйста, выберите местоположение на карте", toastPhoneInvalid:"Введите номер телефона полностью"
   },
   en:{
     navHome:"Home", navMenu:"Menu", navCart:"Cart", navHistory:"History",
     heroEyebrow:"Delivered in 30 minutes",
     heroTitle:"Order the <span>flavor</span> you're craving",
     heroLead:"Stakan Cafe is a fast-food delivery service. The tastiest burgers, pizzas and drinks now reach your door in just a few taps.",
-    heroCta:"Order now", heroCta2:"View menu",
-    statDishes:"Dishes", statRating:"Avg. rating", statMin:"min", statDelivery:"Delivery time",
+    heroCta:"Order now",
+    statDishes:"Dishes", statMin:"min", statDelivery:"Delivery time",
     popularTitle:"Popular dishes", popularSub:"Most ordered by our customers", seeAll:"See all",
     menuTitle:"Menu", menuSub:"Choose your favorite dish",
     cartTitle:"Cart", cartSub:"Review and confirm your order",
@@ -848,58 +863,58 @@ const I18N = {
    PRODUCTS
 ========================================================= */
 const PRODUCTS = [
-  {id:1, cat:"burger", emoji:"рџЌ”", img:null, price:32000, tag:{uz:"РҐРёС‚",ru:"РҐРёС‚",en:"Hot"},
-    name:{uz:"Klassik burger",ru:"РљР»Р°СЃСЃРёС‡РµСЃРєРёР№ Р±СѓСЂРіРµСЂ",en:"Classic burger"},
-    desc:{uz:"Mol go'shti, pomidor, salat, maxsus sous",ru:"Р“РѕРІСЏРґРёРЅР°, РїРѕРјРёРґРѕСЂ, СЃР°Р»Р°С‚, С„РёСЂРјРµРЅРЅС‹Р№ СЃРѕСѓСЃ",en:"Beef patty, tomato, lettuce, house sauce"}},
-  {id:2, cat:"burger", emoji:"рџЌ”", img:null, price:36000,
-    name:{uz:"Cheese burger",ru:"Р§РёР·Р±СѓСЂРіРµСЂ",en:"Cheese burger"},
-    desc:{uz:"Ikki qatlam pishloq, mol go'shti, tuzlangan bodring",ru:"Р”РІРѕР№РЅРѕР№ СЃС‹СЂ, РіРѕРІСЏРґРёРЅР°, РјР°СЂРёРЅРѕРІР°РЅРЅС‹Р№ РѕРіСѓСЂРµС†",en:"Double cheese, beef patty, pickles"}},
-  {id:3, cat:"burger", emoji:"рџЌ—", img:null, price:30000,
-    name:{uz:"Tovuq burger",ru:"РљСѓСЂРёРЅС‹Р№ Р±СѓСЂРіРµСЂ",en:"Chicken burger"},
-    desc:{uz:"Qarsildoq tovuq filesi, yangi sabzavotlar",ru:"РҐСЂСѓСЃС‚СЏС‰РµРµ РєСѓСЂРёРЅРѕРµ С„РёР»Рµ, СЃРІРµР¶РёРµ РѕРІРѕС‰Рё",en:"Crispy chicken fillet, fresh veggies"}},
-  {id:4, cat:"burger", emoji:"рџЌ”", img:null, price:42000, tag:{uz:"Yangi",ru:"РќРѕРІРёРЅРєР°",en:"New"},
-    name:{uz:"Double Stakan Cafe burger",ru:"Р”РІРѕР№РЅРѕР№ Stakan Cafe Р±СѓСЂРіРµСЂ",en:"Double Stakan Cafe burger"},
-    desc:{uz:"Ikki qatlam mol go'shti, pishloq, bekon",ru:"Р”РІРѕР№РЅР°СЏ РіРѕРІСЏРґРёРЅР°, СЃС‹СЂ, Р±РµРєРѕРЅ",en:"Double beef patty, cheese, bacon"}},
-  {id:5, cat:"pizza", emoji:"рџЌ•", img:null, price:58000,
-    name:{uz:"Margarita pitsa",ru:"РџРёС†С†Р° РњР°СЂРіР°СЂРёС‚Р°",en:"Margherita pizza"},
-    desc:{uz:"Pomidor sousi, mozzarella, rayhon",ru:"РўРѕРјР°С‚РЅС‹Р№ СЃРѕСѓСЃ, РјРѕС†Р°СЂРµР»Р»Р°, Р±Р°Р·РёР»РёРє",en:"Tomato sauce, mozzarella, basil"}},
-  {id:6, cat:"pizza", emoji:"рџЌ•", img:null, price:64000, tag:{uz:"РҐРёС‚",ru:"РҐРёС‚",en:"Hot"},
-    name:{uz:"Pepperoni pitsa",ru:"РџРёС†С†Р° РџРµРїРїРµСЂРѕРЅРё",en:"Pepperoni pizza"},
-    desc:{uz:"Achchiq kolbasa, mozzarella, pomidor sousi",ru:"РћСЃС‚СЂР°СЏ РїРµРїРїРµСЂРѕРЅРё, РјРѕС†Р°СЂРµР»Р»Р°, С‚РѕРјР°С‚РЅС‹Р№ СЃРѕСѓСЃ",en:"Spicy pepperoni, mozzarella, tomato sauce"}},
-  {id:7, cat:"pizza", emoji:"рџЌ•", img:null, price:68000,
-    name:{uz:"Go'shtli pitsa",ru:"РњСЏСЃРЅР°СЏ РїРёС†С†Р°",en:"Meat lovers pizza"},
-    desc:{uz:"Mol go'shti, kolbasa, bekon, pishloq",ru:"Р“РѕРІСЏРґРёРЅР°, РєРѕР»Р±Р°СЃР°, Р±РµРєРѕРЅ, СЃС‹СЂ",en:"Beef, sausage, bacon, cheese"}},
-  {id:8, cat:"side", emoji:"рџЌџ", img:null, price:18000,
-    name:{uz:"Fri kartoshka",ru:"РљР°СЂС‚РѕС„РµР»СЊ С„СЂРё",en:"French fries"},
-    desc:{uz:"Qarsildoq, tuzlangan, katta portsiya",ru:"РҐСЂСѓСЃС‚СЏС‰РёР№, СЃРѕР»С‘РЅС‹Р№, Р±РѕР»СЊС€Р°СЏ РїРѕСЂС†РёСЏ",en:"Crispy, salted, large portion"}},
-  {id:9, cat:"side", emoji:"рџЌ—", img:null, price:26000,
-    name:{uz:"Tovuq nugets",ru:"РљСѓСЂРёРЅС‹Рµ РЅР°РіРіРµС‚СЃС‹",en:"Chicken nuggets"},
-    desc:{uz:"8 dona qarsildoq tovuq bo'lakchalari",ru:"8 С…СЂСѓСЃС‚СЏС‰РёС… РєСѓСЂРёРЅС‹С… РєСѓСЃРѕС‡РєРѕРІ",en:"8 pieces of crispy chicken bites"}},
-  {id:10, cat:"side", emoji:"рџ§Ђ", img:null, price:22000,
-    name:{uz:"Pishloq tayoqchalar",ru:"РЎС‹СЂРЅС‹Рµ РїР°Р»РѕС‡РєРё",en:"Cheese sticks"},
-    desc:{uz:"Mozzarella panirovkada, sous bilan",ru:"РњРѕС†Р°СЂРµР»Р»Р° РІ РїР°РЅРёСЂРѕРІРєРµ, СЃ СЃРѕСѓСЃРѕРј",en:"Breaded mozzarella with dip sauce"}},
-  {id:11, cat:"drink", emoji:"рџҐ¤", img:null, price:12000,
-    name:{uz:"Cola",ru:"РљРѕР»Р°",en:"Cola"},
-    desc:{uz:"Sovuq gazlangan ichimlik, 0.5L",ru:"РҐРѕР»РѕРґРЅС‹Р№ РіР°Р·РёСЂРѕРІР°РЅРЅС‹Р№ РЅР°РїРёС‚РѕРє, 0.5Р»",en:"Chilled soda, 0.5L"}},
-  {id:12, cat:"drink", emoji:"в•", img:null, price:15000,
-    name:{uz:"Issiq kofe",ru:"Р“РѕСЂСЏС‡РёР№ РєРѕС„Рµ",en:"Hot coffee"},
-    desc:{uz:"Amerikano yoki latte, yangi qovurilgan",ru:"РђРјРµСЂРёРєР°РЅРѕ РёР»Рё Р»Р°С‚С‚Рµ, СЃРІРµР¶Р°СЏ РѕР±Р¶Р°СЂРєР°",en:"Americano or latte, freshly roasted"}},
-  {id:13, cat:"drink", emoji:"рџ’§", img:null, price:9000,
-    name:{uz:"Mineral suv",ru:"РњРёРЅРµСЂР°Р»СЊРЅР°СЏ РІРѕРґР°",en:"Mineral water"},
-    desc:{uz:"Tabiiy mineral suv, 0.5L",ru:"РџСЂРёСЂРѕРґРЅР°СЏ РјРёРЅРµСЂР°Р»СЊРЅР°СЏ РІРѕРґР°, 0.5Р»",en:"Natural mineral water, 0.5L"}},
-  {id:14, cat:"dessert", emoji:"рџЌ¦", img:null, price:20000,
-    name:{uz:"Muzqaymoq",ru:"РњРѕСЂРѕР¶РµРЅРѕРµ",en:"Ice cream"},
-    desc:{uz:"Vanil yoki shokolad ta'mi",ru:"Р’Р°РЅРёР»СЊРЅС‹Р№ РёР»Рё С€РѕРєРѕР»Р°РґРЅС‹Р№ РІРєСѓСЃ",en:"Vanilla or chocolate flavor"}},
-  {id:15, cat:"dessert", emoji:"рџЌЄ", img:null, price:16000,
-    name:{uz:"Shokoladli kuki",ru:"РЁРѕРєРѕР»Р°РґРЅРѕРµ РїРµС‡РµРЅСЊРµ",en:"Chocolate cookie"},
-    desc:{uz:"Yumshoq, ichi suyuq shokolad bilan",ru:"РњСЏРіРєРѕРµ, СЃ Р¶РёРґРєРёРј С€РѕРєРѕР»Р°РґРѕРј РІРЅСѓС‚СЂРё",en:"Soft-baked with molten chocolate center"}},
-  {id:16, cat:"combo", emoji:"рџЌ±", img:null, price:75000, tag:{uz:"РўРµР¶Р°РјРєРѕСЂ",ru:"Р’С‹РіРѕРґРЅРѕ",en:"Value"},
-    name:{uz:"Stakan Cafe Combo",ru:"РљРѕРјР±Рѕ Stakan Cafe",en:"Stakan Cafe Combo"},
-    desc:{uz:"Burger + fri kartoshka + ichimlik",ru:"Р‘СѓСЂРіРµСЂ + РєР°СЂС‚РѕС„РµР»СЊ С„СЂРё + РЅР°РїРёС‚РѕРє",en:"Burger + fries + drink"}}
+  {id:1, cat:"burger", emoji:"??", img:null, price:32000, tag:{uz:"Хит",ru:"Хит",en:"Hot"},
+    name:{uz:"Klassik burger",ru:"Классический бургер",en:"Classic burger"},
+    desc:{uz:"Mol go'shti, pomidor, salat, maxsus sous",ru:"Говядина, помидор, салат, фирменный соус",en:"Beef patty, tomato, lettuce, house sauce"}},
+  {id:2, cat:"burger", emoji:"??", img:null, price:36000,
+    name:{uz:"Cheese burger",ru:"Чизбургер",en:"Cheese burger"},
+    desc:{uz:"Ikki qatlam pishloq, mol go'shti, tuzlangan bodring",ru:"Двойной сыр, говядина, маринованный огурец",en:"Double cheese, beef patty, pickles"}},
+  {id:3, cat:"burger", emoji:"??", img:null, price:30000,
+    name:{uz:"Tovuq burger",ru:"Куриный бургер",en:"Chicken burger"},
+    desc:{uz:"Qarsildoq tovuq filesi, yangi sabzavotlar",ru:"Хрустящее куриное филе, свежие овощи",en:"Crispy chicken fillet, fresh veggies"}},
+  {id:4, cat:"burger", emoji:"??", img:null, price:42000, tag:{uz:"Yangi",ru:"Новинка",en:"New"},
+    name:{uz:"Double Stakan Cafe burger",ru:"Двойной Stakan Cafe бургер",en:"Double Stakan Cafe burger"},
+    desc:{uz:"Ikki qatlam mol go'shti, pishloq, bekon",ru:"Двойная говядина, сыр, бекон",en:"Double beef patty, cheese, bacon"}},
+  {id:5, cat:"pizza", emoji:"??", img:null, price:58000,
+    name:{uz:"Margarita pitsa",ru:"Пицца Маргарита",en:"Margherita pizza"},
+    desc:{uz:"Pomidor sousi, mozzarella, rayhon",ru:"Томатный соус, моцарелла, базилик",en:"Tomato sauce, mozzarella, basil"}},
+  {id:6, cat:"pizza", emoji:"??", img:null, price:64000, tag:{uz:"Хит",ru:"Хит",en:"Hot"},
+    name:{uz:"Pepperoni pitsa",ru:"Пицца Пепперони",en:"Pepperoni pizza"},
+    desc:{uz:"Achchiq kolbasa, mozzarella, pomidor sousi",ru:"Острая пепперони, моцарелла, томатный соус",en:"Spicy pepperoni, mozzarella, tomato sauce"}},
+  {id:7, cat:"pizza", emoji:"??", img:null, price:68000,
+    name:{uz:"Go'shtli pitsa",ru:"Мясная пицца",en:"Meat lovers pizza"},
+    desc:{uz:"Mol go'shti, kolbasa, bekon, pishloq",ru:"Говядина, колбаса, бекон, сыр",en:"Beef, sausage, bacon, cheese"}},
+  {id:8, cat:"side", emoji:"??", img:null, price:18000,
+    name:{uz:"Fri kartoshka",ru:"Картофель фри",en:"French fries"},
+    desc:{uz:"Qarsildoq, tuzlangan, katta portsiya",ru:"Хрустящий, солёный, большая порция",en:"Crispy, salted, large portion"}},
+  {id:9, cat:"side", emoji:"??", img:null, price:26000,
+    name:{uz:"Tovuq nugets",ru:"Куриные наггетсы",en:"Chicken nuggets"},
+    desc:{uz:"8 dona qarsildoq tovuq bo'lakchalari",ru:"8 хрустящих куриных кусочков",en:"8 pieces of crispy chicken bites"}},
+  {id:10, cat:"side", emoji:"??", img:null, price:22000,
+    name:{uz:"Pishloq tayoqchalar",ru:"Сырные палочки",en:"Cheese sticks"},
+    desc:{uz:"Mozzarella panirovkada, sous bilan",ru:"Моцарелла в панировке, с соусом",en:"Breaded mozzarella with dip sauce"}},
+  {id:11, cat:"drink", emoji:"??", img:null, price:12000,
+    name:{uz:"Cola",ru:"Кола",en:"Cola"},
+    desc:{uz:"Sovuq gazlangan ichimlik, 0.5L",ru:"Холодный газированный напиток, 0.5л",en:"Chilled soda, 0.5L"}},
+  {id:12, cat:"drink", emoji:"?", img:null, price:15000,
+    name:{uz:"Issiq kofe",ru:"Горячий кофе",en:"Hot coffee"},
+    desc:{uz:"Amerikano yoki latte, yangi qovurilgan",ru:"Американо или латте, свежая обжарка",en:"Americano or latte, freshly roasted"}},
+  {id:13, cat:"drink", emoji:"??", img:null, price:9000,
+    name:{uz:"Mineral suv",ru:"Минеральная вода",en:"Mineral water"},
+    desc:{uz:"Tabiiy mineral suv, 0.5L",ru:"Природная минеральная вода, 0.5л",en:"Natural mineral water, 0.5L"}},
+  {id:14, cat:"dessert", emoji:"??", img:null, price:20000,
+    name:{uz:"Muzqaymoq",ru:"Мороженое",en:"Ice cream"},
+    desc:{uz:"Vanil yoki shokolad ta'mi",ru:"Ванильный или шоколадный вкус",en:"Vanilla or chocolate flavor"}},
+  {id:15, cat:"dessert", emoji:"??", img:null, price:16000,
+    name:{uz:"Shokoladli kuki",ru:"Шоколадное печенье",en:"Chocolate cookie"},
+    desc:{uz:"Yumshoq, ichi suyuq shokolad bilan",ru:"Мягкое, с жидким шоколадом внутри",en:"Soft-baked with molten chocolate center"}},
+  {id:16, cat:"combo", emoji:"??", img:null, price:75000, tag:{uz:"Тежамкор",ru:"Выгодно",en:"Value"},
+    name:{uz:"Stakan Cafe Combo",ru:"Комбо Stakan Cafe",en:"Stakan Cafe Combo"},
+    desc:{uz:"Burger + fri kartoshka + ichimlik",ru:"Бургер + картофель фри + напиток",en:"Burger + fries + drink"}}
 ];
 
 const CATEGORIES = ["all","burger","pizza","side","drink","dessert","combo"];
-const CAT_ICON = {all:"рџЌЅпёЏ",burger:"рџЌ”",pizza:"рџЌ•",side:"рџЌџ",drink:"рџҐ¤",dessert:"рџЌЁ",combo:"рџЌ±"};
+const CAT_ICON = {all:"???",burger:"??",pizza:"??",side:"??",drink:"??",dessert:"??",combo:"??"};
 
 /* Har bir mahsulotning "img" maydoniga o'z rasm faylining yo'lini yozsangiz
    (masalan img:"images/burger1.jpg"), sayt avtomatik shu rasmni ko'rsatadi.
@@ -1201,7 +1216,7 @@ function renderCart(){
         <div class="ci-icon-sm">${mediaHTML(p,'media-emoji')}</div>
         <div class="cart-item-info">
           <h4>${p.name[state.lang]}</h4>
-          <span>${money(p.price)} В· ${t('pieces')}: ${item.qty}</span>
+          <span>${money(p.price)} · ${t('pieces')}: ${item.qty}</span>
         </div>
         <div class="cart-item-actions">
           <div class="stepper" data-id="${p.id}">
@@ -1209,7 +1224,7 @@ function renderCart(){
             <span>${item.qty}</span>
             <button class="inc"><i class="fa-solid fa-plus"></i></button>
           </div>
-          <button class="remove-btn" data-remove="${p.id}"><i class="fa-solid fa-trash"></i></button>
+          <button class="remove-btn" data-remove="${p.id}"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
     `;
@@ -1223,7 +1238,7 @@ function renderCart(){
   const subtotal = cartSubtotal();
   const deliveryFee = state.deliveryType==="delivery" ? CONFIG.DELIVERY_FEE : 0;
   document.getElementById("sumSubtotal").textContent = money(subtotal);
-  document.getElementById("sumDelivery").textContent = deliveryFee>0 ? money(deliveryFee) : (state.lang==="ru"?"Р‘РµСЃРїР»Р°С‚РЅРѕ":state.lang==="en"?"Free":"Bepul");
+  document.getElementById("sumDelivery").textContent = deliveryFee>0 ? money(deliveryFee) : (state.lang==="ru"?"Бесплатно":state.lang==="en"?"Free":"Bepul");
   document.getElementById("sumTotal").textContent = money(subtotal+deliveryFee);
 }
 
@@ -1239,49 +1254,76 @@ document.querySelectorAll(".delivery-opt").forEach(btn=>{
 });
 
 /* =========================================================
-   PHONE INPUT MASK вЂ” +998 (__) ___ ____
-   Foydalanuvchi belgilangan sonli raqamdan kam yoki ko'p kirita olmaydi.
+   PHONE INPUT MASK — +998 (__) ___ ____
+   Foydalanuvchi aynan 9 ta raqam kirita oladi — kam ham, ko'p ham emas.
+   Diqqat: bu yerda brauzerning odatiy matn kiritishiga suyanilmaydi,
+   har bir tugma bosilishi qo'lda ushlab, holat asosida qayta chiziladi —
+   shunda maxlength/karetka bilan bog'liq nosozliklar bo'lmaydi.
 ========================================================= */
 const phoneInput = document.getElementById("fPhone");
+phoneInput.removeAttribute("maxlength");
+let phoneRawDigits = "";
 
-function phoneDigits(){
-  return phoneInput.value.replace(/\D/g,"").replace(/^998/,"").slice(0,9);
-}
 function formatPhone(digits){
+  if(!digits) return "";
   const d = digits.padEnd(9,"_").split("");
   return `+998 (${d[0]}${d[1]}) ${d[2]}${d[3]}${d[4]} ${d[5]}${d[6]} ${d[7]}${d[8]}`;
 }
-function caretToFirstBlank(){
+function isPhoneComplete(){
+  return phoneRawDigits.length===9;
+}
+function placeCaretAtFirstBlank(){
   const pos = phoneInput.value.indexOf("_");
   const caret = pos===-1 ? phoneInput.value.length : pos;
   requestAnimationFrame(()=>{ try{ phoneInput.setSelectionRange(caret,caret); }catch(e){} });
 }
-function isPhoneComplete(){
-  return phoneDigits().length===9;
+function renderPhone(){
+  phoneInput.value = phoneRawDigits ? formatPhone(phoneRawDigits) : "";
+  placeCaretAtFirstBlank();
 }
+
 phoneInput.addEventListener("focus", ()=>{
-  if(!phoneInput.value) phoneInput.value = formatPhone("");
-  caretToFirstBlank();
+  if(!phoneRawDigits) phoneInput.value = formatPhone("");
+  placeCaretAtFirstBlank();
 });
-phoneInput.addEventListener("input", ()=>{
-  const digits = phoneDigits();
-  phoneInput.value = formatPhone(digits);
-  caretToFirstBlank();
-});
+
 phoneInput.addEventListener("keydown", (e)=>{
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  const navKeys = ["Tab","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","End","Escape","Enter"];
+  if(navKeys.includes(e.key)) return;
+
+  if(/^[0-9]$/.test(e.key)){
+    e.preventDefault();
+    if(phoneRawDigits.length<9){
+      phoneRawDigits += e.key;
+      renderPhone();
+    }
+    return;
+  }
   if(e.key==="Backspace"){
     e.preventDefault();
-    const digits = phoneDigits().slice(0,-1);
-    phoneInput.value = digits.length ? formatPhone(digits) : "";
-    caretToFirstBlank();
+    phoneRawDigits = phoneRawDigits.slice(0,-1);
+    renderPhone();
+    return;
   }
+  // boshqa har qanday belgi (harflar va h.k.) kiritilmaydi
+  e.preventDefault();
 });
+
+phoneInput.addEventListener("paste", (e)=>{
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData("text");
+  const digits = text.replace(/\D/g,"").replace(/^998/,"").slice(0,9);
+  phoneRawDigits = digits;
+  renderPhone();
+});
+
 phoneInput.addEventListener("blur", ()=>{
-  if(phoneInput.value && phoneDigits().length===0) phoneInput.value = "";
+  if(phoneRawDigits.length===0) phoneInput.value = "";
 });
 
 /* =========================================================
-   LOCATION PICKER (Yandex Eda uslubida вЂ” xaritadan metka bilan)
+   LOCATION PICKER (Yandex Eda uslubida — xaritadan metka bilan)
 ========================================================= */
 let leafletMap = null;
 let pendingLocation = null;
@@ -1440,6 +1482,7 @@ async function submitOrder(){
   refreshCartUI();
 
   document.getElementById("fName").value = "";
+  phoneRawDigits = "";
   phoneInput.value = "";
   document.getElementById("fComment").value = "";
   state.location = null;
@@ -1456,7 +1499,7 @@ function buildTelegramMarkdown(order){
   const dt = new Date(order.date);
   const dateStr = dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ");
   let lines = [];
-  lines.push(`*рџ§ѕ Yangi buyurtma вЂ” Stakan Cafe*`);
+  lines.push(`*?? Yangi buyurtma — Stakan Cafe*`);
   lines.push(``);
   lines.push(`*Mijoz:* ${order.name}`);
   lines.push(`*Telefon:* ${order.phone}`);
@@ -1470,7 +1513,7 @@ function buildTelegramMarkdown(order){
   lines.push(``);
   lines.push(`*Mahsulotlar:*`);
   order.items.forEach(it=>{
-    lines.push(`вЂў ${it.name.uz} x${it.qty} вЂ” ${it.price*it.qty} so'm`);
+    lines.push(`• ${it.name.uz} x${it.qty} — ${it.price*it.qty} so'm`);
   });
   lines.push(``);
   lines.push(`*Mahsulotlar summasi:* ${order.subtotal} so'm`);
