@@ -690,7 +690,7 @@
         <div>
           <span class="eyebrow"><i class="fa-solid fa-bolt"></i> <span data-i18n="heroEyebrow">30 daqiqada yetkazamiz</span></span>
           <h1 data-i18n-html="heroTitle">Nafsingiz tortgan <span>lazzatni</span> buyurtma qiling</h1>
-          <p class="lead" data-i18n="heroLead">Menda &#8212; tezkor fast-food xizmati. Eng mazali burgerlar, pitsalar va ichimliklar endi bir necha bosishda uyingizga yetib boradi.</p>
+          <p class="lead" data-i18n="heroLead">Stakan Cafe &#8212; tezkor fast-food xizmati. Eng mazali burgerlar, pitsalar va ichimliklar endi bir necha bosishda uyingizga yetib boradi.</p>
           <div class="hero-ctas">
             <button class="btn btn-primary" data-view="menu"><i class="fa-solid fa-bag-shopping"></i><span data-i18n="heroCta">Buyurtma berish</span></button>
           </div>
@@ -1013,38 +1013,62 @@ const firebaseConfig = {
   messagingSenderId: "223817742166",
   appId: "1:223817742166:web:b0b947d67940c03e38c8f7"
 };
-const fbApp = firebase.initializeApp(firebaseConfig);
-const db = fbApp.firestore();
 const PRODUCTS_COLLECTION = "products";
 let firestoreReady = false;
+let firebaseAvailable = false;
+let db = null;
+
+/* MUHIM: Firebase CDN skripti ba'zi tarmoqlarda (reklama blokerlar,
+   korporativ/provayder cheklovlari va h.k.) yuklanmasligi mumkin.
+   Shuning uchun bu butun blok try/catch bilan o'ralgan - agar Firebase
+   ishlamasa ham, sayt lokal mahsulotlar ro'yxati bilan TO'LIQ ishlashda
+   davom etadi, faqat "barcha qurilmalarga real vaqtda sinxronlash"
+   funksiyasigina o'chib qoladi. */
+try{
+  if(typeof firebase !== "undefined"){
+    const fbApp = firebase.initializeApp(firebaseConfig);
+    db = fbApp.firestore();
+    firebaseAvailable = true;
+  } else {
+    console.warn("Firebase yuklanmadi (tarmoq cheklovi yoki bloklovchi kengaytma bo'lishi mumkin). Sayt lokal mahsulotlar bilan ishlaydi.");
+  }
+}catch(err){
+  console.error("Firebase ishga tushirishda xatolik:", err);
+}
 
 function seedFirestoreIfEmpty(){
-  db.collection(PRODUCTS_COLLECTION).limit(1).get().then(snap=>{
-    if(snap.empty){
-      const batch = db.batch();
-      PRODUCTS.forEach(p=>{
-        batch.set(db.collection(PRODUCTS_COLLECTION).doc(String(p.id)), p);
-      });
-      batch.commit().catch(err=>console.error("Firestore'ni boshlang'ich mahsulotlar bilan to'ldirishda xatolik:", err));
-    }
-  }).catch(err=>console.error("Firestore holatini tekshirishda xatolik:", err));
+  if(!firebaseAvailable) return;
+  try{
+    db.collection(PRODUCTS_COLLECTION).limit(1).get().then(snap=>{
+      if(snap.empty){
+        const batch = db.batch();
+        PRODUCTS.forEach(p=>{
+          batch.set(db.collection(PRODUCTS_COLLECTION).doc(String(p.id)), p);
+        });
+        batch.commit().catch(err=>console.error("Firestore'ni boshlang'ich mahsulotlar bilan to'ldirishda xatolik:", err));
+      }
+    }).catch(err=>console.error("Firestore holatini tekshirishda xatolik:", err));
+  }catch(err){ console.error("Firestore seed xatosi:", err); }
 }
 
 function listenToProducts(){
-  db.collection(PRODUCTS_COLLECTION).onSnapshot(snapshot=>{
-    if(snapshot.empty) return; // hali birinchi to'ldirish tugamagan, keyingi snapshot'ni kutamiz
-    const list = [];
-    snapshot.forEach(doc=> list.push(doc.data()));
-    list.sort((a,b)=>a.id-b.id);
-    PRODUCTS.length = 0;
-    list.forEach(p=>PRODUCTS.push(p));
-    firestoreReady = true;
-    if(typeof applyLanguage==="function") applyLanguage();
-    const panel = document.getElementById("adminPanelModal");
-    if(panel && panel.classList.contains("open") && typeof renderAdminProductList==="function") renderAdminProductList();
-  }, err=>{
-    console.error("Firestore bilan ulanishda xatolik (internet yo'qmi yoki Firestore qoidalari yopiqmi):", err);
-  });
+  if(!firebaseAvailable) return;
+  try{
+    db.collection(PRODUCTS_COLLECTION).onSnapshot(snapshot=>{
+      if(snapshot.empty) return; // hali birinchi to'ldirish tugamagan, keyingi snapshot'ni kutamiz
+      const list = [];
+      snapshot.forEach(doc=> list.push(doc.data()));
+      list.sort((a,b)=>a.id-b.id);
+      PRODUCTS.length = 0;
+      list.forEach(p=>PRODUCTS.push(p));
+      firestoreReady = true;
+      if(typeof applyLanguage==="function") applyLanguage();
+      const panel = document.getElementById("adminPanelModal");
+      if(panel && panel.classList.contains("open") && typeof renderAdminProductList==="function") renderAdminProductList();
+    }, err=>{
+      console.error("Firestore bilan ulanishda xatolik (internet yo'qmi yoki Firestore qoidalari yopiqmi):", err);
+    });
+  }catch(err){ console.error("Firestore tinglash xatosi:", err); }
 }
 seedFirestoreIfEmpty();
 listenToProducts();
@@ -1052,6 +1076,10 @@ listenToProducts();
 function nextProductId(){ return PRODUCTS.reduce((max,p)=>Math.max(max,p.id),0) + 1; }
 
 function adminSaveProduct(data, editingId){
+  if(!firebaseAvailable){
+    showToast("Bulut bazasiga ulanib bo'lmadi. Internetni tekshirib, sahifani qayta yuklang.", "error");
+    return;
+  }
   const id = editingId || nextProductId();
   const product = Object.assign({id, img:null}, data);
   db.collection(PRODUCTS_COLLECTION).doc(String(id)).set(product).catch(err=>{
@@ -1061,10 +1089,12 @@ function adminSaveProduct(data, editingId){
 }
 
 function adminDeleteProduct(id){
-  db.collection(PRODUCTS_COLLECTION).doc(String(id)).delete().catch(err=>{
-    console.error("Firestore'dan o'chirishda xatolik:", err);
-    showToast("O'chirishda xatolik: internetni tekshiring", "error");
-  });
+  if(firebaseAvailable){
+    db.collection(PRODUCTS_COLLECTION).doc(String(id)).delete().catch(err=>{
+      console.error("Firestore'dan o'chirishda xatolik:", err);
+      showToast("O'chirishda xatolik: internetni tekshiring", "error");
+    });
+  }
   if(state.cart && state.cart[id]){ delete state.cart[id]; saveCart(); refreshCartUI(); }
 }
 
@@ -1682,7 +1712,7 @@ function buildTelegramMarkdown(order){
 }
 
 async function sendToTelegram(markdownText){
-  if(!CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ || CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ==="8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ"){
+  if(!CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ|| CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ==="8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ"){
     console.warn("Telegram bot token sozlanmagan. CONFIG obyektida TELEGRAM_BOT_TOKEN va TELEGRAM_CHAT_ID ni to'ldiring.");
     return false;
   }
