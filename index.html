@@ -11,6 +11,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore-compat.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
@@ -986,71 +988,71 @@ const PRODUCTS = [
 ];
 
 /* =========================================================
-   ADMIN - mahsulotlarga admin panel orqali kiritilgan
-   o'zgarishlarni (qo'shilgan/o'chirilgan/tahrirlangan) shu yerda
-   asosiy PRODUCTS ro'yxatiga qo'llaymiz, sahifa har ochilganda.
+   FIREBASE / FIRESTORE - barcha mijozlarga umumiy mahsulot bazasi
+   Admin panelda qilingan har qanday o'zgarish (qo'shish/tahrirlash/
+   o'chirish) shu yerga yoziladi va onSnapshot orqali SAYTNI OCHGAN
+   BARCHA MIJOZLARGA REAL VAQTDA avtomatik yetib boradi.
 ========================================================= */
-const ADMIN_ADDED_KEY   = "Stakan cafe_admin_added";
-const ADMIN_EDITS_KEY   = "Stakan cafe_admin_edits";
-const ADMIN_DELETED_KEY = "Stakan cafe_admin_deleted";
+const firebaseConfig = {
+  apiKey: "AIzaSyAU9dUq8YNrLjNL0QXGeQM6pj-t69VMAVk",
+  authDomain: "stakan-cafe.firebaseapp.com",
+  projectId: "stakan-cafe",
+  storageBucket: "stakan-cafe.firebasestorage.app",
+  messagingSenderId: "223817742166",
+  appId: "1:223817742166:web:b0b947d67940c03e38c8f7"
+};
+const fbApp = firebase.initializeApp(firebaseConfig);
+const db = fbApp.firestore();
+const PRODUCTS_COLLECTION = "products";
+let firestoreReady = false;
 
-function loadAdminData(){
-  return {
-    added: JSON.parse(localStorage.getItem(ADMIN_ADDED_KEY) || "[]"),
-    edits: JSON.parse(localStorage.getItem(ADMIN_EDITS_KEY) || "{}"),
-    deleted: JSON.parse(localStorage.getItem(ADMIN_DELETED_KEY) || "[]")
-  };
+function seedFirestoreIfEmpty(){
+  db.collection(PRODUCTS_COLLECTION).limit(1).get().then(snap=>{
+    if(snap.empty){
+      const batch = db.batch();
+      PRODUCTS.forEach(p=>{
+        batch.set(db.collection(PRODUCTS_COLLECTION).doc(String(p.id)), p);
+      });
+      batch.commit().catch(err=>console.error("Firestore'ni boshlang'ich mahsulotlar bilan to'ldirishda xatolik:", err));
+    }
+  }).catch(err=>console.error("Firestore holatini tekshirishda xatolik:", err));
 }
-function saveAdminAdded(list){ localStorage.setItem(ADMIN_ADDED_KEY, JSON.stringify(list)); }
-function saveAdminEdits(obj){ localStorage.setItem(ADMIN_EDITS_KEY, JSON.stringify(obj)); }
-function saveAdminDeleted(list){ localStorage.setItem(ADMIN_DELETED_KEY, JSON.stringify(list)); }
 
-function applyAdminOverrides(){
-  const {added, edits, deleted} = loadAdminData();
-  for(let i=PRODUCTS.length-1;i>=0;i--){
-    if(deleted.includes(PRODUCTS[i].id)) PRODUCTS.splice(i,1);
-  }
-  PRODUCTS.forEach(p=>{ if(edits[p.id]) Object.assign(p, edits[p.id]); });
-  added.forEach(np=>{ if(!PRODUCTS.find(p=>p.id===np.id)) PRODUCTS.push(np); });
+function listenToProducts(){
+  db.collection(PRODUCTS_COLLECTION).onSnapshot(snapshot=>{
+    if(snapshot.empty) return; // hali birinchi to'ldirish tugamagan, keyingi snapshot'ni kutamiz
+    const list = [];
+    snapshot.forEach(doc=> list.push(doc.data()));
+    list.sort((a,b)=>a.id-b.id);
+    PRODUCTS.length = 0;
+    list.forEach(p=>PRODUCTS.push(p));
+    firestoreReady = true;
+    if(typeof applyLanguage==="function") applyLanguage();
+    const panel = document.getElementById("adminPanelModal");
+    if(panel && panel.classList.contains("open") && typeof renderAdminProductList==="function") renderAdminProductList();
+  }, err=>{
+    console.error("Firestore bilan ulanishda xatolik (internet yo'qmi yoki Firestore qoidalari yopiqmi):", err);
+  });
 }
-applyAdminOverrides();
+seedFirestoreIfEmpty();
+listenToProducts();
 
 function nextProductId(){ return PRODUCTS.reduce((max,p)=>Math.max(max,p.id),0) + 1; }
 
 function adminSaveProduct(data, editingId){
-  const {added, edits} = loadAdminData();
-  if(editingId){
-    const p = PRODUCTS.find(x=>x.id===editingId);
-    if(p) Object.assign(p, data);
-    const addedIdx = added.findIndex(x=>x.id===editingId);
-    if(addedIdx>-1){
-      added[addedIdx] = Object.assign({}, added[addedIdx], data);
-      saveAdminAdded(added);
-    } else {
-      edits[editingId] = Object.assign({}, edits[editingId]||{}, data);
-      saveAdminEdits(edits);
-    }
-  } else {
-    const id = nextProductId();
-    const newProduct = Object.assign({id, img:null}, data);
-    PRODUCTS.push(newProduct);
-    added.push(newProduct);
-    saveAdminAdded(added);
-  }
+  const id = editingId || nextProductId();
+  const product = Object.assign({id, img:null}, data);
+  db.collection(PRODUCTS_COLLECTION).doc(String(id)).set(product).catch(err=>{
+    console.error("Firestore'ga saqlashda xatolik:", err);
+    showToast("Saqlashda xatolik: internetni tekshiring", "error");
+  });
 }
 
 function adminDeleteProduct(id){
-  const {added, deleted} = loadAdminData();
-  const idx = PRODUCTS.findIndex(p=>p.id===id);
-  if(idx>-1) PRODUCTS.splice(idx,1);
-  const addedIdx = added.findIndex(p=>p.id===id);
-  if(addedIdx>-1){
-    added.splice(addedIdx,1);
-    saveAdminAdded(added);
-  } else if(!deleted.includes(id)){
-    deleted.push(id);
-    saveAdminDeleted(deleted);
-  }
+  db.collection(PRODUCTS_COLLECTION).doc(String(id)).delete().catch(err=>{
+    console.error("Firestore'dan o'chirishda xatolik:", err);
+    showToast("O'chirishda xatolik: internetni tekshiring", "error");
+  });
   if(state.cart && state.cart[id]){ delete state.cart[id]; saveCart(); refreshCartUI(); }
 }
 
@@ -1668,12 +1670,12 @@ function buildTelegramMarkdown(order){
 }
 
 async function sendToTelegram(markdownText){
-  if(!CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY || CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY==="8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY"){
+  if(!CONFIG.TELEGRAM_BOT_TOKEN || CONFIG.TELEGRAM_BOT_TOKEN==="YOUR_BOT_TOKEN_HERE"){
     console.warn("Telegram bot token sozlanmagan. CONFIG obyektida TELEGRAM_BOT_TOKEN va TELEGRAM_CHAT_ID ni to'ldiring.");
     return false;
   }
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY}/sendMessage`;
+    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -1695,9 +1697,9 @@ async function sendToTelegram(markdownText){
 /* Mijoz xaritadan tanlagan joylashuvni Telegram botga
    haqiqiy metka (native location pin) sifatida yuboradi. */
 async function sendLocationToTelegram(loc){
-  if(!CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY || !loc) return false;
+  if(!CONFIG.TELEGRAM_BOT_TOKEN || !loc) return false;
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY}/sendLocation`;
+    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendLocation`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
