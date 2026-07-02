@@ -544,6 +544,16 @@
   .admin-emoji-picker button{width:32px; height:32px; border-radius:8px; background:var(--card); border:1px solid var(--border); font-size:16px; display:flex; align-items:center; justify-content:center; transition:.15s;}
   .admin-emoji-picker button:hover{border-color:var(--yellow); background:rgba(255,204,0,.1); transform:translateY(-2px);}
   .admin-add-btn{width:100%; margin-bottom:16px;}
+  .admin-settings-box{display:none; flex-direction:column; gap:12px; background:var(--card-2); border:1.5px solid #7c9eff; border-radius:16px; padding:16px; margin-bottom:16px;}
+  .admin-settings-box label{font-size:11px; color:var(--muted); font-weight:700; margin-bottom:5px; display:block; text-transform:uppercase; letter-spacing:.03em;}
+  .admin-settings-box input{
+    width:100%; background:var(--card); border:1.5px solid var(--border); border-radius:10px; padding:9px 11px; font-size:13.5px; color:var(--text); font-family:inherit; letter-spacing:2px;
+  }
+  .admin-mode-toggle{display:flex; gap:8px; margin-top:6px;}
+  .admin-mode-toggle button{flex:1; padding:8px; border-radius:9px; background:var(--card); border:1.5px solid var(--border); font-size:12.5px; font-weight:700; color:var(--muted); transition:.2s;}
+  .admin-mode-toggle button.active{background:var(--yellow); color:#171308; border-color:var(--yellow);}
+  .admin-image-preview{width:64px; height:64px; border-radius:12px; background:var(--card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; overflow:hidden; margin-top:10px;}
+  .admin-image-preview img{width:100%; height:100%; object-fit:cover;}
 
   @media (max-width:880px){ .container{padding:0 16px;} .section{padding:26px 0;} }
   @media (prefers-reduced-motion: reduce){
@@ -556,7 +566,7 @@
 <!-- ======================= LANGUAGE MODAL ======================= -->
 <div class="modal-overlay" id="langModal">
   <div class="modal-box">
-    <div class="brand-mark" style="margin:0 auto 16px;">
+    <div class="brand-mark" id="langModalLogo" style="margin:0 auto 16px; cursor:pointer;">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <rect x="16" y="14" width="68" height="15" rx="7.5" fill="#ffcc00"/>
         <path d="M22 29 L78 29 L69 90 Q50 98 31 90 Z" fill="#ffcc00"/>
@@ -621,11 +631,13 @@
     <div class="admin-header">
       <h2><i class="fa-solid fa-user-shield"></i> Admin panel</h2>
       <div class="admin-header-actions">
+        <button class="icon-btn" id="adminSettingsBtn" type="button" title="Sozlamalar"><i class="fa-solid fa-gear"></i></button>
         <button class="icon-btn" id="adminLogoutBtn" type="button" title="Chiqish"><i class="fa-solid fa-right-from-bracket"></i></button>
         <button class="icon-btn" id="adminCloseBtn" type="button" title="Yopish"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>
     <div class="admin-body">
+      <div class="admin-settings-box" id="adminSettingsBox"></div>
       <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
       <div class="admin-form" id="adminForm"></div>
       <div class="admin-product-list" id="adminProductList"></div>
@@ -825,7 +837,7 @@
    Bu yerga o'zingizning bot tokeningiz va chat_id ni kiriting.
 ========================================================= */
 const CONFIG = {
-  TELEGRAM_BOT_TOKEN: "8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY",
+  TELEGRAM_BOT_TOKEN: "8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ",
   TELEGRAM_CHAT_ID: "7583392349",
   CURRENCY: "so'm",
   DELIVERY_FEE: 15000
@@ -1670,12 +1682,12 @@ function buildTelegramMarkdown(order){
 }
 
 async function sendToTelegram(markdownText){
-  if(!CONFIG.TELEGRAM_BOT_TOKEN || CONFIG.TELEGRAM_BOT_TOKEN==="YOUR_BOT_TOKEN_HERE"){
+  if(!CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ || CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ==="8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ"){
     console.warn("Telegram bot token sozlanmagan. CONFIG obyektida TELEGRAM_BOT_TOKEN va TELEGRAM_CHAT_ID ni to'ldiring.");
     return false;
   }
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const url = `https://api.telegram.org/bot${CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ}/sendMessage`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -1697,9 +1709,9 @@ async function sendToTelegram(markdownText){
 /* Mijoz xaritadan tanlagan joylashuvni Telegram botga
    haqiqiy metka (native location pin) sifatida yuboradi. */
 async function sendLocationToTelegram(loc){
-  if(!CONFIG.TELEGRAM_BOT_TOKEN || !loc) return false;
+  if(!CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ|| !loc) return false;
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendLocation`;
+    const url = `https://api.telegram.org/bot${CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ}/sendLocation`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -1776,13 +1788,26 @@ function renderHistory(){
    (masalan: sayt-manzilingiz.html#stakan-admin), parol: admin
    Yoki sayt ochiq turganda Ctrl+Alt+A tugmalarini bosing.
 ========================================================= */
-const ADMIN_PASSWORD = "admin";
+/* =========================================================
+   ADMIN PANEL - UI
+   Kirish usullari:
+   1) Manzil satriga #stakan-admin qo'shib Enter bosing
+      (masalan: sayt-manzilingiz.html#stakan-admin)
+   2) Sayt ochiq turganda Ctrl+Alt+A tugmalarini bosing (kompyuterda)
+   3) Til tanlash oynasidagi Stakan Cafe logosini 10 marta tez-tez bosing
+   Boshlang'ich parol: admin (Admin panel -> sozlamalar (shesterna)
+   tugmasi orqali o'zgartirish mumkin)
+========================================================= */
+const ADMIN_PASSWORD_KEY = "Stakan cafe_admin_pwd";
 const ADMIN_TRIGGER_HASH = "#stakan-admin";
 const ADMIN_AUTH_KEY = "Stakan cafe_admin_auth";
 const ADMIN_CAT_LABELS = {burger:"Burger", pizza:"Pitsa", side:"Yon taom", drink:"Ichimlik", dessert:"Desert", combo:"Kombo"};
 const ADMIN_EMOJI_PRESETS = ["\u{1f354}","\u{1f355}","\u{1f357}","\u{1f35f}","\u{1f32d}","\u{1f96a}","\u{1f960}","\u{1f957}","\u{1f963}","\u{1f9c3}","\u{2615}","\u{1f964}","\u{1f9c9}","\u{1f368}","\u{1f366}","\u{1f382}","\u{1f36a}","\u{1f369}","\u{1f347}","\u{1f955}","\u{1f35c}","\u{1f363}"];
 
 let adminEditingId = null;
+
+function getAdminPassword(){ return localStorage.getItem(ADMIN_PASSWORD_KEY) || "admin"; }
+function setAdminPassword(pwd){ localStorage.setItem(ADMIN_PASSWORD_KEY, pwd); }
 
 function isAdminAuthed(){ return sessionStorage.getItem(ADMIN_AUTH_KEY)==="1"; }
 
@@ -1799,6 +1824,23 @@ document.addEventListener("keydown", (e)=>{
   }
 });
 
+/* Til tanlash oynasidagi logoni 10 marta tez bosish orqali ham kirish */
+let adminLogoTapCount = 0;
+let adminLogoTapTimer = null;
+const adminLogoEl = document.getElementById("langModalLogo");
+if(adminLogoEl){
+  adminLogoEl.addEventListener("click", ()=>{
+    adminLogoTapCount++;
+    clearTimeout(adminLogoTapTimer);
+    adminLogoTapTimer = setTimeout(()=>{ adminLogoTapCount = 0; }, 2500);
+    if(adminLogoTapCount>=10){
+      adminLogoTapCount = 0;
+      closeLangModal();
+      if(isAdminAuthed()) openAdminPanel(); else openAdminLogin();
+    }
+  });
+}
+
 function openAdminLogin(){
   document.getElementById("adminPasswordInput").value = "";
   document.getElementById("adminLoginError").style.display = "none";
@@ -1809,7 +1851,7 @@ function closeAdminLogin(){ document.getElementById("adminLoginModal").classList
 
 function attemptAdminLogin(){
   const val = document.getElementById("adminPasswordInput").value;
-  if(val === ADMIN_PASSWORD){
+  if(val === getAdminPassword()){
     sessionStorage.setItem(ADMIN_AUTH_KEY, "1");
     closeAdminLogin();
     openAdminPanel();
@@ -1823,10 +1865,14 @@ document.getElementById("adminLoginModal").addEventListener("click", (e)=>{ if(e
 
 function openAdminPanel(){
   hideAdminForm();
+  closeAdminSettings();
   renderAdminProductList();
   document.getElementById("adminPanelModal").classList.add("open");
 }
-function closeAdminPanel(){ document.getElementById("adminPanelModal").classList.remove("open"); }
+function closeAdminPanel(){
+  closeAdminSettings();
+  document.getElementById("adminPanelModal").classList.remove("open");
+}
 function logoutAdmin(){
   sessionStorage.removeItem(ADMIN_AUTH_KEY);
   closeAdminPanel();
@@ -1836,6 +1882,94 @@ document.getElementById("adminCloseBtn").addEventListener("click", closeAdminPan
 document.getElementById("adminLogoutBtn").addEventListener("click", logoutAdmin);
 document.getElementById("adminPanelModal").addEventListener("click", (e)=>{ if(e.target.id==="adminPanelModal") closeAdminPanel(); });
 document.getElementById("adminAddNewBtn").addEventListener("click", ()=> showAdminForm(null));
+
+/* ---------- Sozlamalar (parolni yangilash) ---------- */
+let adminSettingsStage = "verify"; // "verify" | "change"
+
+document.getElementById("adminSettingsBtn").addEventListener("click", ()=>{
+  const box = document.getElementById("adminSettingsBox");
+  if(box.style.display==="flex"){ closeAdminSettings(); return; }
+  adminSettingsStage = "verify";
+  renderAdminSettings();
+  box.style.display = "flex";
+});
+
+function closeAdminSettings(){
+  const box = document.getElementById("adminSettingsBox");
+  box.style.display = "none";
+  box.innerHTML = "";
+}
+
+function renderAdminSettings(){
+  const box = document.getElementById("adminSettingsBox");
+
+  if(adminSettingsStage==="verify"){
+    box.innerHTML = `
+      <h3 style="font-size:14px;"><i class="fa-solid fa-lock"></i> Joriy parolni tasdiqlang</h3>
+      <div>
+        <label>Joriy parol</label>
+        <input type="password" id="as_current" autocomplete="off">
+      </div>
+      <p id="as_error" style="color:var(--red); font-size:12px; display:none;">Parol noto'g'ri</p>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-primary" style="flex:1;" id="as_verify_btn"><i class="fa-solid fa-check"></i><span>Tasdiqlash</span></button>
+        <button type="button" class="btn btn-ghost" style="flex:1;" id="as_cancel_btn"><i class="fa-solid fa-xmark"></i><span>Bekor qilish</span></button>
+      </div>
+    `;
+    document.getElementById("as_verify_btn").addEventListener("click", ()=>{
+      const val = document.getElementById("as_current").value;
+      if(val === getAdminPassword()){
+        adminSettingsStage = "change";
+        renderAdminSettings();
+      } else {
+        document.getElementById("as_error").style.display = "block";
+      }
+    });
+    document.getElementById("as_current").addEventListener("keydown", (e)=>{ if(e.key==="Enter") document.getElementById("as_verify_btn").click(); });
+    document.getElementById("as_cancel_btn").addEventListener("click", closeAdminSettings);
+  } else {
+    const lang = state.lang || "uz";
+    const newLabel = lang==="ru" ? "\u041d\u043e\u0432\u044b\u0439 \u043f\u0430\u0440\u043e\u043b\u044c" : lang==="en" ? "New password" : "Yangi parol";
+    const confirmLabel = lang==="ru" ? "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435 \u043d\u043e\u0432\u044b\u0439 \u043f\u0430\u0440\u043e\u043b\u044c" : lang==="en" ? "Confirm new password" : "Yangi parolni tasdiqlang";
+    const titleLabel = lang==="ru" ? "\u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043f\u0430\u0440\u043e\u043b\u044c" : lang==="en" ? "Change password" : "Parolni yangilash";
+    box.innerHTML = `
+      <h3 style="font-size:14px;"><i class="fa-solid fa-key"></i> ${titleLabel}</h3>
+      <div>
+        <label>${newLabel}</label>
+        <input type="password" id="as_new" autocomplete="new-password">
+      </div>
+      <div>
+        <label>${confirmLabel}</label>
+        <input type="password" id="as_confirm" autocomplete="new-password">
+      </div>
+      <p id="as_error2" style="color:var(--red); font-size:12px; display:none;"></p>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-primary" style="flex:1;" id="as_save_btn"><i class="fa-solid fa-check"></i><span>Saqlash</span></button>
+        <button type="button" class="btn btn-ghost" style="flex:1;" id="as_cancel_btn2"><i class="fa-solid fa-xmark"></i><span>Bekor qilish</span></button>
+      </div>
+    `;
+    document.getElementById("as_save_btn").addEventListener("click", ()=>{
+      const p1 = document.getElementById("as_new").value;
+      const p2 = document.getElementById("as_confirm").value;
+      const errEl = document.getElementById("as_error2");
+      if(!p1 || p1.length<3){
+        errEl.textContent = "Parol kamida 3 belgidan iborat bo'lsin";
+        errEl.style.display = "block";
+        return;
+      }
+      if(p1 !== p2){
+        errEl.textContent = "Parollar mos kelmadi";
+        errEl.style.display = "block";
+        return;
+      }
+      setAdminPassword(p1);
+      closeAdminSettings();
+      showToast("Parol muvaffaqiyatli yangilandi", "success");
+    });
+    document.getElementById("as_confirm").addEventListener("keydown", (e)=>{ if(e.key==="Enter") document.getElementById("as_save_btn").click(); });
+    document.getElementById("as_cancel_btn2").addEventListener("click", closeAdminSettings);
+  }
+}
 
 function renderAdminProductList(){
   const wrap = document.getElementById("adminProductList");
@@ -1871,21 +2005,37 @@ function renderAdminProductList(){
   });
 }
 
+let adminImageData = null;
+
 function showAdminForm(editId){
   adminEditingId = editId || null;
+  adminImageData = null;
   const p = editId ? PRODUCTS.find(x=>x.id===editId) : null;
   const catOptions = Object.keys(ADMIN_CAT_LABELS).map(c=>
     `<option value="${c}" ${p && p.cat===c ? "selected":""}>${ADMIN_CAT_LABELS[c]}</option>`
   ).join("");
   const emojiPickerHTML = ADMIN_EMOJI_PRESETS.map(em=>`<button type="button" data-emoji="${em}">${em}</button>`).join("");
+  const startMode = (p && p.img) ? "image" : "emoji";
 
   const form = document.getElementById("adminForm");
   form.innerHTML = `
     <h3 style="font-size:15px;">${editId ? "Mahsulotni tahrirlash" : "Yangi mahsulot qo'shish"}</h3>
     <div>
+      <label>Mahsulot ko'rinishi</label>
+      <div class="admin-mode-toggle">
+        <button type="button" id="af_mode_emoji" class="${startMode==="emoji"?"active":""}"><i class="fa-solid fa-face-smile"></i> Stiker (emoji)</button>
+        <button type="button" id="af_mode_image" class="${startMode==="image"?"active":""}"><i class="fa-solid fa-image"></i> Rasm yuklash</button>
+      </div>
+    </div>
+    <div id="af_emoji_wrap" style="display:${startMode==="emoji"?"block":"none"};">
       <label>Stiker (emoji)</label>
       <input type="text" id="af_emoji" maxlength="4" value="${p ? p.emoji : "\u{1f354}"}" style="font-size:20px; text-align:center; max-width:80px;">
       <div class="admin-emoji-picker">${emojiPickerHTML}</div>
+    </div>
+    <div id="af_image_wrap" style="display:${startMode==="image"?"block":"none"};">
+      <label>Rasm tanlang (kompyuter yoki telefon galereyasidan)</label>
+      <input type="file" id="af_image_file" accept="image/*">
+      <div class="admin-image-preview" id="af_image_preview">${p && p.img ? `<img src="${p.img}">` : `<i class="fa-solid fa-image" style="color:var(--muted-2);"></i>`}</div>
     </div>
     <div class="af-row">
       <div>
@@ -1927,22 +2077,60 @@ function showAdminForm(editId){
     </div>
   `;
   form.style.display = "flex";
+
+  let afMode = startMode;
+  if(p && p.img) adminImageData = p.img;
+
+  function setMode(mode){
+    afMode = mode;
+    document.getElementById("af_mode_emoji").classList.toggle("active", mode==="emoji");
+    document.getElementById("af_mode_image").classList.toggle("active", mode==="image");
+    document.getElementById("af_emoji_wrap").style.display = mode==="emoji" ? "block" : "none";
+    document.getElementById("af_image_wrap").style.display = mode==="image" ? "block" : "none";
+  }
+  document.getElementById("af_mode_emoji").addEventListener("click", ()=> setMode("emoji"));
+  document.getElementById("af_mode_image").addEventListener("click", ()=> setMode("image"));
+
+  document.getElementById("af_image_file").addEventListener("change", (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      const img = new Image();
+      img.onload = function(){
+        const maxDim = 420;
+        let w = img.width, h = img.height;
+        if(w>h && w>maxDim){ h = Math.round(h*maxDim/w); w = maxDim; }
+        else if(h>=w && h>maxDim){ w = Math.round(w*maxDim/h); h = maxDim; }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.72);
+        adminImageData = dataUrl;
+        document.getElementById("af_image_preview").innerHTML = `<img src="${dataUrl}">`;
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
   form.querySelectorAll("[data-emoji]").forEach(btn=>{
     btn.addEventListener("click", ()=>{ document.getElementById("af_emoji").value = btn.getAttribute("data-emoji"); });
   });
-  document.getElementById("af_save").addEventListener("click", submitAdminForm);
+  document.getElementById("af_save").addEventListener("click", ()=> submitAdminForm(afMode));
   document.getElementById("af_cancel").addEventListener("click", hideAdminForm);
   form.scrollIntoView && (function(){ try{ form.scrollIntoView({behavior:"smooth", block:"nearest"}); }catch(e){} })();
 }
 
 function hideAdminForm(){
   adminEditingId = null;
+  adminImageData = null;
   const form = document.getElementById("adminForm");
   form.style.display = "none";
   form.innerHTML = "";
 }
 
-function submitAdminForm(){
+function submitAdminForm(mode){
   const emoji = document.getElementById("af_emoji").value.trim() || "\u{1f37d}\u{fe0f}";
   const cat = document.getElementById("af_cat").value;
   const price = parseInt(document.getElementById("af_price").value, 10);
@@ -1958,12 +2146,19 @@ function submitAdminForm(){
     en: document.getElementById("af_desc_en").value.trim()
   };
 
+  if(mode==="image" && !adminImageData){
+    showToast("Iltimos, rasm tanlang yoki 'Stiker' rejimiga o'ting", "error"); return;
+  }
+  if(mode==="image" && adminImageData && adminImageData.length > 550000){
+    showToast("Rasm hajmi juda katta, boshqa rasm tanlang", "error"); return;
+  }
+
   if(!name.uz || !name.ru || !name.en){ showToast("Nomni barcha tillarda kiriting", "error"); return; }
   if(!desc.uz || !desc.ru || !desc.en){ showToast("Tavsifni barcha tillarda kiriting", "error"); return; }
   if(!price || price<=0){ showToast("Narxni to'g'ri kiriting", "error"); return; }
 
   const data = {
-    emoji, img:null, cat, price,
+    emoji, img: mode==="image" ? adminImageData : null, cat, price,
     tag: tagVal ? {uz:tagVal, ru:tagVal, en:tagVal} : null,
     name, desc
   };
