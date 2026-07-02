@@ -823,7 +823,7 @@
    Bu yerga o'zingizning bot tokeningiz va chat_id ni kiriting.
 ========================================================= */
 const CONFIG = {
-  TELEGRAM_BOT_TOKEN: "8417416146:AAGc6wdf6E0mQaB9zH_tUNhBeIpfXFgP_BU",
+  TELEGRAM_BOT_TOKEN: "8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY",
   TELEGRAM_CHAT_ID: "7583392349",
   CURRENCY: "so'm",
   DELIVERY_FEE: 15000
@@ -1668,12 +1668,12 @@ function buildTelegramMarkdown(order){
 }
 
 async function sendToTelegram(markdownText){
-  if(!CONFIG.TELEGRAM_BOT_TOKEN || CONFIG.TELEGRAM_BOT_TOKEN==="YOUR_BOT_TOKEN_HERE"){
+  if(!CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY || CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY==="8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY"){
     console.warn("Telegram bot token sozlanmagan. CONFIG obyektida TELEGRAM_BOT_TOKEN va TELEGRAM_CHAT_ID ni to'ldiring.");
     return false;
   }
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const url = `https://api.telegram.org/bot${CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY}/sendMessage`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -1695,9 +1695,9 @@ async function sendToTelegram(markdownText){
 /* Mijoz xaritadan tanlagan joylashuvni Telegram botga
    haqiqiy metka (native location pin) sifatida yuboradi. */
 async function sendLocationToTelegram(loc){
-  if(!CONFIG.TELEGRAM_BOT_TOKEN || !loc) return false;
+  if(!CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY || !loc) return false;
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendLocation`;
+    const url = `https://api.telegram.org/bot${CONFIG.8417416146:AAHGUexsFzJOgHMXavOiMPCqScmMt11gIRY}/sendLocation`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
