@@ -1712,12 +1712,12 @@ function buildTelegramMarkdown(order){
 }
 
 async function sendToTelegram(markdownText){
-  if(!CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ|| CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ==="8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ"){
+  if(!CONFIG.TELEGRAM_BOT_TOKEN || CONFIG.TELEGRAM_BOT_TOKEN==="YOUR_BOT_TOKEN_HERE"){
     console.warn("Telegram bot token sozlanmagan. CONFIG obyektida TELEGRAM_BOT_TOKEN va TELEGRAM_CHAT_ID ni to'ldiring.");
     return false;
   }
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ}/sendMessage`;
+    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -1739,9 +1739,9 @@ async function sendToTelegram(markdownText){
 /* Mijoz xaritadan tanlagan joylashuvni Telegram botga
    haqiqiy metka (native location pin) sifatida yuboradi. */
 async function sendLocationToTelegram(loc){
-  if(!CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ|| !loc) return false;
+  if(!CONFIG.TELEGRAM_BOT_TOKEN || !loc) return false;
   try{
-    const url = `https://api.telegram.org/bot${CONFIG.8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ}/sendLocation`;
+    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendLocation`;
     const res = await fetch(url, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
