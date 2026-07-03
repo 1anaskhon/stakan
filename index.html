@@ -125,6 +125,7 @@
   [data-view="menu"] .nav-ico{background:linear-gradient(150deg,#ffb84d,#e6841a); color:#2a1400;}
   [data-view="cart"] .nav-ico{background:linear-gradient(150deg,var(--yellow),#e6a800); color:#191308;}
   [data-view="history"] .nav-ico{background:linear-gradient(150deg,#d19bff,#8a4fe0); color:#1c0a30;}
+  [data-view="tracker"] .nav-ico{background:linear-gradient(150deg,#6fe0c0,#1ea888); color:#052e24;}
   .desktop-nav button.active .nav-ico, .mnav-btn.active .nav-ico{transform:scale(1.08); box-shadow:0 6px 14px -4px rgba(0,0,0,.6);}
   .mnav-btn .nav-ico{width:24px; height:24px; border-radius:8px; margin-bottom:1px;}
   .nav-ico i{font-size:13px;}
@@ -220,6 +221,87 @@
   .hero-stats{display:flex; gap:26px; margin-top:34px; flex-wrap:wrap;}
   .hero-stat b{display:block; font-size:23px; font-weight:900; color:var(--yellow);}
   .hero-stat span{font-size:12.5px; color:var(--muted); font-weight:600;}
+  .hero-rating{
+    display:flex; align-items:center; gap:8px; margin-top:16px; font-size:14px; font-weight:700; color:var(--text);
+  }
+  .hero-rating i{color:var(--yellow); font-size:16px;}
+  .hero-rating span{color:var(--muted); font-weight:600; font-size:12.5px;}
+
+  /* ============ ORDER TRACKER (Mening buyurtmam) ============ */
+  .tracker-card{background:var(--card); border:1px solid var(--border); border-radius:20px; padding:26px 22px; margin-bottom:20px;}
+  .tracker-card h3{font-size:16px; margin-bottom:4px;}
+  .tracker-card .tr-sub{font-size:12.5px; color:var(--muted); margin-bottom:26px;}
+  .ot-timeline{display:flex; align-items:flex-start; justify-content:space-between; position:relative; padding:0 6px;}
+  .ot-timeline::before{
+    content:""; position:absolute; top:15px; left:8%; right:8%; height:3px; background:var(--border); z-index:0; border-radius:3px;
+  }
+  .ot-timeline .ot-line-fill{position:absolute; top:15px; left:8%; height:3px; background:linear-gradient(90deg,#1ea888,#6fe0c0); z-index:1; border-radius:3px; transition:width .5s var(--ease);}
+  .ot-step{position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:10px; flex:1;}
+  .ot-dot{
+    width:32px; height:32px; border-radius:50%; background:var(--card-2); border:3px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--muted-2); transition:.35s var(--ease);
+  }
+  .ot-step.done .ot-dot{background:linear-gradient(150deg,#6fe0c0,#1ea888); border-color:#1ea888; color:#052e24; box-shadow:0 0 0 5px rgba(30,168,136,.15);}
+  .ot-step.active .ot-dot{background:var(--yellow); border-color:var(--yellow); color:#171308; box-shadow:0 0 0 6px rgba(255,204,0,.2); animation:pulseDot 1.6s infinite;}
+  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 6px rgba(255,204,0,.2);} 50%{box-shadow:0 0 0 10px rgba(255,204,0,.05);}}
+  .ot-step-label{font-size:10.5px; font-weight:700; color:var(--muted); text-align:center; max-width:80px;}
+  .ot-step.done .ot-step-label, .ot-step.active .ot-step-label{color:var(--text);}
+  .tracker-order-info{margin-top:28px; padding-top:20px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--muted);}
+  .tracker-order-info b{color:var(--text);}
+
+  .rating-box{text-align:center; margin-top:24px; padding-top:22px; border-top:1px solid var(--border);}
+  .rating-box p{font-size:13px; color:var(--muted); margin-bottom:14px;}
+  .rating-stars{display:flex; justify-content:center; gap:8px; font-size:30px;}
+  .rating-stars i{color:var(--border-strong); cursor:pointer; transition:.15s;}
+  .rating-stars i.filled{color:var(--yellow);}
+  .rating-stars i:hover{transform:scale(1.15);}
+  .rating-done{color:var(--yellow); font-size:14px; font-weight:700; margin-top:10px;}
+
+  /* ============ ADMIN: order status + stats ============ */
+  .admin-order-status{margin-top:10px; padding-top:10px; border-top:1px dashed var(--border); display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .admin-order-status .aos-label{font-size:11.5px; font-weight:700; color:var(--muted);}
+  .admin-order-status .aos-badge{font-size:10.5px; font-weight:800; padding:3px 9px; border-radius:20px; background:var(--card); color:var(--text);}
+  .admin-order-status .aos-badge.delivered{background:linear-gradient(150deg,#6fe0c0,#1ea888); color:#052e24;}
+  .admin-order-status button{font-size:11px; font-weight:700; padding:6px 12px; border-radius:9px; background:var(--yellow); color:#171308; white-space:nowrap;}
+  .admin-order-status button:disabled{opacity:.4;}
+
+  .admin-stats-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:20px;}
+  .admin-stat-card{background:var(--card-2); border:1px solid var(--border); border-radius:16px; padding:18px;}
+  .admin-stat-card i{font-size:18px; color:var(--yellow); margin-bottom:8px; display:block;}
+  .admin-stat-card b{display:block; font-size:21px; font-weight:900;}
+  .admin-stat-card span{font-size:11.5px; color:var(--muted); font-weight:600;}
+  .admin-top-products{display:flex; flex-direction:column; gap:8px;}
+  .admin-top-row{display:flex; align-items:center; gap:12px; background:var(--card-2); border:1px solid var(--border); border-radius:12px; padding:10px 14px;}
+  .admin-top-row .atr-rank{width:22px; height:22px; border-radius:50%; background:var(--yellow); color:#171308; font-size:11px; font-weight:900; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .admin-top-row .atr-name{flex:1; font-size:13px; font-weight:700;}
+  .admin-top-row .atr-count{font-size:12px; color:var(--muted); font-weight:700;}
+
+  /* ============ MODIFIER PICKER (bottom sheet) ============ */
+  .modifier-sheet-box{max-width:420px;}
+  .modifier-sheet-box h3{font-size:16px; margin-bottom:2px;}
+  .modifier-sheet-box .ms-sub{font-size:12.5px; color:var(--muted); margin-bottom:16px;}
+  .modifier-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 14px; background:var(--card-2); border:1.5px solid var(--border); border-radius:12px; margin-bottom:8px; cursor:pointer; transition:.15s;}
+  .modifier-row.checked{border-color:var(--yellow); background:rgba(255,204,0,.08);}
+  .modifier-row .mr-check{width:20px; height:20px; border-radius:6px; border:2px solid var(--border-strong); display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0; transition:.15s;}
+  .modifier-row.checked .mr-check{background:var(--yellow); border-color:var(--yellow); color:#171308;}
+  .modifier-row .mr-name{flex:1; font-size:13.5px; font-weight:600;}
+  .modifier-row .mr-price{font-size:12.5px; color:var(--yellow); font-weight:700; white-space:nowrap;}
+
+  .cart-item-mods{font-size:11px; color:var(--muted-2); margin-top:2px;}
+
+  /* ============ COMBO TAG & ADMIN COMBO BUILDER ============ */
+  .card-tag.combo-tag{background:linear-gradient(150deg,#6fe0c0,#1ea888); color:#052e24;}
+  .combo-contents{font-size:11px; color:var(--muted-2); margin-top:2px;}
+  .admin-combo-picker{display:flex; flex-direction:column; gap:6px; max-height:200px; overflow-y:auto; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:8px;}
+  .admin-combo-picker label{display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; padding:5px 6px; text-transform:none; letter-spacing:0; color:var(--text);}
+
+  /* ============ SCHEDULE (Kechroq yetkazish) ============ */
+  .schedule-options{display:flex; gap:10px; margin-bottom:12px;}
+  .schedule-opt{flex:1; padding:11px; border-radius:12px; background:var(--card-2); border:1.5px solid var(--border); color:var(--muted); font-size:12.5px; font-weight:700; display:flex; flex-direction:column; align-items:center; gap:5px; transition:.2s;}
+  .schedule-opt i{font-size:16px;}
+  .schedule-opt.active{border-color:var(--yellow); background:rgba(255,204,0,.09); color:var(--yellow);}
+  .schedule-time-field{display:none;}
+  .schedule-time-field.show{display:block;}
 
   /* ============ 3D CAROUSEL ============ */
   .carousel-wrap{
@@ -446,8 +528,8 @@
   @media (max-width:880px){.mobile-nav{display:flex; justify-content:space-around; align-items:center; gap:4px;}}
   .mnav-btn{
     position:relative; display:flex; flex-direction:column; align-items:center; gap:4px;
-    padding:8px 14px; border-radius:14px; color:var(--muted); font-size:10.5px; font-weight:700;
-    transition:.25s var(--ease); flex:1; max-width:90px;
+    padding:8px 8px; border-radius:14px; color:var(--muted); font-size:9.5px; font-weight:700;
+    transition:.25s var(--ease); flex:1; max-width:80px;
   }
   .mnav-btn i{font-size:19px; transition:.25s var(--ease);}
   .mnav-btn.active{color:var(--yellow);}
@@ -520,6 +602,18 @@
   .admin-header{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border); flex-shrink:0;}
   .admin-header h2{font-size:17px; display:flex; align-items:center; gap:9px;}
   .admin-header .admin-header-actions{display:flex; gap:8px;}
+  .admin-tabs{display:flex; gap:8px; padding:0 22px 14px; border-bottom:1px solid var(--border); flex-shrink:0;}
+  .admin-tab-btn{padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--muted); background:var(--card-2); border:1px solid var(--border); display:flex; align-items:center; gap:7px; transition:.2s;}
+  .admin-tab-btn.active{background:var(--yellow); color:#171308; border-color:var(--yellow);}
+  .admin-customer-list{display:flex; flex-direction:column; gap:10px;}
+  .admin-customer-row{background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:14px;}
+  .admin-customer-row .ac-top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;}
+  .admin-customer-row .ac-name{font-size:14px; font-weight:800;}
+  .admin-customer-row .ac-count{background:var(--yellow); color:#171308; font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; white-space:nowrap;}
+  .admin-customer-row .ac-phone{font-size:12.5px; color:var(--muted); margin-bottom:4px;}
+  .admin-customer-row .ac-tg{font-size:11.5px; color:var(--muted-2); display:flex; align-items:center; gap:6px;}
+  .admin-customer-row .ac-tg.linked{color:#7c9eff;}
+  .admin-empty-note{text-align:center; color:var(--muted-2); font-size:13px; padding:30px 10px;}
   .admin-body{padding:20px 22px; overflow-y:auto;}
   .admin-product-list{display:flex; flex-direction:column; gap:10px;}
   .admin-product-row{display:flex; align-items:center; gap:12px; background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:10px 12px;}
@@ -606,6 +700,18 @@
   </div>
 </div>
 
+<!-- ======================= MODIFIER PICKER MODAL ======================= -->
+<div class="modal-overlay" id="modifierModal">
+  <div class="modal-box modifier-sheet-box">
+    <h3 id="modifierProductName">Mahsulot</h3>
+    <p class="ms-sub" data-i18n="modifierSub">Xohlagan qo'shimchalarni tanlang</p>
+    <div id="modifierList"></div>
+    <button class="btn btn-primary btn-block" id="modifierConfirmBtn" type="button" style="margin-top:14px;">
+      <i class="fa-solid fa-cart-plus"></i><span data-i18n="modifierAddBtn">Savatga qo'shish</span> &#8212; <span id="modifierTotalPrice">0</span>
+    </button>
+  </div>
+</div>
+
 <!-- ======================= ADMIN LOGIN MODAL ======================= -->
 <div class="modal-overlay" id="adminLoginModal">
   <div class="modal-box admin-login-box">
@@ -636,11 +742,27 @@
         <button class="icon-btn" id="adminCloseBtn" type="button" title="Yopish"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" id="adminTabProducts" type="button"><i class="fa-solid fa-burger"></i> Mahsulotlar</button>
+      <button class="admin-tab-btn" id="adminTabCustomers" type="button"><i class="fa-solid fa-users"></i> Mijozlar</button>
+      <button class="admin-tab-btn" id="adminTabStats" type="button"><i class="fa-solid fa-chart-line"></i> Statistika</button>
+    </div>
     <div class="admin-body">
       <div class="admin-settings-box" id="adminSettingsBox"></div>
-      <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
-      <div class="admin-form" id="adminForm"></div>
-      <div class="admin-product-list" id="adminProductList"></div>
+
+      <div id="adminProductsSection">
+        <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
+        <div class="admin-form" id="adminForm"></div>
+        <div class="admin-product-list" id="adminProductList"></div>
+      </div>
+
+      <div id="adminCustomersSection" style="display:none;">
+        <div class="admin-customer-list" id="adminCustomerList"></div>
+      </div>
+
+      <div id="adminStatsSection" style="display:none;">
+        <div id="adminStatsContent"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -666,6 +788,7 @@
       <button data-view="home" class="active"><span class="nav-ico"><i class="fa-solid fa-house"></i></span><span data-i18n="navHome">Bosh sahifa</span></button>
       <button data-view="menu"><span class="nav-ico"><i class="fa-solid fa-utensils"></i></span><span data-i18n="navMenu">Menyu</span></button>
       <button data-view="cart"><span class="nav-ico"><i class="fa-solid fa-cart-shopping"></i></span><span data-i18n="navCart">Savat</span></button>
+      <button data-view="tracker"><span class="nav-ico"><i class="fa-solid fa-truck-fast"></i></span><span data-i18n="navTracker">Mening buyurtmam</span></button>
       <button data-view="history"><span class="nav-ico"><i class="fa-solid fa-clock-rotate-left"></i></span><span data-i18n="navHistory">Tarix</span></button>
     </nav>
 
@@ -693,6 +816,9 @@
           <p class="lead" data-i18n="heroLead">Stakan Cafe &#8212; tezkor fast-food xizmati. Eng mazali burgerlar, pitsalar va ichimliklar endi bir necha bosishda uyingizga yetib boradi.</p>
           <div class="hero-ctas">
             <button class="btn btn-primary" data-view="menu"><i class="fa-solid fa-bag-shopping"></i><span data-i18n="heroCta">Buyurtma berish</span></button>
+          </div>
+          <div class="hero-rating" id="heroRating" style="display:none;">
+            <i class="fa-solid fa-star"></i> <b id="heroRatingValue">0</b>/5 <span data-i18n="heroRatingLabel">(Mijozlar bahosi)</span>
           </div>
           <div class="hero-stats">
             <div class="hero-stat"><b>15+</b><span data-i18n="statDishes">Xil taomlar</span></div>
@@ -768,6 +894,16 @@
               <button class="delivery-opt" data-type="pickup"><i class="fa-solid fa-store"></i><span data-i18n="pickupOpt">Olib ketish</span></button>
             </div>
 
+            <div class="schedule-options">
+              <button class="schedule-opt active" data-schedule="now" type="button"><i class="fa-solid fa-bolt"></i><span data-i18n="scheduleNow">Tezkor (hozir)</span></button>
+              <button class="schedule-opt" data-schedule="later" type="button"><i class="fa-regular fa-clock"></i><span data-i18n="scheduleLater">Vaqtni tanlash</span></button>
+            </div>
+            <div class="field schedule-time-field" id="scheduleTimeField">
+              <label data-i18n="scheduleTimeLabel">Yetkazish vaqti</label>
+              <input type="time" id="fScheduleTime">
+              <div class="err-msg" data-i18n="reqField">Bu maydon majburiy</div>
+            </div>
+
             <div class="field">
               <label data-i18n="nameLabel">Ismingiz</label>
               <input type="text" id="fName" placeholder="Ism Familiya" maxlength="60">
@@ -798,6 +934,25 @@
     </div>
   </section>
 
+  <!-- ============ ORDER TRACKER VIEW ============ -->
+  <section class="view" id="view-tracker">
+    <div class="section" style="padding-top:34px;">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="trackerTitle">Mening buyurtmam</h2>
+          <p data-i18n="trackerSub">Buyurtmangiz holatini kuzatib boring</p>
+        </div>
+      </div>
+      <div id="trackerEmptyState" class="empty-state" style="display:none;">
+        <i class="fa-solid fa-truck-fast"></i>
+        <h3 data-i18n="trackerEmptyTitle">Faol buyurtma yo'q</h3>
+        <p data-i18n="trackerEmptyText">Buyurtma bersangiz, uning holati shu yerda ko'rinadi</p>
+        <button class="btn btn-primary" data-view="menu"><i class="fa-solid fa-utensils"></i><span data-i18n="goToMenu">Menyuga o'tish</span></button>
+      </div>
+      <div id="trackerContent" style="display:none;"></div>
+    </div>
+  </section>
+
   <!-- ============ HISTORY VIEW ============ -->
   <section class="view" id="view-history">
     <div class="section" style="padding-top:34px;">
@@ -817,7 +972,7 @@
     </div>
   </section>
 
-  <div class="footer-note">Stakan Cafe &copy; 2026 &#183; Made with <i class="fa-solid fa-heart"></i> by Karakhujayev Anaskhon</div>
+  <div class="footer-note">Stakan Cafe &copy; 2026 &#183; Made by Karakhujayev Anaskhon</div>
 </main>
 
 <!-- ======================= MOBILE BOTTOM NAV ======================= -->
@@ -825,6 +980,7 @@
   <button class="mnav-btn active" data-view="home"><span class="nav-ico"><i class="fa-solid fa-house"></i></span><span data-i18n="navHome">Bosh sahifa</span></button>
   <button class="mnav-btn" data-view="menu"><span class="nav-ico"><i class="fa-solid fa-utensils"></i></span><span data-i18n="navMenu">Menyu</span></button>
   <button class="mnav-btn" data-view="cart"><span class="nav-ico"><i class="fa-solid fa-cart-shopping"></i></span><span class="badge hidden" id="cartBadgeMobile">0</span><span data-i18n="navCart">Savat</span></button>
+  <button class="mnav-btn" data-view="tracker"><span class="nav-ico"><i class="fa-solid fa-truck-fast"></i></span><span data-i18n="navTracker">Buyurtmam</span></button>
   <button class="mnav-btn" data-view="history"><span class="nav-ico"><i class="fa-solid fa-clock-rotate-left"></i></span><span data-i18n="navHistory">Tarix</span></button>
 </nav>
 
@@ -877,7 +1033,13 @@ const I18N = {
     useMyLocation:"Joriy joylashuvimni aniqlash", confirmLocation:"Joylashuvni tasdiqlash",
     dragMapHint:"Xaritani surib, markazga joylashuvni to'g'rilang", locating:"Manzil aniqlanmoqda...",
     toastGeoUnsupported:"Qurilmangiz joylashuvni aniqlay olmaydi", toastGeoFail:"Joylashuvni aniqlab bo'lmadi",
-    toastLocationRequired:"Iltimos, xaritadan joylashuvni tanlang", toastPhoneInvalid:"Telefon raqamni to'liq kiriting"
+    toastLocationRequired:"Iltimos, xaritadan joylashuvni tanlang", toastPhoneInvalid:"Telefon raqamni to'liq kiriting",
+    navTracker:"Mening buyurtmam", trackerTitle:"Mening buyurtmam", trackerSub:"Buyurtmangiz holatini kuzatib boring",
+    trackerEmptyTitle:"Faol buyurtma yo'q", trackerEmptyText:"Buyurtma bersangiz, uning holati shu yerda ko'rinadi",
+    heroRatingLabel:"(Mijozlar bahosi)", modifierSub:"Xohlagan qo'shimchalarni tanlang", modifierAddBtn:"Savatga qo'shish",
+    scheduleNow:"Tezkor (hozir)", scheduleLater:"Vaqtni tanlash", scheduleTimeLabel:"Yetkazish vaqti",
+    statusAccepted:"Qabul qilindi", statusPreparing:"Tayyorlanmoqda", statusCourier:"Kuryer yo'lda", statusDelivered:"Yetkazildi",
+    rateUsPrompt:"Xizmatimizni baholang", thanksForRating:"Rahmat! Bahoyingiz qabul qilindi"
   },
   ru:{
     navHome:"\u{413}\u{43b}\u{430}\u{432}\u{43d}\u{430}\u{44f}", navMenu:"\u{41c}\u{435}\u{43d}\u{44e}", navCart:"\u{41a}\u{43e}\u{440}\u{437}\u{438}\u{43d}\u{430}", navHistory:"\u{418}\u{441}\u{442}\u{43e}\u{440}\u{438}\u{44f}",
@@ -909,7 +1071,13 @@ const I18N = {
     useMyLocation:"\u{41e}\u{43f}\u{440}\u{435}\u{434}\u{435}\u{43b}\u{438}\u{442}\u{44c} \u{43c}\u{43e}\u{451} \u{43c}\u{435}\u{441}\u{442}\u{43e}\u{43f}\u{43e}\u{43b}\u{43e}\u{436}\u{435}\u{43d}\u{438}\u{435}", confirmLocation:"\u{41f}\u{43e}\u{434}\u{442}\u{432}\u{435}\u{440}\u{434}\u{438}\u{442}\u{44c} \u{43c}\u{435}\u{441}\u{442}\u{43e}\u{43f}\u{43e}\u{43b}\u{43e}\u{436}\u{435}\u{43d}\u{438}\u{435}",
     dragMapHint:"\u{41f}\u{435}\u{440}\u{435}\u{434}\u{432}\u{438}\u{43d}\u{44c}\u{442}\u{435} \u{43a}\u{430}\u{440}\u{442}\u{443}, \u{447}\u{442}\u{43e}\u{431}\u{44b} \u{443}\u{43a}\u{430}\u{437}\u{430}\u{442}\u{44c} \u{442}\u{43e}\u{447}\u{43a}\u{443} \u{432} \u{446}\u{435}\u{43d}\u{442}\u{440}\u{435}", locating:"\u{41e}\u{43f}\u{440}\u{435}\u{434}\u{435}\u{43b}\u{435}\u{43d}\u{438}\u{435} \u{430}\u{434}\u{440}\u{435}\u{441}\u{430}...",
     toastGeoUnsupported:"\u{412}\u{430}\u{448}\u{435} \u{443}\u{441}\u{442}\u{440}\u{43e}\u{439}\u{441}\u{442}\u{432}\u{43e} \u{43d}\u{435} \u{43f}\u{43e}\u{434}\u{434}\u{435}\u{440}\u{436}\u{438}\u{432}\u{430}\u{435}\u{442} \u{43e}\u{43f}\u{440}\u{435}\u{434}\u{435}\u{43b}\u{435}\u{43d}\u{438}\u{435} \u{43c}\u{435}\u{441}\u{442}\u{43e}\u{43f}\u{43e}\u{43b}\u{43e}\u{436}\u{435}\u{43d}\u{438}\u{44f}", toastGeoFail:"\u{41d}\u{435} \u{443}\u{434}\u{430}\u{43b}\u{43e}\u{441}\u{44c} \u{43e}\u{43f}\u{440}\u{435}\u{434}\u{435}\u{43b}\u{438}\u{442}\u{44c} \u{43c}\u{435}\u{441}\u{442}\u{43e}\u{43f}\u{43e}\u{43b}\u{43e}\u{436}\u{435}\u{43d}\u{438}\u{435}",
-    toastLocationRequired:"\u{41f}\u{43e}\u{436}\u{430}\u{43b}\u{443}\u{439}\u{441}\u{442}\u{430}, \u{432}\u{44b}\u{431}\u{435}\u{440}\u{438}\u{442}\u{435} \u{43c}\u{435}\u{441}\u{442}\u{43e}\u{43f}\u{43e}\u{43b}\u{43e}\u{436}\u{435}\u{43d}\u{438}\u{435} \u{43d}\u{430} \u{43a}\u{430}\u{440}\u{442}\u{435}", toastPhoneInvalid:"\u{412}\u{432}\u{435}\u{434}\u{438}\u{442}\u{435} \u{43d}\u{43e}\u{43c}\u{435}\u{440} \u{442}\u{435}\u{43b}\u{435}\u{444}\u{43e}\u{43d}\u{430} \u{43f}\u{43e}\u{43b}\u{43d}\u{43e}\u{441}\u{442}\u{44c}\u{44e}"
+    toastLocationRequired:"\u{41f}\u{43e}\u{436}\u{430}\u{43b}\u{443}\u{439}\u{441}\u{442}\u{430}, \u{432}\u{44b}\u{431}\u{435}\u{440}\u{438}\u{442}\u{435} \u{43c}\u{435}\u{441}\u{442}\u{43e}\u{43f}\u{43e}\u{43b}\u{43e}\u{436}\u{435}\u{43d}\u{438}\u{435} \u{43d}\u{430} \u{43a}\u{430}\u{440}\u{442}\u{435}", toastPhoneInvalid:"\u{412}\u{432}\u{435}\u{434}\u{438}\u{442}\u{435} \u{43d}\u{43e}\u{43c}\u{435}\u{440} \u{442}\u{435}\u{43b}\u{435}\u{444}\u{43e}\u{43d}\u{430} \u{43f}\u{43e}\u{43b}\u{43d}\u{43e}\u{441}\u{442}\u{44c}\u{44e}",
+    navTracker:"\u{41c}\u{43e}\u{439} \u{437}\u{430}\u{43a}\u{430}\u{437}", trackerTitle:"\u{41c}\u{43e}\u{439} \u{437}\u{430}\u{43a}\u{430}\u{437}", trackerSub:"\u{421}\u{43b}\u{435}\u{434}\u{438}\u{442}\u{435} \u{437}\u{430} \u{441}\u{442}\u{430}\u{442}\u{443}\u{441}\u{43e}\u{43c} \u{432}\u{430}\u{448}\u{435}\u{433}\u{43e} \u{437}\u{430}\u{43a}\u{430}\u{437}\u{430}",
+    trackerEmptyTitle:"\u{41d}\u{435}\u{442} \u{430}\u{43a}\u{442}\u{438}\u{432}\u{43d}\u{43e}\u{433}\u{43e} \u{437}\u{430}\u{43a}\u{430}\u{437}\u{430}", trackerEmptyText:"\u{421}\u{434}\u{435}\u{43b}\u{430}\u{439}\u{442}\u{435} \u{437}\u{430}\u{43a}\u{430}\u{437}, \u{438} \u{435}\u{433}\u{43e} \u{441}\u{442}\u{430}\u{442}\u{443}\u{441} \u{43f}\u{43e}\u{44f}\u{432}\u{438}\u{442}\u{441}\u{44f} \u{437}\u{434}\u{435}\u{441}\u{44c}",
+    heroRatingLabel:"(\u{41e}\u{446}\u{435}\u{43d}\u{43a}\u{430} \u{43a}\u{43b}\u{438}\u{435}\u{43d}\u{442}\u{43e}\u{432})", modifierSub:"\u{412}\u{44b}\u{431}\u{435}\u{440}\u{438}\u{442}\u{435} \u{43d}\u{443}\u{436}\u{43d}\u{44b}\u{435} \u{434}\u{43e}\u{431}\u{430}\u{432}\u{43a}\u{438}", modifierAddBtn:"\u{414}\u{43e}\u{431}\u{430}\u{432}\u{438}\u{442}\u{44c} \u{432} \u{43a}\u{43e}\u{440}\u{437}\u{438}\u{43d}\u{443}",
+    scheduleNow:"\u{411}\u{44b}\u{441}\u{442}\u{440}\u{43e} (\u{441}\u{435}\u{439}\u{447}\u{430}\u{441})", scheduleLater:"\u{412}\u{44b}\u{431}\u{440}\u{430}\u{442}\u{44c} \u{432}\u{440}\u{435}\u{43c}\u{44f}", scheduleTimeLabel:"\u{412}\u{440}\u{435}\u{43c}\u{44f} \u{434}\u{43e}\u{441}\u{442}\u{430}\u{432}\u{43a}\u{438}",
+    statusAccepted:"\u{41f}\u{440}\u{438}\u{43d}\u{44f}\u{442}", statusPreparing:"\u{413}\u{43e}\u{442}\u{43e}\u{432}\u{438}\u{442}\u{441}\u{44f}", statusCourier:"\u{41a}\u{443}\u{440}\u{44c}\u{435}\u{440} \u{432} \u{43f}\u{443}\u{442}\u{438}", statusDelivered:"\u{414}\u{43e}\u{441}\u{442}\u{430}\u{432}\u{43b}\u{435}\u{43d}",
+    rateUsPrompt:"\u{41e}\u{446}\u{435}\u{43d}\u{438}\u{442}\u{435} \u{43d}\u{430}\u{448} \u{441}\u{435}\u{440}\u{432}\u{438}\u{441}", thanksForRating:"\u{421}\u{43f}\u{430}\u{441}\u{438}\u{431}\u{43e}! \u{412}\u{430}\u{448}\u{430} \u{43e}\u{446}\u{435}\u{43d}\u{43a}\u{430} \u{43f}\u{440}\u{438}\u{43d}\u{44f}\u{442}\u{430}"
   },
   en:{
     navHome:"Home", navMenu:"Menu", navCart:"Cart", navHistory:"History",
@@ -941,7 +1109,13 @@ const I18N = {
     useMyLocation:"Detect my current location", confirmLocation:"Confirm location",
     dragMapHint:"Drag the map so the pin marks your spot", locating:"Detecting address...",
     toastGeoUnsupported:"Your device doesn't support location detection", toastGeoFail:"Couldn't detect your location",
-    toastLocationRequired:"Please choose a location on the map", toastPhoneInvalid:"Please enter the full phone number"
+    toastLocationRequired:"Please choose a location on the map", toastPhoneInvalid:"Please enter the full phone number",
+    navTracker:"My order", trackerTitle:"My order", trackerSub:"Track your order status",
+    trackerEmptyTitle:"No active order", trackerEmptyText:"Place an order and its status will appear here",
+    heroRatingLabel:"(Customer rating)", modifierSub:"Choose your add-ons", modifierAddBtn:"Add to cart",
+    scheduleNow:"Fast (now)", scheduleLater:"Choose time", scheduleTimeLabel:"Delivery time",
+    statusAccepted:"Accepted", statusPreparing:"Preparing", statusCourier:"Courier on the way", statusDelivered:"Delivered",
+    rateUsPrompt:"Rate our service", thanksForRating:"Thanks! Your rating was submitted"
   }
 };
 
@@ -1014,6 +1188,10 @@ const firebaseConfig = {
   appId: "1:223817742166:web:b0b947d67940c03e38c8f7"
 };
 const PRODUCTS_COLLECTION = "products";
+const CUSTOMERS_COLLECTION = "customers";
+const ORDERS_COLLECTION = "orders";
+const CONFIG_COLLECTION = "config";
+const LAST_PHONE_KEY = "Stakan cafe_last_phone";
 let firestoreReady = false;
 let firebaseAvailable = false;
 let db = null;
@@ -1072,6 +1250,7 @@ function listenToProducts(){
 }
 seedFirestoreIfEmpty();
 listenToProducts();
+listenToRatings();
 
 function nextProductId(){ return PRODUCTS.reduce((max,p)=>Math.max(max,p.id),0) + 1; }
 
@@ -1098,6 +1277,133 @@ function adminDeleteProduct(id){
   if(state.cart && state.cart[id]){ delete state.cart[id]; saveCart(); refreshCartUI(); }
 }
 
+/* =========================================================
+   MIJOZLAR (CUSTOMERS) - telefon raqami bo'yicha, serverda
+   (Firestore'da) saqlanadi, shuning uchun mijoz qaysi qurilma/
+   brauzerdan kirishidan qat'iy nazar o'z tarixini va ma'lumotlarini
+   ko'radi. Har bir mijoz hujjati telefon raqamining faqat
+   raqamlaridan iborat ID bilan saqlanadi (masalan "997772200").
+========================================================= */
+function extractPhoneDigits(phone){
+  return (phone || "").replace(/\D/g,"").replace(/^998/,"");
+}
+
+const STATUS_STEPS = ["accepted","preparing","courier","delivered"];
+const STATUS_I18N_KEYS = {accepted:"statusAccepted", preparing:"statusPreparing", courier:"statusCourier", delivered:"statusDelivered"};
+const LAST_ORDER_ID_KEY = "Stakan cafe_last_order_id";
+
+function saveOrderLocalFallback(order){
+  let history = JSON.parse(localStorage.getItem("Stakan cafe_history_fallback") || "[]");
+  history.unshift(order);
+  history = history.slice(0,20);
+  localStorage.setItem("Stakan cafe_history_fallback", JSON.stringify(history));
+}
+
+/* Buyurtma berilganda: 1) customers/{telefon} hujjatini yangilaydi
+   (yoki yaratadi) va NECHANCHI marta buyurtma berayotganini hisoblaydi,
+   2) orders/{orderId} alohida hujjat sifatida yaratiladi - shu hujjat
+   orqali "Mening buyurtmam" bo'limi va admin panel real vaqtda holatni
+   kuzatadi (Live Order Tracker). */
+async function saveOrder(order){
+  const digits = extractPhoneDigits(order.phone);
+  order.phoneDigits = digits;
+  order.status = "accepted";
+  order.rating = null;
+  order.createdAt = Date.now();
+
+  if(!digits){ saveOrderLocalFallback(order); return {orderNumber:1}; }
+  localStorage.setItem(LAST_PHONE_KEY, digits);
+  localStorage.setItem(LAST_ORDER_ID_KEY, String(order.id));
+
+  if(!firebaseAvailable){
+    saveOrderLocalFallback(order);
+    return {orderNumber:1};
+  }
+
+  try{
+    const custRef = db.collection(CUSTOMERS_COLLECTION).doc(digits);
+    const orderRef = db.collection(ORDERS_COLLECTION).doc(String(order.id));
+    const orderNumber = await db.runTransaction(async (tx)=>{
+      const custDoc = await tx.get(custRef);
+      const custData = custDoc.exists ? custDoc.data() : {
+        name: order.name, phone: order.phone, orderCount: 0,
+        telegramUsername: null, telegramId: null
+      };
+      custData.name = order.name || custData.name;
+      custData.phone = order.phone;
+      custData.orderCount = (custData.orderCount || 0) + 1;
+      custData.updatedAt = Date.now();
+      tx.set(custRef, custData);
+      tx.set(orderRef, order);
+      return custData.orderCount;
+    });
+    return {orderNumber};
+  }catch(err){
+    console.error("Buyurtmani saqlashda xatolik:", err);
+    saveOrderLocalFallback(order);
+    return {orderNumber:1};
+  }
+}
+
+/* Telefon raqami 9 ta raqamga to'lgach, agar bu mijoz avval ham
+   buyurtma bergan bo'lsa - uning ismini avtomatik to'ldiradi. */
+function lookupReturningCustomer(digits){
+  if(!firebaseAvailable || !digits || digits.length!==9) return;
+  try{
+    db.collection(CUSTOMERS_COLLECTION).doc(digits).get().then(doc=>{
+      if(doc.exists){
+        const data = doc.data();
+        const nameField = document.getElementById("fName");
+        if(data.name && nameField && !nameField.value.trim()){
+          nameField.value = data.name;
+        }
+      }
+    }).catch(err=>console.error("Mijozni qidirishda xatolik:", err));
+  }catch(err){ console.error("Mijoz qidirish xatosi:", err); }
+}
+
+/* =========================================================
+   REYTING (baholash) tizimi - o'rtacha baho config/ratings
+   hujjatida {sum, count} ko'rinishida saqlanadi va bosh sahifada
+   real vaqtda ko'rsatiladi.
+========================================================= */
+function listenToRatings(){
+  if(!firebaseAvailable) return;
+  try{
+    db.collection(CONFIG_COLLECTION).doc("ratings").onSnapshot(doc=>{
+      const box = document.getElementById("heroRating");
+      const valEl = document.getElementById("heroRatingValue");
+      if(!box || !valEl) return;
+      if(doc.exists && doc.data().count>0){
+        const avg = doc.data().sum / doc.data().count;
+        valEl.textContent = avg.toFixed(1);
+        box.style.display = "flex";
+      } else {
+        box.style.display = "none";
+      }
+    }, err=>console.error("Reytingni sinxronlashda xatolik:", err));
+  }catch(err){ console.error("Rating tinglash xatosi:", err); }
+}
+
+async function submitRating(orderId, stars){
+  if(!firebaseAvailable) return false;
+  try{
+    await db.collection(ORDERS_COLLECTION).doc(String(orderId)).update({rating: stars});
+    const ref = db.collection(CONFIG_COLLECTION).doc("ratings");
+    await db.runTransaction(async (tx)=>{
+      const doc = await tx.get(ref);
+      const data = doc.exists ? doc.data() : {sum:0, count:0};
+      data.sum = (data.sum||0) + stars;
+      data.count = (data.count||0) + 1;
+      tx.set(ref, data);
+    });
+    return true;
+  }catch(err){
+    console.error("Bahoni saqlashda xatolik:", err);
+    return false;
+  }
+}
+
 const CATEGORIES = ["all","burger","pizza","side","drink","dessert","combo"];
 const CAT_ICON = {all:"\u{1f37d}\u{fe0f}",burger:"\u{1f354}",pizza:"\u{1f355}",side:"\u{1f35f}",drink:"\u{1f964}",dessert:"\u{1f368}",combo:"\u{1f371}"};
 
@@ -1121,8 +1427,11 @@ let state = {
   activeCat: "all",
   activeView: "home",
   deliveryType: "delivery",
+  scheduleType: "now",
   location: null
 };
+migrateCartShape();
+saveCart();
 
 function t(key){ return (I18N[state.lang||"uz"][key]) || key; }
 function money(n){ return n.toLocaleString("fr-FR").replace(/,/g," ") + " " + CONFIG.CURRENCY; }
@@ -1184,6 +1493,7 @@ document.getElementById("langSwitchBtnMobile").addEventListener("click", openLan
 function goToView(view){
   state.activeView = view;
   if(view==="history") renderHistory();
+  if(view==="tracker") renderTracker();
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
   document.getElementById("view-"+view).classList.add("active");
 
@@ -1259,18 +1569,53 @@ carouselWrap.addEventListener("touchend", restartCarouselTimer);
 /* =========================================================
    PRODUCT CARD RENDER
 ========================================================= */
-function qtyOf(id){ return state.cart[id] ? state.cart[id].qty : 0; }
+function qtyOf(id){ return state.cart[String(id)] ? state.cart[String(id)].qty : 0; }
+
+function cartKey(productId, modIds){
+  const mods = (modIds||[]).slice().sort().join(",");
+  return mods ? `${productId}::${mods}` : `${productId}`;
+}
+
+function modifierPriceSum(p, modIds){
+  if(!p.modifiers || !modIds || !modIds.length) return 0;
+  return modIds.reduce((s,mid)=>{
+    const m = p.modifiers.find(x=>x.id===mid);
+    return s + (m ? m.price : 0);
+  },0);
+}
 
 function productCardHTML(p){
+  const hasModifiers = p.modifiers && p.modifiers.length>0;
+  const isCombo = p.cat==="combo";
   const qty = qtyOf(p.id);
-  const tagHTML = p.tag ? `<span class="card-tag">${p.tag[state.lang]}</span>` : "";
-  const footerHTML = qty>0
-    ? `<div class="stepper" data-id="${p.id}">
-         <button class="dec"><i class="fa-solid fa-minus"></i></button>
-         <span>${qty}</span>
-         <button class="inc"><i class="fa-solid fa-plus"></i></button>
-       </div>`
-    : `<button class="add-btn" data-add="${p.id}" title="${t('addToCartTip')}"><i class="fa-solid fa-plus"></i></button>`;
+  let tagHTML = "";
+  if(isCombo){
+    tagHTML = `<span class="card-tag combo-tag"><i class="fa-solid fa-layer-group"></i> ${t('cat_combo')}</span>`;
+  } else if(p.tag){
+    tagHTML = `<span class="card-tag">${p.tag[state.lang]}</span>`;
+  }
+
+  let footerHTML;
+  if(hasModifiers){
+    footerHTML = `<button class="add-btn" data-modify="${p.id}" title="${t('addToCartTip')}"><i class="fa-solid fa-plus"></i></button>`;
+  } else {
+    footerHTML = qty>0
+      ? `<div class="stepper" data-id="${p.id}">
+           <button class="dec"><i class="fa-solid fa-minus"></i></button>
+           <span>${qty}</span>
+           <button class="inc"><i class="fa-solid fa-plus"></i></button>
+         </div>`
+      : `<button class="add-btn" data-add="${p.id}" title="${t('addToCartTip')}"><i class="fa-solid fa-plus"></i></button>`;
+  }
+
+  let comboContentsHTML = "";
+  if(isCombo && p.comboItems && p.comboItems.length){
+    const names = p.comboItems.map(cid=>{
+      const cp = PRODUCTS.find(x=>x.id===cid);
+      return cp ? cp.name[state.lang] : null;
+    }).filter(Boolean);
+    if(names.length) comboContentsHTML = `<div class="combo-contents">${names.join(" + ")}</div>`;
+  }
 
   return `
     <div class="card" data-pid="${p.id}">
@@ -1278,6 +1623,7 @@ function productCardHTML(p){
       <div class="card-body">
         <h3>${p.name[state.lang]}</h3>
         <p>${p.desc[state.lang]}</p>
+        ${comboContentsHTML}
       </div>
       <div class="card-footer">
         <div class="price">${money(p.price)}</div>
@@ -1320,38 +1666,65 @@ function bindCardEvents(scope){
   scope.querySelectorAll("[data-add]").forEach(btn=>{
     btn.addEventListener("click", ()=> addToCart(parseInt(btn.getAttribute("data-add"))));
   });
+  scope.querySelectorAll("[data-modify]").forEach(btn=>{
+    btn.addEventListener("click", ()=> openModifierModal(parseInt(btn.getAttribute("data-modify"))));
+  });
   scope.querySelectorAll(".stepper").forEach(st=>{
     const id = parseInt(st.getAttribute("data-id"));
     st.querySelector(".inc").addEventListener("click", ()=> addToCart(id));
-    st.querySelector(".dec").addEventListener("click", ()=> removeOneFromCart(id));
+    st.querySelector(".dec").addEventListener("click", ()=> removeOneFromCart(String(id)));
   });
 }
 
 /* =========================================================
-   CART LOGIC
+   CART LOGIC - endi har bir savat yozuvi {productId, modIds, qty}
+   ko'rinishida, shu bilan bir xil mahsulotning turli qo'shimchali
+   variantlari (masalan "pishloqli" va "pishloqsiz") savatda alohida
+   qatorlar sifatida saqlanadi.
 ========================================================= */
 function saveCart(){ localStorage.setItem("Stakan cafe_cart", JSON.stringify(state.cart)); }
 
+/* Eski formatdagi ({id:{qty}}) savatni yangi formatga o'tkazadi,
+   shunda avvalgi mijozlarning savati yo'qolib qolmaydi. */
+function migrateCartShape(){
+  const migrated = {};
+  Object.entries(state.cart || {}).forEach(([key,item])=>{
+    if(!item) return;
+    if(typeof item.productId === "number"){
+      migrated[key] = item;
+    } else if(typeof item.qty === "number"){
+      const pid = parseInt(key);
+      if(!isNaN(pid)) migrated[String(pid)] = {productId: pid, modIds: [], qty: item.qty};
+    }
+  });
+  state.cart = migrated;
+}
+
 function addToCart(id){
-  const p = PRODUCTS.find(x=>x.id===id);
+  addToCartWithModifiers(id, []);
+}
+
+function addToCartWithModifiers(productId, modIds){
+  const p = PRODUCTS.find(x=>x.id===productId);
   if(!p) return;
-  if(!state.cart[id]) state.cart[id] = {qty:0};
-  state.cart[id].qty++;
+  const key = cartKey(productId, modIds);
+  if(!state.cart[key]) state.cart[key] = {productId, modIds: modIds||[], qty:0};
+  state.cart[key].qty++;
   saveCart();
   refreshCartUI();
   showToast(t("toastAdded"), "success");
 }
 
-function removeOneFromCart(id){
-  if(!state.cart[id]) return;
-  state.cart[id].qty--;
-  if(state.cart[id].qty<=0) delete state.cart[id];
+function removeOneFromCart(key){
+  if(!state.cart[key]) return;
+  state.cart[key].qty--;
+  if(state.cart[key].qty<=0) delete state.cart[key];
   saveCart();
   refreshCartUI();
 }
 
-function removeItemFromCart(id){
-  delete state.cart[id];
+function removeItemFromCart(key){
+  delete state.cart[key];
   saveCart();
   refreshCartUI();
   showToast(t("toastRemoved"), "info");
@@ -1361,9 +1734,11 @@ function cartCount(){
   return Object.values(state.cart).reduce((s,i)=>s+i.qty,0);
 }
 function cartSubtotal(){
-  return Object.entries(state.cart).reduce((s,[id,i])=>{
-    const p = PRODUCTS.find(x=>x.id===parseInt(id));
-    return s + (p? p.price*i.qty : 0);
+  return Object.values(state.cart).reduce((s,item)=>{
+    const p = PRODUCTS.find(x=>x.id===item.productId);
+    if(!p) return s;
+    const unit = p.price + modifierPriceSum(p, item.modIds);
+    return s + unit*item.qty;
   },0);
 }
 
@@ -1380,12 +1755,28 @@ function refreshCartUI(){
   renderCart();
 }
 
+function bindCartStepperEvents(scope){
+  scope.querySelectorAll(".stepper").forEach(st=>{
+    const key = st.getAttribute("data-id");
+    st.querySelector(".inc").addEventListener("click", ()=>{
+      if(!state.cart[key]) return;
+      state.cart[key].qty++;
+      saveCart();
+      refreshCartUI();
+    });
+    st.querySelector(".dec").addEventListener("click", ()=> removeOneFromCart(key));
+  });
+  scope.querySelectorAll("[data-remove]").forEach(btn=>{
+    btn.addEventListener("click", ()=> removeItemFromCart(btn.getAttribute("data-remove")));
+  });
+}
+
 function renderCart(){
-  const ids = Object.keys(state.cart);
+  const keys = Object.keys(state.cart);
   const emptyState = document.getElementById("cartEmptyState");
   const layout = document.getElementById("cartLayout");
 
-  if(ids.length===0){
+  if(keys.length===0){
     emptyState.style.display = "flex";
     layout.style.display = "none";
     return;
@@ -1394,33 +1785,38 @@ function renderCart(){
   layout.style.display = "grid";
 
   const list = document.getElementById("cartList");
-  list.innerHTML = ids.map(id=>{
-    const p = PRODUCTS.find(x=>x.id===parseInt(id));
-    const item = state.cart[id];
+  list.innerHTML = keys.map(key=>{
+    const item = state.cart[key];
+    const p = PRODUCTS.find(x=>x.id===item.productId);
     if(!p) return "";
+    const modSum = modifierPriceSum(p, item.modIds);
+    const unitPrice = p.price + modSum;
+    const modNames = (item.modIds||[]).map(mid=>{
+      const m = (p.modifiers||[]).find(x=>x.id===mid);
+      return m ? `+ ${m.name[state.lang]}` : null;
+    }).filter(Boolean);
+    const modHTML = modNames.length ? `<div class="cart-item-mods">${modNames.join(", ")}</div>` : "";
     return `
-      <div class="cart-item" data-id="${p.id}">
+      <div class="cart-item" data-id="${key}">
         <div class="ci-icon-sm">${mediaHTML(p,'media-emoji')}</div>
         <div class="cart-item-info">
           <h4>${p.name[state.lang]}</h4>
-          <span>${money(p.price)} \u{b7} ${t('pieces')}: ${item.qty}</span>
+          <span>${money(unitPrice)} \u{b7} ${t('pieces')}: ${item.qty}</span>
+          ${modHTML}
         </div>
         <div class="cart-item-actions">
-          <div class="stepper" data-id="${p.id}">
+          <div class="stepper" data-id="${key}">
             <button class="dec"><i class="fa-solid fa-minus"></i></button>
             <span>${item.qty}</span>
             <button class="inc"><i class="fa-solid fa-plus"></i></button>
           </div>
-          <button class="remove-btn" data-remove="${p.id}"><i class="fa-solid fa-xmark"></i></button>
+          <button class="remove-btn" data-remove="${key}"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
     `;
   }).join("");
 
-  bindCardEvents(list);
-  list.querySelectorAll("[data-remove]").forEach(btn=>{
-    btn.addEventListener("click", ()=> removeItemFromCart(parseInt(btn.getAttribute("data-remove"))));
-  });
+  bindCartStepperEvents(list);
 
   const subtotal = cartSubtotal();
   const deliveryFee = state.deliveryType==="delivery" ? CONFIG.DELIVERY_FEE : 0;
@@ -1438,6 +1834,65 @@ document.querySelectorAll(".delivery-opt").forEach(btn=>{
     document.getElementById("addressField").style.display = state.deliveryType==="pickup" ? "none" : "block";
     renderCart();
   });
+});
+
+/* "Tezkor (hozir)" / "Vaqtni tanlash" - kechroq yetkazish */
+document.querySelectorAll(".schedule-opt").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".schedule-opt").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    state.scheduleType = btn.getAttribute("data-schedule");
+    document.getElementById("scheduleTimeField").classList.toggle("show", state.scheduleType==="later");
+  });
+});
+
+/* =========================================================
+   MAHSULOT MODIFIKATORLARI (qo'shimchalar) - pastdan chiquvchi oyna
+========================================================= */
+let modifierModalProductId = null;
+let modifierModalSelected = [];
+
+function openModifierModal(productId){
+  const p = PRODUCTS.find(x=>x.id===productId);
+  if(!p) return;
+  modifierModalProductId = productId;
+  modifierModalSelected = [];
+
+  document.getElementById("modifierProductName").textContent = p.name[state.lang];
+  const listEl = document.getElementById("modifierList");
+  listEl.innerHTML = (p.modifiers||[]).map(m=>`
+    <div class="modifier-row" data-mod="${m.id}">
+      <span class="mr-check"><i class="fa-solid fa-check"></i></span>
+      <span class="mr-name">${m.name[state.lang]}</span>
+      <span class="mr-price">+${money(m.price)}</span>
+    </div>
+  `).join("");
+
+  listEl.querySelectorAll(".modifier-row").forEach(row=>{
+    row.addEventListener("click", ()=>{
+      const mid = row.getAttribute("data-mod");
+      const idx = modifierModalSelected.indexOf(mid);
+      if(idx>-1){ modifierModalSelected.splice(idx,1); row.classList.remove("checked"); }
+      else { modifierModalSelected.push(mid); row.classList.add("checked"); }
+      updateModifierTotal(p);
+    });
+  });
+
+  updateModifierTotal(p);
+  document.getElementById("modifierModal").classList.add("open");
+}
+function closeModifierModal(){ document.getElementById("modifierModal").classList.remove("open"); }
+
+function updateModifierTotal(p){
+  const total = p.price + modifierPriceSum(p, modifierModalSelected);
+  document.getElementById("modifierTotalPrice").textContent = money(total);
+}
+
+document.getElementById("modifierModal").addEventListener("click", (e)=>{ if(e.target.id==="modifierModal") closeModifierModal(); });
+document.getElementById("modifierConfirmBtn").addEventListener("click", ()=>{
+  if(modifierModalProductId==null) return;
+  addToCartWithModifiers(modifierModalProductId, modifierModalSelected.slice());
+  closeModifierModal();
 });
 
 /* =========================================================
@@ -1484,6 +1939,7 @@ phoneInput.addEventListener("keydown", (e)=>{
     if(phoneRawDigits.length<9){
       phoneRawDigits += e.key;
       renderPhone();
+      if(phoneRawDigits.length===9) lookupReturningCustomer(phoneRawDigits);
     }
     return;
   }
@@ -1503,6 +1959,7 @@ phoneInput.addEventListener("paste", (e)=>{
   const digits = text.replace(/\D/g,"").replace(/^998/,"").slice(0,9);
   phoneRawDigits = digits;
   renderPhone();
+  if(phoneRawDigits.length===9) lookupReturningCustomer(phoneRawDigits);
 });
 
 phoneInput.addEventListener("blur", ()=>{
@@ -1631,6 +2088,7 @@ async function submitOrder(){
   if(!validateField("fName")) valid = false;
   if(!validatePhoneField()) valid = false;
   if(!validateLocationField()) valid = false;
+  if(state.scheduleType==="later" && !validateField("fScheduleTime")) valid = false;
   if(!valid){ showToast(t("toastFillFields"), "error"); return; }
 
   const btn = document.getElementById("confirmOrderBtn");
@@ -1642,10 +2100,16 @@ async function submitOrder(){
   const phone = phoneInput.value.trim();
   const location = state.deliveryType==="delivery" ? state.location : null;
   const comment = document.getElementById("fComment").value.trim();
+  const scheduledTime = state.scheduleType==="later" ? document.getElementById("fScheduleTime").value : null;
 
-  const items = Object.entries(state.cart).map(([id,i])=>{
-    const p = PRODUCTS.find(x=>x.id===parseInt(id));
-    return {id:p.id, name:p.name, price:p.price, qty:i.qty, emoji:p.emoji, img:p.img};
+  const items = Object.values(state.cart).map(item=>{
+    const p = PRODUCTS.find(x=>x.id===item.productId);
+    const mods = (item.modIds||[]).map(mid=>{
+      const m = (p.modifiers||[]).find(x=>x.id===mid);
+      return m ? {id:m.id, name:m.name, price:m.price} : null;
+    }).filter(Boolean);
+    const unitPrice = p.price + mods.reduce((s,m)=>s+m.price,0);
+    return {id:p.id, name:p.name, price:unitPrice, basePrice:p.price, qty:item.qty, emoji:p.emoji, img:p.img, modifiers:mods};
   });
   const subtotal = cartSubtotal();
   const deliveryFee = state.deliveryType==="delivery" ? CONFIG.DELIVERY_FEE : 0;
@@ -1656,14 +2120,17 @@ async function submitOrder(){
     date: new Date().toISOString(),
     items, subtotal, deliveryFee, total: totalSum,
     deliveryType: state.deliveryType,
+    scheduleType: state.scheduleType, scheduledTime,
     name, phone, location, comment
   };
+
+  const saveResult = await saveOrder(order);
+  order.orderNumber = saveResult.orderNumber;
 
   const md = buildTelegramMarkdown(order);
   await sendToTelegram(md);
   if(location){ await sendLocationToTelegram(location); }
 
-  saveOrderToHistory(order);
   state.cart = {};
   saveCart();
   refreshCartUI();
@@ -1672,6 +2139,7 @@ async function submitOrder(){
   phoneRawDigits = "";
   phoneInput.value = "";
   document.getElementById("fComment").value = "";
+  document.getElementById("fScheduleTime").value = "";
   state.location = null;
   updateLocationSummary();
 
@@ -1679,7 +2147,7 @@ async function submitOrder(){
   btn.innerHTML = originalHTML;
 
   showToast(t("toastOrderSuccess"), "success", t("toastOrderSuccessSub"));
-  goToView("history");
+  goToView("tracker");
 }
 
 function buildTelegramMarkdown(order){
@@ -1690,7 +2158,15 @@ function buildTelegramMarkdown(order){
   lines.push(``);
   lines.push(`*Mijoz:* ${order.name}`);
   lines.push(`*Telefon:* ${order.phone}`);
+  if(order.orderNumber){
+    lines.push(`*Bu mijozning:* ${order.orderNumber}-buyurtmasi \u{1f501}`);
+  }
   lines.push(`*Turi:* ${order.deliveryType==="delivery" ? "Yetkazib berish" : "Olib ketish"}`);
+  if(order.scheduleType==="later" && order.scheduledTime){
+    lines.push(`*Yetkazish vaqti:* \u{23f0} ${order.scheduledTime} (kechroq)`);
+  } else {
+    lines.push(`*Yetkazish vaqti:* Tezkor (hozir)`);
+  }
   if(order.deliveryType==="delivery" && order.location){
     const loc = order.location;
     if(loc.address) lines.push(`*Manzil:* ${loc.address}`);
@@ -1700,7 +2176,8 @@ function buildTelegramMarkdown(order){
   lines.push(``);
   lines.push(`*Mahsulotlar:*`);
   order.items.forEach(it=>{
-    lines.push(`\u{2022} ${it.name.uz} x${it.qty} \u{2014} ${it.price*it.qty} so'm`);
+    const modsText = (it.modifiers && it.modifiers.length) ? ` (${it.modifiers.map(m=>m.name.uz).join(", ")})` : "";
+    lines.push(`\u{2022} ${it.name.uz}${modsText} x${it.qty} \u{2014} ${it.price*it.qty} so'm`);
   });
   lines.push(``);
   lines.push(`*Mahsulotlar summasi:* ${order.subtotal} so'm`);
@@ -1760,31 +2237,30 @@ async function sendLocationToTelegram(loc){
 }
 
 /* =========================================================
-   ORDER HISTORY
+   ORDER HISTORY - endi telefon raqami bo'yicha SERVERDA
+   (Firestore, customers/{telefon}.orders) saqlanadi. Shu brauzer
+   faqat "oxirgi ishlatilgan telefon raqami"ni eslab qoladi (chunki
+   saytda login tizimi yo'q) - ma'lumotning o'zi esa serverda.
 ========================================================= */
-function saveOrderToHistory(order){
-  let history = JSON.parse(localStorage.getItem("Stakan cafe_history") || "[]");
-  history.unshift(order);
-  history = history.slice(0,5);
-  localStorage.setItem("Stakan cafe_history", JSON.stringify(history));
-}
-
-function renderHistory(){
-  const history = JSON.parse(localStorage.getItem("Stakan cafe_history") || "[]");
+function paintHistory(orders){
   const emptyState = document.getElementById("historyEmptyState");
   const list = document.getElementById("historyList");
 
-  if(history.length===0){
+  if(!orders || orders.length===0){
     emptyState.style.display = "flex";
     list.innerHTML = "";
     return;
   }
   emptyState.style.display = "none";
 
-  list.innerHTML = history.map(order=>{
+  const recent = orders.slice(0,5);
+  list.innerHTML = recent.map(order=>{
     const dt = new Date(order.date);
     const dateStr = dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ", {day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
-    const chips = order.items.map(it=>`<span class="hi-chip">${mediaHTML(it,'chip-emoji')}${it.name[state.lang]} x${it.qty}</span>`).join("");
+    const chips = order.items.map(it=>{
+      const modsText = (it.modifiers && it.modifiers.length) ? ` (${it.modifiers.map(m=>m.name[state.lang]).join(", ")})` : "";
+      return `<span class="hi-chip">${mediaHTML(it,'chip-emoji')}${it.name[state.lang]}${modsText} x${it.qty}</span>`;
+    }).join("");
     return `
       <div class="history-item" data-order="${order.id}">
         <div class="hi-top">
@@ -1800,16 +2276,169 @@ function renderHistory(){
   list.querySelectorAll(".history-item").forEach(el=>{
     el.addEventListener("click", ()=>{
       const orderId = parseInt(el.getAttribute("data-order"));
-      const order = history.find(o=>o.id===orderId);
+      const order = recent.find(o=>o.id===orderId);
       if(!order) return;
       state.cart = {};
-      order.items.forEach(it=>{ state.cart[it.id] = {qty: it.qty}; });
+      order.items.forEach(it=>{
+        const modIds = (it.modifiers||[]).map(m=>m.id);
+        const key = cartKey(it.id, modIds);
+        state.cart[key] = {productId: it.id, modIds, qty: it.qty};
+      });
       saveCart();
       refreshCartUI();
       showToast(t("toastReorder"), "success");
       goToView("cart");
     });
   });
+}
+
+function renderHistory(){
+  const digits = localStorage.getItem(LAST_PHONE_KEY);
+
+  if(!digits){
+    paintHistory([]);
+    return;
+  }
+
+  if(!firebaseAvailable){
+    const fallback = JSON.parse(localStorage.getItem("Stakan cafe_history_fallback") || "[]");
+    paintHistory(fallback);
+    return;
+  }
+
+  db.collection(ORDERS_COLLECTION).where("phoneDigits","==",digits).get().then(snap=>{
+    const orders = [];
+    snap.forEach(d=>orders.push(d.data()));
+    orders.sort((a,b)=> b.id - a.id);
+    paintHistory(orders);
+  }).catch(err=>{
+    console.error("Tarixni serverdan yuklashda xatolik:", err);
+    const fallback = JSON.parse(localStorage.getItem("Stakan cafe_history_fallback") || "[]");
+    paintHistory(fallback);
+  });
+}
+
+/* =========================================================
+   LIVE ORDER TRACKER - "Mening buyurtmam" bo'limi. Oxirgi
+   berilgan buyurtma orders/{orderId} hujjatini real vaqtda
+   (onSnapshot) kuzatadi - admin holatni o'zgartirganda mijoz
+   ekranida darhol yangilanadi.
+========================================================= */
+let trackerUnsubscribe = null;
+
+function paintTrackerOrder(order){
+  const content = document.getElementById("trackerContent");
+  const empty = document.getElementById("trackerEmptyState");
+  if(!order){
+    empty.style.display = "flex";
+    content.style.display = "none";
+    return;
+  }
+  empty.style.display = "none";
+  content.style.display = "block";
+
+  const stepIdx = STATUS_STEPS.indexOf(order.status || "accepted");
+  const fillPct = stepIdx<=0 ? 0 : (stepIdx/(STATUS_STEPS.length-1))*84;
+
+  const stepsHTML = STATUS_STEPS.map((s,i)=>{
+    const done = i<stepIdx;
+    const active = i===stepIdx;
+    const icon = s==="accepted" ? "fa-clipboard-check" : s==="preparing" ? "fa-kitchen-set" : s==="courier" ? "fa-motorcycle" : "fa-house-flag";
+    return `
+      <div class="ot-step ${done?'done':''} ${active?'active':''}">
+        <div class="ot-dot"><i class="fa-solid ${done?'fa-check':icon}"></i></div>
+        <div class="ot-step-label">${i+1}. ${t(STATUS_I18N_KEYS[s])}</div>
+      </div>
+    `;
+  }).join("");
+
+  const dt = new Date(order.date);
+  const dateStr = dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ", {day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+
+  let ratingHTML = "";
+  if(order.status==="delivered"){
+    if(order.rating){
+      ratingHTML = `<div class="rating-box"><div class="rating-done"><i class="fa-solid fa-circle-check"></i> ${t('thanksForRating')}</div></div>`;
+    } else {
+      ratingHTML = `
+        <div class="rating-box">
+          <p>${t('rateUsPrompt')}</p>
+          <div class="rating-stars" id="ratingStars">
+            ${[1,2,3,4,5].map(n=>`<i class="fa-solid fa-star" data-star="${n}"></i>`).join("")}
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  content.innerHTML = `
+    <div class="tracker-card">
+      <h3>${t('orderNumLabel')} #${String(order.id).slice(-5)}</h3>
+      <p class="tr-sub">${dateStr}</p>
+      <div class="ot-timeline">
+        <div class="ot-line-fill" style="width:${fillPct}%;"></div>
+        ${stepsHTML}
+      </div>
+      <div class="tracker-order-info">
+        <div><b>${money(order.total)}</b></div>
+        <div>${order.items.length} ${t('pieces')}</div>
+      </div>
+      ${ratingHTML}
+    </div>
+  `;
+
+  if(order.status==="delivered" && !order.rating){
+    const starsEl = document.getElementById("ratingStars");
+    const stars = starsEl.querySelectorAll("i");
+    stars.forEach(star=>{
+      star.addEventListener("mouseenter", ()=>{
+        const n = parseInt(star.getAttribute("data-star"));
+        stars.forEach(s=> s.classList.toggle("filled", parseInt(s.getAttribute("data-star"))<=n));
+      });
+      star.addEventListener("click", async ()=>{
+        const n = parseInt(star.getAttribute("data-star"));
+        const ok = await submitRating(order.id, n);
+        if(ok){
+          order.rating = n;
+          paintTrackerOrder(order);
+          showToast(t("thanksForRating"), "success");
+        } else {
+          showToast("Xatolik yuz berdi, qayta urinib ko'ring", "error");
+        }
+      });
+    });
+    starsEl.addEventListener("mouseleave", ()=>{
+      stars.forEach(s=> s.classList.remove("filled"));
+    });
+  }
+}
+
+function renderTracker(){
+  if(trackerUnsubscribe){ trackerUnsubscribe(); trackerUnsubscribe = null; }
+
+  const orderId = localStorage.getItem(LAST_ORDER_ID_KEY);
+  if(!orderId){
+    paintTrackerOrder(null);
+    return;
+  }
+
+  if(!firebaseAvailable){
+    paintTrackerOrder(null);
+    return;
+  }
+
+  try{
+    trackerUnsubscribe = db.collection(ORDERS_COLLECTION).doc(orderId).onSnapshot(doc=>{
+      if(!doc.exists){ paintTrackerOrder(null); return; }
+      paintTrackerOrder(doc.data());
+    }, err=>{
+      console.error("Buyurtma holatini kuzatishda xatolik:", err);
+      paintTrackerOrder(null);
+    });
+  }catch(err){
+    console.error("Tracker xatosi:", err);
+    paintTrackerOrder(null);
+  }
 }
 
 /* =========================================================
@@ -1835,9 +2464,34 @@ const ADMIN_CAT_LABELS = {burger:"Burger", pizza:"Pitsa", side:"Yon taom", drink
 const ADMIN_EMOJI_PRESETS = ["\u{1f354}","\u{1f355}","\u{1f357}","\u{1f35f}","\u{1f32d}","\u{1f96a}","\u{1f960}","\u{1f957}","\u{1f963}","\u{1f9c3}","\u{2615}","\u{1f964}","\u{1f9c9}","\u{1f368}","\u{1f366}","\u{1f382}","\u{1f36a}","\u{1f369}","\u{1f347}","\u{1f955}","\u{1f35c}","\u{1f363}"];
 
 let adminEditingId = null;
+let adminPasswordCache = null;
 
-function getAdminPassword(){ return localStorage.getItem(ADMIN_PASSWORD_KEY) || "admin"; }
-function setAdminPassword(pwd){ localStorage.setItem(ADMIN_PASSWORD_KEY, pwd); }
+function listenToAdminConfig(){
+  if(!firebaseAvailable) return;
+  try{
+    db.collection(CONFIG_COLLECTION).doc("admin").onSnapshot(doc=>{
+      if(doc.exists && doc.data().password) adminPasswordCache = doc.data().password;
+    }, err=>console.error("Admin sozlamalarini sinxronlashda xatolik:", err));
+  }catch(err){ console.error("Admin config tinglash xatosi:", err); }
+}
+listenToAdminConfig();
+
+function getAdminPassword(){
+  if(adminPasswordCache) return adminPasswordCache;
+  return localStorage.getItem(ADMIN_PASSWORD_KEY) || "admin";
+}
+function setAdminPassword(pwd){
+  localStorage.setItem(ADMIN_PASSWORD_KEY, pwd);
+  adminPasswordCache = pwd;
+  if(firebaseAvailable){
+    db.collection(CONFIG_COLLECTION).doc("admin").set({password: pwd}).catch(err=>{
+      console.error("Parolni bulutga saqlashda xatolik:", err);
+      showToast("Parol faqat shu qurilmada saqlandi (internetni tekshiring)", "error");
+    });
+  } else {
+    showToast("Internet yo'q: parol faqat shu qurilmada saqlandi", "error");
+  }
+}
 
 function isAdminAuthed(){ return sessionStorage.getItem(ADMIN_AUTH_KEY)==="1"; }
 
@@ -1896,6 +2550,7 @@ document.getElementById("adminLoginModal").addEventListener("click", (e)=>{ if(e
 function openAdminPanel(){
   hideAdminForm();
   closeAdminSettings();
+  switchAdminTab("products");
   renderAdminProductList();
   document.getElementById("adminPanelModal").classList.add("open");
 }
@@ -1912,6 +2567,63 @@ document.getElementById("adminCloseBtn").addEventListener("click", closeAdminPan
 document.getElementById("adminLogoutBtn").addEventListener("click", logoutAdmin);
 document.getElementById("adminPanelModal").addEventListener("click", (e)=>{ if(e.target.id==="adminPanelModal") closeAdminPanel(); });
 document.getElementById("adminAddNewBtn").addEventListener("click", ()=> showAdminForm(null));
+
+/* ---------- Bo'limlar: Mahsulotlar / Mijozlar ---------- */
+function switchAdminTab(tab){
+  const isProducts = tab==="products";
+  document.getElementById("adminTabProducts").classList.toggle("active", isProducts);
+  document.getElementById("adminTabCustomers").classList.toggle("active", !isProducts);
+  document.getElementById("adminProductsSection").style.display = isProducts ? "block" : "none";
+  document.getElementById("adminCustomersSection").style.display = isProducts ? "none" : "block";
+  closeAdminSettings();
+  hideAdminForm();
+  if(isProducts){
+    renderAdminProductList();
+  } else {
+    renderAdminCustomerList();
+  }
+}
+document.getElementById("adminTabProducts").addEventListener("click", ()=> switchAdminTab("products"));
+document.getElementById("adminTabCustomers").addEventListener("click", ()=> switchAdminTab("customers"));
+
+function renderAdminCustomerList(){
+  const wrap = document.getElementById("adminCustomerList");
+  wrap.innerHTML = `<p class="admin-empty-note"><i class="fa-solid fa-spinner fa-spin"></i> Yuklanmoqda...</p>`;
+
+  if(!firebaseAvailable){
+    wrap.innerHTML = `<p class="admin-empty-note">Internet yo'q, mijozlar ro'yxatini yuklab bo'lmadi.</p>`;
+    return;
+  }
+
+  db.collection(CUSTOMERS_COLLECTION).get().then(snapshot=>{
+    if(snapshot.empty){
+      wrap.innerHTML = `<p class="admin-empty-note">Hozircha birorta ham mijoz buyurtma bermagan.</p>`;
+      return;
+    }
+    const customers = [];
+    snapshot.forEach(doc=> customers.push(doc.data()));
+    customers.sort((a,b)=> (b.orderCount||0) - (a.orderCount||0));
+
+    wrap.innerHTML = customers.map(c=>{
+      const tgLabel = c.telegramUsername
+        ? `<span class="ac-tg linked"><i class="fa-brands fa-telegram"></i> @${c.telegramUsername}</span>`
+        : `<span class="ac-tg"><i class="fa-brands fa-telegram"></i> Bog'lanmagan</span>`;
+      return `
+        <div class="admin-customer-row">
+          <div class="ac-top">
+            <span class="ac-name">${c.name || "Noma'lum"}</span>
+            <span class="ac-count">${c.orderCount || 0} marta buyurtma</span>
+          </div>
+          <div class="ac-phone"><i class="fa-solid fa-phone"></i> ${c.phone || "-"}</div>
+          ${tgLabel}
+        </div>
+      `;
+    }).join("");
+  }).catch(err=>{
+    console.error("Mijozlar ro'yxatini yuklashda xatolik:", err);
+    wrap.innerHTML = `<p class="admin-empty-note">Yuklashda xatolik yuz berdi.</p>`;
+  });
+}
 
 /* ---------- Sozlamalar (parolni yangilash) ---------- */
 let adminSettingsStage = "verify"; // "verify" | "change"
