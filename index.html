@@ -520,6 +520,18 @@
   .admin-header{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border); flex-shrink:0;}
   .admin-header h2{font-size:17px; display:flex; align-items:center; gap:9px;}
   .admin-header .admin-header-actions{display:flex; gap:8px;}
+  .admin-tabs{display:flex; gap:8px; padding:0 22px 14px; border-bottom:1px solid var(--border); flex-shrink:0;}
+  .admin-tab-btn{padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--muted); background:var(--card-2); border:1px solid var(--border); display:flex; align-items:center; gap:7px; transition:.2s;}
+  .admin-tab-btn.active{background:var(--yellow); color:#171308; border-color:var(--yellow);}
+  .admin-customer-list{display:flex; flex-direction:column; gap:10px;}
+  .admin-customer-row{background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:14px;}
+  .admin-customer-row .ac-top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;}
+  .admin-customer-row .ac-name{font-size:14px; font-weight:800;}
+  .admin-customer-row .ac-count{background:var(--yellow); color:#171308; font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; white-space:nowrap;}
+  .admin-customer-row .ac-phone{font-size:12.5px; color:var(--muted); margin-bottom:4px;}
+  .admin-customer-row .ac-tg{font-size:11.5px; color:var(--muted-2); display:flex; align-items:center; gap:6px;}
+  .admin-customer-row .ac-tg.linked{color:#7c9eff;}
+  .admin-empty-note{text-align:center; color:var(--muted-2); font-size:13px; padding:30px 10px;}
   .admin-body{padding:20px 22px; overflow-y:auto;}
   .admin-product-list{display:flex; flex-direction:column; gap:10px;}
   .admin-product-row{display:flex; align-items:center; gap:12px; background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:10px 12px;}
@@ -636,11 +648,22 @@
         <button class="icon-btn" id="adminCloseBtn" type="button" title="Yopish"><i class="fa-solid fa-xmark"></i></button>
       </div>
     </div>
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" id="adminTabProducts" type="button"><i class="fa-solid fa-burger"></i> Mahsulotlar</button>
+      <button class="admin-tab-btn" id="adminTabCustomers" type="button"><i class="fa-solid fa-users"></i> Mijozlar</button>
+    </div>
     <div class="admin-body">
       <div class="admin-settings-box" id="adminSettingsBox"></div>
-      <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
-      <div class="admin-form" id="adminForm"></div>
-      <div class="admin-product-list" id="adminProductList"></div>
+
+      <div id="adminProductsSection">
+        <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
+        <div class="admin-form" id="adminForm"></div>
+        <div class="admin-product-list" id="adminProductList"></div>
+      </div>
+
+      <div id="adminCustomersSection" style="display:none;">
+        <div class="admin-customer-list" id="adminCustomerList"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1014,6 +1037,9 @@ const firebaseConfig = {
   appId: "1:223817742166:web:b0b947d67940c03e38c8f7"
 };
 const PRODUCTS_COLLECTION = "products";
+const CUSTOMERS_COLLECTION = "customers";
+const CONFIG_COLLECTION = "config";
+const LAST_PHONE_KEY = "Stakan cafe_last_phone";
 let firestoreReady = false;
 let firebaseAvailable = false;
 let db = null;
@@ -1096,6 +1122,78 @@ function adminDeleteProduct(id){
     });
   }
   if(state.cart && state.cart[id]){ delete state.cart[id]; saveCart(); refreshCartUI(); }
+}
+
+/* =========================================================
+   MIJOZLAR (CUSTOMERS) - telefon raqami bo'yicha, serverda
+   (Firestore'da) saqlanadi, shuning uchun mijoz qaysi qurilma/
+   brauzerdan kirishidan qat'iy nazar o'z tarixini va ma'lumotlarini
+   ko'radi. Har bir mijoz hujjati telefon raqamining faqat
+   raqamlaridan iborat ID bilan saqlanadi (masalan "997772200").
+========================================================= */
+function extractPhoneDigits(phone){
+  return (phone || "").replace(/\D/g,"").replace(/^998/,"");
+}
+
+function saveOrderLocalFallback(order){
+  let history = JSON.parse(localStorage.getItem("Stakan cafe_history_fallback") || "[]");
+  history.unshift(order);
+  history = history.slice(0,20);
+  localStorage.setItem("Stakan cafe_history_fallback", JSON.stringify(history));
+}
+
+/* Buyurtma berilganda mijoz hujjatini yangilaydi (yoki yaratadi),
+   buyurtmalar tarixiga qo'shadi va NECHANCHI marta buyurtma
+   berayotganini qaytaradi (Telegram xabariga qo'shish uchun). */
+async function saveOrderToCustomer(order){
+  const digits = extractPhoneDigits(order.phone);
+  if(!digits){ saveOrderLocalFallback(order); return 1; }
+  localStorage.setItem(LAST_PHONE_KEY, digits);
+
+  if(!firebaseAvailable){
+    saveOrderLocalFallback(order);
+    return 1;
+  }
+
+  try{
+    const ref = db.collection(CUSTOMERS_COLLECTION).doc(digits);
+    const newCount = await db.runTransaction(async (tx)=>{
+      const doc = await tx.get(ref);
+      const data = doc.exists ? doc.data() : {
+        name: order.name, phone: order.phone, orderCount: 0, orders: [],
+        telegramUsername: null, telegramId: null
+      };
+      data.name = order.name || data.name;
+      data.phone = order.phone;
+      data.orderCount = (data.orderCount || 0) + 1;
+      data.orders = [order, ...(data.orders || [])].slice(0,20);
+      data.updatedAt = Date.now();
+      tx.set(ref, data);
+      return data.orderCount;
+    });
+    return newCount;
+  }catch(err){
+    console.error("Mijoz ma'lumotini saqlashda xatolik:", err);
+    saveOrderLocalFallback(order);
+    return 1;
+  }
+}
+
+/* Telefon raqami 9 ta raqamga to'lgach, agar bu mijoz avval ham
+   buyurtma bergan bo'lsa - uning ismini avtomatik to'ldiradi. */
+function lookupReturningCustomer(digits){
+  if(!firebaseAvailable || !digits || digits.length!==9) return;
+  try{
+    db.collection(CUSTOMERS_COLLECTION).doc(digits).get().then(doc=>{
+      if(doc.exists){
+        const data = doc.data();
+        const nameField = document.getElementById("fName");
+        if(data.name && nameField && !nameField.value.trim()){
+          nameField.value = data.name;
+        }
+      }
+    }).catch(err=>console.error("Mijozni qidirishda xatolik:", err));
+  }catch(err){ console.error("Mijoz qidirish xatosi:", err); }
 }
 
 const CATEGORIES = ["all","burger","pizza","side","drink","dessert","combo"];
@@ -1484,6 +1582,7 @@ phoneInput.addEventListener("keydown", (e)=>{
     if(phoneRawDigits.length<9){
       phoneRawDigits += e.key;
       renderPhone();
+      if(phoneRawDigits.length===9) lookupReturningCustomer(phoneRawDigits);
     }
     return;
   }
@@ -1503,6 +1602,7 @@ phoneInput.addEventListener("paste", (e)=>{
   const digits = text.replace(/\D/g,"").replace(/^998/,"").slice(0,9);
   phoneRawDigits = digits;
   renderPhone();
+  if(phoneRawDigits.length===9) lookupReturningCustomer(phoneRawDigits);
 });
 
 phoneInput.addEventListener("blur", ()=>{
@@ -1659,11 +1759,13 @@ async function submitOrder(){
     name, phone, location, comment
   };
 
+  const orderNumber = await saveOrderToCustomer(order);
+  order.orderNumber = orderNumber;
+
   const md = buildTelegramMarkdown(order);
   await sendToTelegram(md);
   if(location){ await sendLocationToTelegram(location); }
 
-  saveOrderToHistory(order);
   state.cart = {};
   saveCart();
   refreshCartUI();
@@ -1690,6 +1792,9 @@ function buildTelegramMarkdown(order){
   lines.push(``);
   lines.push(`*Mijoz:* ${order.name}`);
   lines.push(`*Telefon:* ${order.phone}`);
+  if(order.orderNumber){
+    lines.push(`*Bu mijozning:* ${order.orderNumber}-buyurtmasi \u{1f501}`);
+  }
   lines.push(`*Turi:* ${order.deliveryType==="delivery" ? "Yetkazib berish" : "Olib ketish"}`);
   if(order.deliveryType==="delivery" && order.location){
     const loc = order.location;
@@ -1760,28 +1865,24 @@ async function sendLocationToTelegram(loc){
 }
 
 /* =========================================================
-   ORDER HISTORY
+   ORDER HISTORY - endi telefon raqami bo'yicha SERVERDA
+   (Firestore, customers/{telefon}.orders) saqlanadi. Shu brauzer
+   faqat "oxirgi ishlatilgan telefon raqami"ni eslab qoladi (chunki
+   saytda login tizimi yo'q) - ma'lumotning o'zi esa serverda.
 ========================================================= */
-function saveOrderToHistory(order){
-  let history = JSON.parse(localStorage.getItem("Stakan cafe_history") || "[]");
-  history.unshift(order);
-  history = history.slice(0,5);
-  localStorage.setItem("Stakan cafe_history", JSON.stringify(history));
-}
-
-function renderHistory(){
-  const history = JSON.parse(localStorage.getItem("Stakan cafe_history") || "[]");
+function paintHistory(orders){
   const emptyState = document.getElementById("historyEmptyState");
   const list = document.getElementById("historyList");
 
-  if(history.length===0){
+  if(!orders || orders.length===0){
     emptyState.style.display = "flex";
     list.innerHTML = "";
     return;
   }
   emptyState.style.display = "none";
 
-  list.innerHTML = history.map(order=>{
+  const recent = orders.slice(0,5);
+  list.innerHTML = recent.map(order=>{
     const dt = new Date(order.date);
     const dateStr = dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ", {day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
     const chips = order.items.map(it=>`<span class="hi-chip">${mediaHTML(it,'chip-emoji')}${it.name[state.lang]} x${it.qty}</span>`).join("");
@@ -1800,7 +1901,7 @@ function renderHistory(){
   list.querySelectorAll(".history-item").forEach(el=>{
     el.addEventListener("click", ()=>{
       const orderId = parseInt(el.getAttribute("data-order"));
-      const order = history.find(o=>o.id===orderId);
+      const order = recent.find(o=>o.id===orderId);
       if(!order) return;
       state.cart = {};
       order.items.forEach(it=>{ state.cart[it.id] = {qty: it.qty}; });
@@ -1809,6 +1910,30 @@ function renderHistory(){
       showToast(t("toastReorder"), "success");
       goToView("cart");
     });
+  });
+}
+
+function renderHistory(){
+  const digits = localStorage.getItem(LAST_PHONE_KEY);
+
+  if(!digits){
+    paintHistory([]);
+    return;
+  }
+
+  if(!firebaseAvailable){
+    const fallback = JSON.parse(localStorage.getItem("Stakan cafe_history_fallback") || "[]");
+    paintHistory(fallback);
+    return;
+  }
+
+  db.collection(CUSTOMERS_COLLECTION).doc(digits).get().then(doc=>{
+    const orders = doc.exists ? (doc.data().orders || []) : [];
+    paintHistory(orders);
+  }).catch(err=>{
+    console.error("Tarixni serverdan yuklashda xatolik:", err);
+    const fallback = JSON.parse(localStorage.getItem("Stakan cafe_history_fallback") || "[]");
+    paintHistory(fallback);
   });
 }
 
@@ -1835,9 +1960,34 @@ const ADMIN_CAT_LABELS = {burger:"Burger", pizza:"Pitsa", side:"Yon taom", drink
 const ADMIN_EMOJI_PRESETS = ["\u{1f354}","\u{1f355}","\u{1f357}","\u{1f35f}","\u{1f32d}","\u{1f96a}","\u{1f960}","\u{1f957}","\u{1f963}","\u{1f9c3}","\u{2615}","\u{1f964}","\u{1f9c9}","\u{1f368}","\u{1f366}","\u{1f382}","\u{1f36a}","\u{1f369}","\u{1f347}","\u{1f955}","\u{1f35c}","\u{1f363}"];
 
 let adminEditingId = null;
+let adminPasswordCache = null;
 
-function getAdminPassword(){ return localStorage.getItem(ADMIN_PASSWORD_KEY) || "admin"; }
-function setAdminPassword(pwd){ localStorage.setItem(ADMIN_PASSWORD_KEY, pwd); }
+function listenToAdminConfig(){
+  if(!firebaseAvailable) return;
+  try{
+    db.collection(CONFIG_COLLECTION).doc("admin").onSnapshot(doc=>{
+      if(doc.exists && doc.data().password) adminPasswordCache = doc.data().password;
+    }, err=>console.error("Admin sozlamalarini sinxronlashda xatolik:", err));
+  }catch(err){ console.error("Admin config tinglash xatosi:", err); }
+}
+listenToAdminConfig();
+
+function getAdminPassword(){
+  if(adminPasswordCache) return adminPasswordCache;
+  return localStorage.getItem(ADMIN_PASSWORD_KEY) || "admin";
+}
+function setAdminPassword(pwd){
+  localStorage.setItem(ADMIN_PASSWORD_KEY, pwd);
+  adminPasswordCache = pwd;
+  if(firebaseAvailable){
+    db.collection(CONFIG_COLLECTION).doc("admin").set({password: pwd}).catch(err=>{
+      console.error("Parolni bulutga saqlashda xatolik:", err);
+      showToast("Parol faqat shu qurilmada saqlandi (internetni tekshiring)", "error");
+    });
+  } else {
+    showToast("Internet yo'q: parol faqat shu qurilmada saqlandi", "error");
+  }
+}
 
 function isAdminAuthed(){ return sessionStorage.getItem(ADMIN_AUTH_KEY)==="1"; }
 
@@ -1896,6 +2046,7 @@ document.getElementById("adminLoginModal").addEventListener("click", (e)=>{ if(e
 function openAdminPanel(){
   hideAdminForm();
   closeAdminSettings();
+  switchAdminTab("products");
   renderAdminProductList();
   document.getElementById("adminPanelModal").classList.add("open");
 }
@@ -1912,6 +2063,63 @@ document.getElementById("adminCloseBtn").addEventListener("click", closeAdminPan
 document.getElementById("adminLogoutBtn").addEventListener("click", logoutAdmin);
 document.getElementById("adminPanelModal").addEventListener("click", (e)=>{ if(e.target.id==="adminPanelModal") closeAdminPanel(); });
 document.getElementById("adminAddNewBtn").addEventListener("click", ()=> showAdminForm(null));
+
+/* ---------- Bo'limlar: Mahsulotlar / Mijozlar ---------- */
+function switchAdminTab(tab){
+  const isProducts = tab==="products";
+  document.getElementById("adminTabProducts").classList.toggle("active", isProducts);
+  document.getElementById("adminTabCustomers").classList.toggle("active", !isProducts);
+  document.getElementById("adminProductsSection").style.display = isProducts ? "block" : "none";
+  document.getElementById("adminCustomersSection").style.display = isProducts ? "none" : "block";
+  closeAdminSettings();
+  hideAdminForm();
+  if(isProducts){
+    renderAdminProductList();
+  } else {
+    renderAdminCustomerList();
+  }
+}
+document.getElementById("adminTabProducts").addEventListener("click", ()=> switchAdminTab("products"));
+document.getElementById("adminTabCustomers").addEventListener("click", ()=> switchAdminTab("customers"));
+
+function renderAdminCustomerList(){
+  const wrap = document.getElementById("adminCustomerList");
+  wrap.innerHTML = `<p class="admin-empty-note"><i class="fa-solid fa-spinner fa-spin"></i> Yuklanmoqda...</p>`;
+
+  if(!firebaseAvailable){
+    wrap.innerHTML = `<p class="admin-empty-note">Internet yo'q, mijozlar ro'yxatini yuklab bo'lmadi.</p>`;
+    return;
+  }
+
+  db.collection(CUSTOMERS_COLLECTION).get().then(snapshot=>{
+    if(snapshot.empty){
+      wrap.innerHTML = `<p class="admin-empty-note">Hozircha birorta ham mijoz buyurtma bermagan.</p>`;
+      return;
+    }
+    const customers = [];
+    snapshot.forEach(doc=> customers.push(doc.data()));
+    customers.sort((a,b)=> (b.orderCount||0) - (a.orderCount||0));
+
+    wrap.innerHTML = customers.map(c=>{
+      const tgLabel = c.telegramUsername
+        ? `<span class="ac-tg linked"><i class="fa-brands fa-telegram"></i> @${c.telegramUsername}</span>`
+        : `<span class="ac-tg"><i class="fa-brands fa-telegram"></i> Bog'lanmagan</span>`;
+      return `
+        <div class="admin-customer-row">
+          <div class="ac-top">
+            <span class="ac-name">${c.name || "Noma'lum"}</span>
+            <span class="ac-count">${c.orderCount || 0} marta buyurtma</span>
+          </div>
+          <div class="ac-phone"><i class="fa-solid fa-phone"></i> ${c.phone || "-"}</div>
+          ${tgLabel}
+        </div>
+      `;
+    }).join("");
+  }).catch(err=>{
+    console.error("Mijozlar ro'yxatini yuklashda xatolik:", err);
+    wrap.innerHTML = `<p class="admin-empty-note">Yuklashda xatolik yuz berdi.</p>`;
+  });
+}
 
 /* ---------- Sozlamalar (parolni yangilash) ---------- */
 let adminSettingsStage = "verify"; // "verify" | "change"
