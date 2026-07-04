@@ -310,8 +310,9 @@
   }
   .carousel-stage{
     position:relative; width:210px; height:270px; transform-style:preserve-3d;
-    transition:transform 1s var(--ease);
+    transition:transform 1s var(--ease); cursor:grab; user-select:none;
   }
+  .carousel-stage:active{cursor:grabbing;}
   .carousel-item{
     position:absolute; inset:0; border-radius:24px; overflow:hidden;
     background:linear-gradient(160deg,var(--card-2),var(--card));
@@ -369,6 +370,11 @@
     transition:.3s var(--ease); position:relative; overflow:hidden;
   }
   .card:hover{transform:translateY(-5px); border-color:var(--border-strong); box-shadow:var(--shadow-1);}
+  .card-flash{animation:cardFlash 1.4s var(--ease);}
+  @keyframes cardFlash{
+    0%{box-shadow:0 0 0 3px var(--yellow); border-color:var(--yellow);}
+    100%{box-shadow:none;}
+  }
   .card-media{
     height:126px; border-radius:16px;
     background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.05), transparent 65%), #11161e;
@@ -637,7 +643,10 @@
   .admin-emoji-picker{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
   .admin-emoji-picker button{width:32px; height:32px; border-radius:8px; background:var(--card); border:1px solid var(--border); font-size:16px; display:flex; align-items:center; justify-content:center; transition:.15s;}
   .admin-emoji-picker button:hover{border-color:var(--yellow); background:rgba(255,204,0,.1); transform:translateY(-2px);}
-  .admin-add-btn{width:100%; margin-bottom:16px;}
+  .admin-add-btn{flex:1; margin-bottom:16px;}
+  .admin-featured-picker{background:var(--card-2); border:1.5px solid #6fe0c0; border-radius:16px; padding:16px; margin-bottom:16px; display:flex; flex-direction:column; gap:8px; max-height:320px; overflow-y:auto;}
+  .admin-featured-picker label{display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; padding:8px 10px; border-radius:10px; background:var(--card); cursor:pointer;}
+  .admin-featured-picker .fp-note{font-size:11.5px; color:var(--muted); margin-bottom:4px;}
   .admin-settings-box{display:none; flex-direction:column; gap:12px; background:var(--card-2); border:1.5px solid #7c9eff; border-radius:16px; padding:16px; margin-bottom:16px;}
   .admin-settings-box label{font-size:11px; color:var(--muted); font-weight:700; margin-bottom:5px; display:block; text-transform:uppercase; letter-spacing:.03em;}
   .admin-settings-box input{
@@ -751,7 +760,11 @@
       <div class="admin-settings-box" id="adminSettingsBox"></div>
 
       <div id="adminProductsSection">
-        <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
+        <div style="display:flex; gap:10px; margin-bottom:16px;">
+          <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button" style="margin-bottom:0;"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
+          <button class="btn btn-ghost" id="adminFeaturedBtn" type="button"><i class="fa-solid fa-record-vinyl"></i><span>Ruletka</span></button>
+        </div>
+        <div class="admin-featured-picker" id="adminFeaturedPicker" style="display:none;"></div>
         <div class="admin-form" id="adminForm"></div>
         <div class="admin-product-list" id="adminProductList"></div>
       </div>
@@ -1251,6 +1264,7 @@ function listenToProducts(){
 seedFirestoreIfEmpty();
 listenToProducts();
 listenToRatings();
+listenToFeatured();
 
 function nextProductId(){ return PRODUCTS.reduce((max,p)=>Math.max(max,p.id),0) + 1; }
 
@@ -1404,6 +1418,46 @@ async function submitRating(orderId, stars){
   }
 }
 
+/* =========================================================
+   RULETKA (bosh sahifadagi 3D karusel) - admin qaysi
+   mahsulotlar ko'rinishini config/featured hujjatida {ids:[...]}
+   ko'rinishida boshqaradi. Hech narsa tanlanmagan bo'lsa,
+   birinchi 5 ta mahsulot ko'rsatiladi (standart holat).
+========================================================= */
+let featuredIds = null; // null = hali yuklanmagan, standart (birinchi 5) ishlatiladi
+
+function listenToFeatured(){
+  if(!firebaseAvailable) return;
+  try{
+    db.collection(CONFIG_COLLECTION).doc("featured").onSnapshot(doc=>{
+      featuredIds = (doc.exists && Array.isArray(doc.data().ids) && doc.data().ids.length) ? doc.data().ids : null;
+      if(typeof renderCarousel==="function") renderCarousel(true);
+      const panel = document.getElementById("adminFeaturedPicker");
+      if(panel && panel.style.display!=="none") renderAdminFeaturedPicker();
+    }, err=>console.error("Ruletkani sinxronlashda xatolik:", err));
+  }catch(err){ console.error("Featured tinglash xatosi:", err); }
+}
+
+function getFeaturedProducts(){
+  if(featuredIds && featuredIds.length){
+    const list = featuredIds.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
+    if(list.length) return list;
+  }
+  return PRODUCTS.slice(0,5);
+}
+
+function saveFeaturedIds(ids){
+  featuredIds = ids;
+  if(!firebaseAvailable){
+    showToast("Internet yo'q, o'zgarish saqlanmadi", "error");
+    return;
+  }
+  db.collection(CONFIG_COLLECTION).doc("featured").set({ids}).catch(err=>{
+    console.error("Ruletkani saqlashda xatolik:", err);
+    showToast("Saqlashda xatolik yuz berdi", "error");
+  });
+}
+
 const CATEGORIES = ["all","burger","pizza","side","drink","dessert","combo"];
 const CAT_ICON = {all:"\u{1f37d}\u{fe0f}",burger:"\u{1f354}",pizza:"\u{1f355}",side:"\u{1f35f}",drink:"\u{1f964}",dessert:"\u{1f368}",combo:"\u{1f371}"};
 
@@ -1511,31 +1565,38 @@ document.querySelectorAll("[data-view]").forEach(el=>{
 });
 
 /* =========================================================
-   CAROUSEL (3D)
+   CAROUSEL (3D) - qo'lda aylantirish (drag) va bosilganda
+   mahsulotni menyuda ko'rsatish imkoniyati bilan.
 ========================================================= */
 let carouselIndex = 0;
 let carouselTimer = null;
 let FEATURED = PRODUCTS.slice(0,5);
 
 function renderCarousel(reset){
-  FEATURED = PRODUCTS.slice(0,5);
+  FEATURED = getFeaturedProducts();
   const stage = document.getElementById("carouselStage");
   const dots = document.getElementById("carouselDots");
   const n = FEATURED.length;
   const angleStep = 360 / n;
   const radius = 300;
 
+  if(carouselIndex>=n) carouselIndex = 0;
   stage.innerHTML = "";
   dots.innerHTML = "";
   FEATURED.forEach((p, i)=>{
     const item = document.createElement("div");
     item.className = "carousel-item";
     item.style.transform = `rotateY(${angleStep*i}deg) translateZ(${radius}px)`;
+    item.setAttribute("data-pid", p.id);
     item.innerHTML = `
       <div class="ci-icon">${mediaHTML(p,'media-emoji')}</div>
       <div class="ci-name">${p.name[state.lang]}</div>
       <div class="ci-price">${money(p.price)}</div>
     `;
+    item.addEventListener("click", (e)=>{
+      if(carouselDragged) return; // drag tugagach tasodifiy bosilib ketmasin
+      goToProductInMenu(p.id);
+    });
     stage.appendChild(item);
 
     const dot = document.createElement("span");
@@ -1560,11 +1621,72 @@ function restartCarouselTimer(){
   if(carouselTimer) clearInterval(carouselTimer);
   carouselTimer = setInterval(()=> rotateCarousel(1), 3200);
 }
+
+/* Mahsulotni bosganda - Menyu bo'limiga o'tib, o'sha mahsulot
+   kartasini topib, ekranga chiqarib, bir lahza yoritib ko'rsatadi. */
+function goToProductInMenu(productId){
+  const p = PRODUCTS.find(x=>x.id===productId);
+  if(!p) return;
+  state.activeCat = "all";
+  goToView("menu");
+  renderCatTabs();
+  renderMenu();
+  setTimeout(()=>{
+    const card = document.querySelector(`#menuGrid .card[data-pid="${productId}"]`);
+    if(card){
+      card.scrollIntoView({behavior:"smooth", block:"center"});
+      card.classList.add("card-flash");
+      setTimeout(()=> card.classList.remove("card-flash"), 1400);
+    }
+  }, 120);
+}
+
 const carouselWrap = document.getElementById("carouselWrap");
+const carouselStageEl = document.getElementById("carouselStage");
+let carouselDragging = false;
+let carouselDragged = false;
+let carouselDragStartX = 0;
+let carouselDragBaseAngle = 0;
+
+function carouselDragStart(clientX){
+  carouselDragging = true;
+  carouselDragged = false;
+  carouselDragStartX = clientX;
+  const n = FEATURED.length;
+  carouselDragBaseAngle = -(360/n)*carouselIndex;
+  clearInterval(carouselTimer);
+  carouselStageEl.style.transition = "none";
+}
+function carouselDragMove(clientX){
+  if(!carouselDragging) return;
+  const dx = clientX - carouselDragStartX;
+  if(Math.abs(dx)>4) carouselDragged = true;
+  const angle = carouselDragBaseAngle + dx*0.35;
+  carouselStageEl.style.transform = `rotateY(${angle}deg)`;
+}
+function carouselDragEnd(clientX){
+  if(!carouselDragging) return;
+  carouselDragging = false;
+  const n = FEATURED.length;
+  const angleStep = 360/n;
+  const dx = clientX - carouselDragStartX;
+  const stepsMoved = Math.round((dx*0.35)/angleStep);
+  carouselStageEl.style.transition = "";
+  rotateCarousel(-stepsMoved, false);
+  restartCarouselTimer();
+  setTimeout(()=>{ carouselDragged = false; }, 50);
+}
+
+carouselStageEl.addEventListener("mousedown", (e)=>{ carouselDragStart(e.clientX); e.preventDefault(); });
+window.addEventListener("mousemove", (e)=>{ if(carouselDragging) carouselDragMove(e.clientX); });
+window.addEventListener("mouseup", (e)=>{ if(carouselDragging) carouselDragEnd(e.clientX); });
+
+carouselStageEl.addEventListener("touchstart", (e)=>{ carouselDragStart(e.touches[0].clientX); }, {passive:true});
+carouselStageEl.addEventListener("touchmove", (e)=>{ carouselDragMove(e.touches[0].clientX); }, {passive:true});
+carouselStageEl.addEventListener("touchend", (e)=>{ carouselDragEnd(e.changedTouches[0].clientX); });
+
 carouselWrap.addEventListener("mouseenter", ()=> clearInterval(carouselTimer));
-carouselWrap.addEventListener("mouseleave", restartCarouselTimer);
-carouselWrap.addEventListener("touchstart", ()=> clearInterval(carouselTimer), {passive:true});
-carouselWrap.addEventListener("touchend", restartCarouselTimer);
+carouselWrap.addEventListener("mouseleave", ()=>{ if(!carouselDragging) restartCarouselTimer(); });
 
 /* =========================================================
    PRODUCT CARD RENDER
@@ -1989,14 +2111,36 @@ function openMapModal(){
   setTimeout(()=>{
     initMap();
     leafletMap.invalidateSize();
+
     if(state.location){
       leafletMap.setView([state.location.lat, state.location.lng], 16);
       pendingLocation = {...state.location};
+      reverseGeocode(pendingLocation);
+      return;
+    }
+
+    const preview = document.getElementById('mapAddressPreview');
+    if(navigator.geolocation){
+      preview.textContent = t('locating');
+      navigator.geolocation.getCurrentPosition(
+        pos=>{
+          const loc = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+          leafletMap.setView([loc.lat, loc.lng], 16);
+          pendingLocation = loc;
+          reverseGeocode(pendingLocation);
+        },
+        ()=>{
+          const c = leafletMap.getCenter();
+          pendingLocation = {lat:c.lat, lng:c.lng};
+          reverseGeocode(pendingLocation);
+        },
+        {timeout:6000, enableHighAccuracy:true}
+      );
     } else {
       const c = leafletMap.getCenter();
       pendingLocation = {lat:c.lat, lng:c.lng};
+      reverseGeocode(pendingLocation);
     }
-    reverseGeocode(pendingLocation);
   }, 60);
 }
 function closeMapModal(){ document.getElementById('mapModal').classList.remove('open'); }
@@ -2007,9 +2151,17 @@ document.getElementById('mapModal').addEventListener('click', (e)=>{ if(e.target
 
 document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
   if(!navigator.geolocation){ showToast(t('toastGeoUnsupported'), 'error'); return; }
+  const preview = document.getElementById('mapAddressPreview');
+  preview.textContent = t('locating');
   navigator.geolocation.getCurrentPosition(
-    pos=>{ leafletMap.setView([pos.coords.latitude, pos.coords.longitude], 16); },
-    ()=>{ showToast(t('toastGeoFail'), 'error'); }
+    pos=>{
+      const loc = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+      leafletMap.setView([loc.lat, loc.lng], 16);
+      pendingLocation = loc;
+      reverseGeocode(pendingLocation);
+    },
+    ()=>{ showToast(t('toastGeoFail'), 'error'); },
+    {timeout:6000, enableHighAccuracy:true}
   );
 });
 
@@ -2568,23 +2720,138 @@ document.getElementById("adminLogoutBtn").addEventListener("click", logoutAdmin)
 document.getElementById("adminPanelModal").addEventListener("click", (e)=>{ if(e.target.id==="adminPanelModal") closeAdminPanel(); });
 document.getElementById("adminAddNewBtn").addEventListener("click", ()=> showAdminForm(null));
 
+document.getElementById("adminFeaturedBtn").addEventListener("click", ()=>{
+  const panel = document.getElementById("adminFeaturedPicker");
+  const isOpen = panel.style.display==="flex";
+  panel.style.display = isOpen ? "none" : "flex";
+  if(!isOpen) renderAdminFeaturedPicker();
+});
+
+function renderAdminFeaturedPicker(){
+  const panel = document.getElementById("adminFeaturedPicker");
+  const currentIds = (featuredIds && featuredIds.length) ? featuredIds : PRODUCTS.slice(0,5).map(p=>p.id);
+  panel.innerHTML = `<div class="fp-note">Bosh sahifadagi ruletkada qaysi mahsulotlar aylanishini tanlang:</div>` +
+    PRODUCTS.map(p=>`
+      <label>
+        <input type="checkbox" data-fid="${p.id}" ${currentIds.includes(p.id)?"checked":""}>
+        <span>${p.emoji} ${p.name.uz}</span>
+      </label>
+    `).join("");
+  panel.querySelectorAll("input[data-fid]").forEach(cb=>{
+    cb.addEventListener("change", ()=>{
+      const selected = [...panel.querySelectorAll("input[data-fid]:checked")].map(el=>parseInt(el.getAttribute("data-fid")));
+      saveFeaturedIds(selected);
+    });
+  });
+}
+
 /* ---------- Bo'limlar: Mahsulotlar / Mijozlar ---------- */
 function switchAdminTab(tab){
-  const isProducts = tab==="products";
-  document.getElementById("adminTabProducts").classList.toggle("active", isProducts);
-  document.getElementById("adminTabCustomers").classList.toggle("active", !isProducts);
-  document.getElementById("adminProductsSection").style.display = isProducts ? "block" : "none";
-  document.getElementById("adminCustomersSection").style.display = isProducts ? "none" : "block";
+  document.getElementById("adminTabProducts").classList.toggle("active", tab==="products");
+  document.getElementById("adminTabCustomers").classList.toggle("active", tab==="customers");
+  document.getElementById("adminTabStats").classList.toggle("active", tab==="stats");
+  document.getElementById("adminProductsSection").style.display = tab==="products" ? "block" : "none";
+  document.getElementById("adminCustomersSection").style.display = tab==="customers" ? "block" : "none";
+  document.getElementById("adminStatsSection").style.display = tab==="stats" ? "block" : "none";
   closeAdminSettings();
   hideAdminForm();
-  if(isProducts){
-    renderAdminProductList();
-  } else {
-    renderAdminCustomerList();
-  }
+  if(tab==="products") renderAdminProductList();
+  else if(tab==="customers") renderAdminCustomerList();
+  else if(tab==="stats") renderAdminStats();
 }
 document.getElementById("adminTabProducts").addEventListener("click", ()=> switchAdminTab("products"));
 document.getElementById("adminTabCustomers").addEventListener("click", ()=> switchAdminTab("customers"));
+document.getElementById("adminTabStats").addEventListener("click", ()=> switchAdminTab("stats"));
+
+function renderAdminStats(){
+  const wrap = document.getElementById("adminStatsContent");
+  wrap.innerHTML = `<p class="admin-empty-note"><i class="fa-solid fa-spinner fa-spin"></i> Yuklanmoqda...</p>`;
+
+  if(!firebaseAvailable){
+    wrap.innerHTML = `<p class="admin-empty-note">Internet yo'q, statistikani yuklab bo'lmadi.</p>`;
+    return;
+  }
+
+  fetchAllOrders().then(orders=>{
+    if(orders.length===0){
+      wrap.innerHTML = `<p class="admin-empty-note">Hozircha birorta ham buyurtma yo'q.</p>`;
+      return;
+    }
+
+    const totalRevenue = orders.reduce((s,o)=> s + (o.total||0), 0);
+    const totalOrders = orders.length;
+
+    const productCounts = {};
+    orders.forEach(o=>{
+      (o.items||[]).forEach(it=>{
+        const key = it.id;
+        if(!productCounts[key]) productCounts[key] = {name: it.name ? it.name.uz : "?", qty: 0};
+        productCounts[key].qty += it.qty;
+      });
+    });
+    const topProducts = Object.values(productCounts).sort((a,b)=> b.qty - a.qty).slice(0,5);
+
+    const cardsHTML = `
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <i class="fa-solid fa-sack-dollar"></i>
+          <b>${money(totalRevenue)}</b>
+          <span>Jami tushum</span>
+        </div>
+        <div class="admin-stat-card">
+          <i class="fa-solid fa-receipt"></i>
+          <b>${totalOrders}</b>
+          <span>Jami buyurtmalar</span>
+        </div>
+        <div class="admin-stat-card">
+          <i class="fa-solid fa-chart-simple"></i>
+          <b>${money(Math.round(totalRevenue/totalOrders))}</b>
+          <span>O'rtacha chek</span>
+        </div>
+      </div>
+    `;
+
+    const topHTML = topProducts.length ? `
+      <h3 style="font-size:14.5px; margin-bottom:10px;"><i class="fa-solid fa-fire"></i> Eng ko'p sotilgan taomlar</h3>
+      <div class="admin-top-products">
+        ${topProducts.map((p,i)=>`
+          <div class="admin-top-row">
+            <span class="atr-rank">${i+1}</span>
+            <span class="atr-name">${p.name}</span>
+            <span class="atr-count">${p.qty} dona sotilgan</span>
+          </div>
+        `).join("")}
+      </div>
+    ` : "";
+
+    wrap.innerHTML = cardsHTML + topHTML;
+  });
+}
+
+function fetchAllOrders(){
+  if(!firebaseAvailable) return Promise.resolve([]);
+  return db.collection(ORDERS_COLLECTION).get().then(snap=>{
+    const orders = [];
+    snap.forEach(d=>orders.push(d.data()));
+    return orders;
+  }).catch(err=>{
+    console.error("Buyurtmalarni yuklashda xatolik:", err);
+    return [];
+  });
+}
+
+async function adminAdvanceOrderStatus(orderId, currentStatus){
+  const idx = STATUS_STEPS.indexOf(currentStatus);
+  if(idx===-1 || idx>=STATUS_STEPS.length-1) return;
+  const nextStatus = STATUS_STEPS[idx+1];
+  try{
+    await db.collection(ORDERS_COLLECTION).doc(String(orderId)).update({status: nextStatus});
+    renderAdminCustomerList();
+  }catch(err){
+    console.error("Holatni yangilashda xatolik:", err);
+    showToast("Holatni yangilashda xatolik yuz berdi", "error");
+  }
+}
 
 function renderAdminCustomerList(){
   const wrap = document.getElementById("adminCustomerList");
@@ -2595,7 +2862,10 @@ function renderAdminCustomerList(){
     return;
   }
 
-  db.collection(CUSTOMERS_COLLECTION).get().then(snapshot=>{
+  Promise.all([
+    db.collection(CUSTOMERS_COLLECTION).get(),
+    fetchAllOrders()
+  ]).then(([snapshot, allOrders])=>{
     if(snapshot.empty){
       wrap.innerHTML = `<p class="admin-empty-note">Hozircha birorta ham mijoz buyurtma bermagan.</p>`;
       return;
@@ -2605,9 +2875,28 @@ function renderAdminCustomerList(){
     customers.sort((a,b)=> (b.orderCount||0) - (a.orderCount||0));
 
     wrap.innerHTML = customers.map(c=>{
+      const digits = extractPhoneDigits(c.phone);
+      const custOrders = allOrders.filter(o=>o.phoneDigits===digits).sort((a,b)=>b.id-a.id);
+      const lastOrder = custOrders[0] || null;
+
       const tgLabel = c.telegramUsername
         ? `<span class="ac-tg linked"><i class="fa-brands fa-telegram"></i> @${c.telegramUsername}</span>`
         : `<span class="ac-tg"><i class="fa-brands fa-telegram"></i> Bog'lanmagan</span>`;
+
+      let statusHTML = "";
+      if(lastOrder){
+        const isDelivered = lastOrder.status==="delivered";
+        const label = STATUS_I18N_KEYS[lastOrder.status] ? t(STATUS_I18N_KEYS[lastOrder.status]) : lastOrder.status;
+        statusHTML = `
+          <div class="admin-order-status">
+            <span class="aos-label">Oxirgi buyurtma: <span class="aos-badge ${isDelivered?'delivered':''}">${label}</span></span>
+            <button data-advance="${lastOrder.id}" data-status="${lastOrder.status}" ${isDelivered?"disabled":""}>
+              ${isDelivered ? "Yakunlangan" : "Keyingi bosqich \u2192"}
+            </button>
+          </div>
+        `;
+      }
+
       return `
         <div class="admin-customer-row">
           <div class="ac-top">
@@ -2616,9 +2905,18 @@ function renderAdminCustomerList(){
           </div>
           <div class="ac-phone"><i class="fa-solid fa-phone"></i> ${c.phone || "-"}</div>
           ${tgLabel}
+          ${statusHTML}
         </div>
       `;
     }).join("");
+
+    wrap.querySelectorAll("[data-advance]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const orderId = btn.getAttribute("data-advance");
+        const status = btn.getAttribute("data-status");
+        adminAdvanceOrderStatus(orderId, status);
+      });
+    });
   }).catch(err=>{
     console.error("Mijozlar ro'yxatini yuklashda xatolik:", err);
     wrap.innerHTML = `<p class="admin-empty-note">Yuklashda xatolik yuz berdi.</p>`;
@@ -2789,9 +3087,33 @@ function showAdminForm(editId){
         <input type="number" id="af_price" min="0" step="500" value="${p ? p.price : ""}">
       </div>
     </div>
+    <div id="af_combo_wrap" style="display:${p && p.cat==="combo" ? "block":"none"};">
+      <label>Kombo tarkibi (qaysi mahsulotlar kiradi)</label>
+      <div class="admin-combo-picker" id="af_combo_picker">
+        ${PRODUCTS.filter(x=>x.cat!=="combo").map(cp=>`
+          <label>
+            <input type="checkbox" data-combo-item="${cp.id}" ${p && p.comboItems && p.comboItems.includes(cp.id) ? "checked":""}>
+            <span>${cp.emoji} ${cp.name.uz}</span>
+          </label>
+        `).join("")}
+      </div>
+    </div>
     <div>
       <label>Belgi (ixtiyoriy, mas: Yangi / Hit)</label>
       <input type="text" id="af_tag" value="${p && p.tag ? p.tag.uz : ""}">
+    </div>
+    <div>
+      <label>Qo'shimchalar (modifikatorlar) - masalan "+ Pishloq"</label>
+      <div id="af_modifiers_list">
+        ${(p && p.modifiers ? p.modifiers : []).map((m,i)=>`
+          <div class="af-row modifier-edit-row" data-mi="${i}" style="margin-bottom:8px;">
+            <input type="text" class="af-mod-name" placeholder="Nomi (masalan: Pishloq)" value="${m.name.uz}">
+            <input type="number" class="af-mod-price" placeholder="Narxi" min="0" step="500" value="${m.price}" style="max-width:110px;">
+            <button type="button" class="icon-btn af-mod-remove" style="flex-shrink:0;"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `).join("")}
+      </div>
+      <button type="button" class="btn btn-ghost" id="af_mod_add" style="width:100%; margin-top:4px;"><i class="fa-solid fa-plus"></i><span>Qo'shimcha qo'shish</span></button>
     </div>
     <div class="af-row">
       <div><label>Nomi &mdash; O'zbekcha</label><input type="text" id="af_name_uz" value="${p ? p.name.uz : ""}"></div>
@@ -2832,6 +3154,28 @@ function showAdminForm(editId){
   }
   document.getElementById("af_mode_emoji").addEventListener("click", ()=> setMode("emoji"));
   document.getElementById("af_mode_image").addEventListener("click", ()=> setMode("image"));
+
+  document.getElementById("af_cat").addEventListener("change", (e)=>{
+    document.getElementById("af_combo_wrap").style.display = e.target.value==="combo" ? "block" : "none";
+  });
+
+  function addModifierRow(name, price){
+    const list = document.getElementById("af_modifiers_list");
+    const row = document.createElement("div");
+    row.className = "af-row modifier-edit-row";
+    row.style.marginBottom = "8px";
+    row.innerHTML = `
+      <input type="text" class="af-mod-name" placeholder="Nomi (masalan: Pishloq)" value="${name||''}">
+      <input type="number" class="af-mod-price" placeholder="Narxi" min="0" step="500" value="${price||''}" style="max-width:110px;">
+      <button type="button" class="icon-btn af-mod-remove" style="flex-shrink:0;"><i class="fa-solid fa-trash"></i></button>
+    `;
+    row.querySelector(".af-mod-remove").addEventListener("click", ()=> row.remove());
+    list.appendChild(row);
+  }
+  document.querySelectorAll(".af-mod-remove").forEach(btn=>{
+    btn.addEventListener("click", ()=> btn.closest(".modifier-edit-row").remove());
+  });
+  document.getElementById("af_mod_add").addEventListener("click", ()=> addModifierRow("",""));
 
   document.getElementById("af_image_file").addEventListener("change", (e)=>{
     const file = e.target.files[0];
@@ -2899,10 +3243,22 @@ function submitAdminForm(mode){
   if(!desc.uz || !desc.ru || !desc.en){ showToast("Tavsifni barcha tillarda kiriting", "error"); return; }
   if(!price || price<=0){ showToast("Narxni to'g'ri kiriting", "error"); return; }
 
+  const modifiers = [...document.querySelectorAll(".modifier-edit-row")].map((row,i)=>{
+    const mname = row.querySelector(".af-mod-name").value.trim();
+    const mprice = parseInt(row.querySelector(".af-mod-price").value, 10) || 0;
+    if(!mname) return null;
+    return {id: "m"+i+"_"+Date.now(), name:{uz:mname, ru:mname, en:mname}, price: mprice};
+  }).filter(Boolean);
+
+  let comboItems = null;
+  if(cat==="combo"){
+    comboItems = [...document.querySelectorAll("[data-combo-item]:checked")].map(el=>parseInt(el.getAttribute("data-combo-item")));
+  }
+
   const data = {
     emoji, img: mode==="image" ? adminImageData : null, cat, price,
     tag: tagVal ? {uz:tagVal, ru:tagVal, en:tagVal} : null,
-    name, desc
+    name, desc, modifiers, comboItems
   };
 
   adminSaveProduct(data, adminEditingId);
