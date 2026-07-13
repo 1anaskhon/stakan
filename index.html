@@ -612,19 +612,49 @@
   .admin-tab-btn{padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--muted); background:var(--card-2); border:1px solid var(--border); display:flex; align-items:center; gap:7px; transition:.2s;}
   .admin-tab-btn.active{background:var(--yellow); color:#171308; border-color:var(--yellow);}
   .admin-customer-list{display:flex; flex-direction:column; gap:10px;}
-  .admin-customer-row{background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:14px;}
+  .admin-customer-row{background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:14px; cursor:pointer; transition:.2s;}
+  .admin-customer-row:hover{border-color:var(--border-strong);}
+  .admin-customer-row.expanded{cursor:default; border-color:var(--yellow);}
   .admin-customer-row .ac-top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;}
-  .admin-customer-row .ac-name{font-size:14px; font-weight:800;}
-  .admin-customer-row .ac-count{background:var(--yellow); color:#171308; font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; white-space:nowrap;}
+  .admin-customer-row .ac-name-wrap{display:flex; align-items:center; gap:8px; min-width:0;}
+  .admin-customer-row .ac-name{font-size:14px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .admin-customer-row .ac-count{background:var(--yellow); color:#171308; font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; white-space:nowrap; flex-shrink:0;}
   .admin-customer-row .ac-phone{font-size:12.5px; color:var(--muted); margin-bottom:4px;}
   .admin-customer-row .ac-tg{font-size:11.5px; color:var(--muted-2); display:flex; align-items:center; gap:6px;}
   .admin-customer-row .ac-tg.linked{color:#7c9eff;}
+  .ac-new-badge{
+    display:inline-flex; align-items:center; gap:5px; background:linear-gradient(150deg,#ff8a5c,#e64a19); color:#fff;
+    font-size:10px; font-weight:800; padding:3px 9px; border-radius:20px; flex-shrink:0; animation:acPulse 1.6s infinite;
+  }
+  @keyframes acPulse{0%,100%{opacity:1;} 50%{opacity:.55;}}
+  .ac-chevron{color:var(--muted-2); font-size:12px; transition:.25s var(--ease); flex-shrink:0;}
+  .admin-customer-row.expanded .ac-chevron{transform:rotate(180deg);}
+  .ac-orders-list{margin-top:14px; padding-top:14px; border-top:1px dashed var(--border); display:flex; flex-direction:column; gap:10px;}
+  .ac-order-card{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px 14px;}
+  .ac-order-card.is-active{border-color:var(--yellow);}
+  .ac-order-head{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;}
+  .ac-order-num{font-size:12.5px; font-weight:800; color:var(--text);}
+  .ac-order-date{font-size:11px; color:var(--muted-2);}
+  .ac-order-items{font-size:12px; color:var(--muted); line-height:1.6; margin-bottom:8px;}
+  .ac-order-items b{color:var(--text); font-weight:600;}
+  .ac-order-meta{font-size:11.5px; color:var(--muted); display:flex; flex-wrap:wrap; gap:10px; margin-bottom:8px;}
+  .ac-order-meta span{display:flex; align-items:center; gap:5px;}
+  .ac-order-total{font-weight:800; color:var(--yellow); font-size:13px;}
   .admin-empty-note{text-align:center; color:var(--muted-2); font-size:13px; padding:30px 10px;}
   .admin-body{padding:20px 22px; overflow-y:auto;}
   .admin-product-list{display:flex; flex-direction:column; gap:10px;}
   .admin-product-row{display:flex; align-items:center; gap:12px; background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:10px 12px;}
   .admin-product-row .ap-emoji{width:38px; height:38px; border-radius:10px; background:var(--card); display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0;}
   .admin-product-row .ap-info{flex:1; min-width:0;}
+  /* ============ ADMIN STATS: DAILY CHART ============ */
+  .admin-chart-card{background:var(--card-2); border:1px solid var(--border); border-radius:16px; padding:18px 16px; margin-bottom:20px;}
+  .admin-chart-card h3{font-size:14.5px; margin-bottom:14px;}
+  .admin-chart-scroll{overflow-x:auto; padding-bottom:6px;}
+  .admin-chart-bars{display:flex; align-items:flex-end; gap:6px; height:140px; min-width:min-content;}
+  .admin-chart-bar-col{display:flex; flex-direction:column; align-items:center; gap:6px; width:20px; flex-shrink:0; height:100%; justify-content:flex-end;}
+  .admin-chart-bar{width:14px; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--yellow),#e6a800); min-height:2px; transition:.3s var(--ease); position:relative;}
+  .admin-chart-bar:hover{filter:brightness(1.15);}
+  .admin-chart-daylabel{font-size:8.5px; color:var(--muted-2); white-space:nowrap; transform:rotate(0deg);}
   .admin-product-row .ap-info b{display:block; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .admin-product-row .ap-info span{font-size:11px; color:var(--muted);}
   .admin-product-row .ap-price{font-weight:800; color:var(--yellow); font-size:13px; white-space:nowrap;}
@@ -1323,15 +1353,16 @@ async function saveOrder(order){
   order.phoneDigits = digits;
   order.status = "accepted";
   order.rating = null;
+  order.seenByAdmin = false;
   order.createdAt = Date.now();
 
-  if(!digits){ saveOrderLocalFallback(order); return {orderNumber:1}; }
+  if(!digits){ saveOrderLocalFallback(order); return {orderNumber:1, saved:false}; }
   localStorage.setItem(LAST_PHONE_KEY, digits);
   localStorage.setItem(LAST_ORDER_ID_KEY, String(order.id));
 
   if(!firebaseAvailable){
     saveOrderLocalFallback(order);
-    return {orderNumber:1};
+    return {orderNumber:1, saved:false};
   }
 
   try{
@@ -1351,11 +1382,11 @@ async function saveOrder(order){
       tx.set(orderRef, order);
       return custData.orderCount;
     });
-    return {orderNumber};
+    return {orderNumber, saved:true};
   }catch(err){
-    console.error("Buyurtmani saqlashda xatolik:", err);
+    console.error("Buyurtmani Firestore'ga saqlashda xatolik (ehtimol Firestore Rules 'orders' kolleksiyasiga ruxsat bermayapti):", err);
     saveOrderLocalFallback(order);
-    return {orderNumber:1};
+    return {orderNumber:1, saved:false};
   }
 }
 
@@ -2298,8 +2329,13 @@ async function submitOrder(){
   btn.disabled = false;
   btn.innerHTML = originalHTML;
 
-  showToast(t("toastOrderSuccess"), "success", t("toastOrderSuccessSub"));
-  goToView("tracker");
+  if(saveResult.saved){
+    showToast(t("toastOrderSuccess"), "success", t("toastOrderSuccessSub"));
+    goToView("tracker");
+  } else {
+    showToast(t("toastOrderSuccess"), "success", "Buyurtma Telegram'ga yuborildi, lekin jonli kuzatuv vaqtincha ishlamayapti (internetni tekshiring).");
+    goToView("home");
+  }
 }
 
 function buildTelegramMarkdown(order){
@@ -2756,7 +2792,7 @@ function switchAdminTab(tab){
   closeAdminSettings();
   hideAdminForm();
   if(tab==="products") renderAdminProductList();
-  else if(tab==="customers") renderAdminCustomerList();
+  else if(tab==="customers"){ expandedCustomerDigits = null; renderAdminCustomerList(); }
   else if(tab==="stats") renderAdminStats();
 }
 document.getElementById("adminTabProducts").addEventListener("click", ()=> switchAdminTab("products"));
@@ -2774,7 +2810,7 @@ function renderAdminStats(){
 
   fetchAllOrders().then(orders=>{
     if(orders.length===0){
-      wrap.innerHTML = `<p class="admin-empty-note">Hozircha birorta ham buyurtma yo'q.</p>`;
+      wrap.innerHTML = `<p class="admin-empty-note">Hozircha birorta ham buyurtma yo'q.<br><small style="opacity:.7;">Agar buyurtmalar bergan bo'lsangiz-u, baribir bo'sh ko'rinsa, Firestore xavfsizlik qoidalarida "orders" kolleksiyasiga ruxsat berilganini tekshiring.</small></p>`;
       return;
     }
 
@@ -2790,6 +2826,49 @@ function renderAdminStats(){
       });
     });
     const topProducts = Object.values(productCounts).sort((a,b)=> b.qty - a.qty).slice(0,5);
+
+    /* So'nggi 30 kunlik kunlik buyurtmalar soni diagrammasi */
+    const days = [];
+    const now = new Date();
+    for(let i=29;i>=0;i--){
+      const d = new Date(now);
+      d.setDate(d.getDate()-i);
+      d.setHours(0,0,0,0);
+      days.push(d);
+    }
+    const dayCounts = days.map(d=>{
+      const dayStart = d.getTime();
+      const dayEnd = dayStart + 86400000;
+      const count = orders.filter(o=>{
+        const t = new Date(o.date).getTime();
+        return t>=dayStart && t<dayEnd;
+      }).length;
+      return {date:d, count};
+    });
+    const maxCount = Math.max(...dayCounts.map(d=>d.count), 1);
+    const monthShort = state.lang==="ru" ? ["\u044f\u043d\u0432","\u0444\u0435\u0432","\u043c\u0430\u0440","\u0430\u043f\u0440","\u043c\u0430\u0439","\u0438\u044e\u043d","\u0438\u044e\u043b","\u0430\u0432\u0433","\u0441\u0435\u043d","\u043e\u043a\u0442","\u043d\u043e\u044f","\u0434\u0435\u043a"]
+      : state.lang==="en" ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+      : ["yan","fev","mar","apr","may","iyn","iyl","avg","sen","okt","noy","dek"];
+
+    const chartHTML = `
+      <div class="admin-chart-card">
+        <h3><i class="fa-solid fa-chart-column"></i> So'nggi 30 kunlik buyurtmalar soni</h3>
+        <div class="admin-chart-scroll">
+          <div class="admin-chart-bars">
+            ${dayCounts.map(dc=>{
+              const heightPct = Math.max((dc.count/maxCount)*100, dc.count>0?6:2);
+              const label = `${dc.date.getDate()} ${monthShort[dc.date.getMonth()]}`;
+              return `
+                <div class="admin-chart-bar-col">
+                  <div class="admin-chart-bar" style="height:${heightPct}%;" title="${label}: ${dc.count} ta buyurtma"></div>
+                  <div class="admin-chart-daylabel">${dc.date.getDate()}</div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      </div>
+    `;
 
     const cardsHTML = `
       <div class="admin-stats-grid">
@@ -2824,7 +2903,7 @@ function renderAdminStats(){
       </div>
     ` : "";
 
-    wrap.innerHTML = cardsHTML + topHTML;
+    wrap.innerHTML = cardsHTML + chartHTML + topHTML;
   });
 }
 
@@ -2840,20 +2919,81 @@ function fetchAllOrders(){
   });
 }
 
-async function adminAdvanceOrderStatus(orderId, currentStatus){
+async function adminAdvanceOrderStatus(orderId, currentStatus, phoneDigits){
   const idx = STATUS_STEPS.indexOf(currentStatus);
   if(idx===-1 || idx>=STATUS_STEPS.length-1) return;
   const nextStatus = STATUS_STEPS[idx+1];
   try{
     await db.collection(ORDERS_COLLECTION).doc(String(orderId)).update({status: nextStatus});
-    renderAdminCustomerList();
+    renderAdminCustomerList(phoneDigits);
   }catch(err){
     console.error("Holatni yangilashda xatolik:", err);
     showToast("Holatni yangilashda xatolik yuz berdi", "error");
   }
 }
 
-function renderAdminCustomerList(){
+async function adminMarkCustomerOrdersSeen(orders){
+  const unseen = orders.filter(o=>o.seenByAdmin===false);
+  if(!unseen.length || !firebaseAvailable) return;
+  try{
+    await Promise.all(unseen.map(o=> db.collection(ORDERS_COLLECTION).doc(String(o.id)).update({seenByAdmin:true})));
+    unseen.forEach(o=> o.seenByAdmin = true);
+  }catch(err){ console.error("seenByAdmin yangilashda xatolik:", err); }
+}
+
+function formatOrderDateTime(dateStr){
+  const dt = new Date(dateStr);
+  return dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ", {day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+}
+
+function orderItemsSummary(order){
+  return (order.items||[]).map(it=>{
+    const modsText = (it.modifiers && it.modifiers.length) ? ` (${it.modifiers.map(m=>m.name.uz).join(", ")})` : "";
+    return `<div><b>${it.qty}x</b> ${it.name.uz}${modsText}</div>`;
+  }).join("");
+}
+
+function buildCustomerOrdersHTML(custOrders){
+  // custOrders kelganda newest-first bo'lishi mumkin; "1-buyurtma, 2-buyurtma..."
+  // deb xronologik (eskisi birinchi) tartibda raqamlash uchun avval eskisidan
+  // yangisiga saralaymiz, raqam beramiz, keyin ekranda yangisini tepaga chiqaramiz.
+  const chronological = custOrders.slice().sort((a,b)=> a.id - b.id);
+  const numbered = chronological.map((o,i)=> Object.assign({}, o, {orderIndex: i+1}));
+  const newestFirst = numbered.slice().sort((a,b)=> b.id - a.id);
+
+  return newestFirst.map(order=>{
+    const isActive = order.status!=="delivered";
+    const label = STATUS_I18N_KEYS[order.status] ? t(STATUS_I18N_KEYS[order.status]) : order.status;
+    const deliveryLabel = order.deliveryType==="delivery"
+      ? `<span><i class="fa-solid fa-motorcycle"></i> Yetkazib berish${order.location && order.location.address ? ": "+order.location.address : ""}</span>`
+      : `<span><i class="fa-solid fa-store"></i> Olib ketish</span>`;
+    const scheduleLabel = order.scheduleType==="later" && order.scheduledTime
+      ? `<span><i class="fa-regular fa-clock"></i> ${order.scheduledTime}ga</span>` : "";
+
+    const advanceBtn = isActive
+      ? `<button data-advance="${order.id}" data-status="${order.status}" data-phone="${order.phoneDigits}" style="margin-top:8px; font-size:11px; font-weight:700; padding:6px 12px; border-radius:9px; background:var(--yellow); color:#171308;">Keyingi bosqich: ${STATUS_I18N_KEYS[STATUS_STEPS[STATUS_STEPS.indexOf(order.status)+1]] ? t(STATUS_I18N_KEYS[STATUS_STEPS[STATUS_STEPS.indexOf(order.status)+1]]) : ''} \u2192</button>`
+      : "";
+
+    return `
+      <div class="ac-order-card ${isActive?'is-active':''}">
+        <div class="ac-order-head">
+          <span class="ac-order-num">#${order.orderIndex}-buyurtma</span>
+          <span class="aos-badge ${order.status==='delivered'?'delivered':''}">${label}</span>
+        </div>
+        <div class="ac-order-date"><i class="fa-regular fa-clock"></i> ${formatOrderDateTime(order.date)}</div>
+        <div class="ac-order-items" style="margin-top:8px;">${orderItemsSummary(order)}</div>
+        <div class="ac-order-meta">${deliveryLabel}${scheduleLabel}</div>
+        <div class="ac-order-total">${money(order.total)}</div>
+        ${advanceBtn}
+      </div>
+    `;
+  }).join("");
+}
+
+let expandedCustomerDigits = null;
+
+function renderAdminCustomerList(keepExpanded){
+  if(keepExpanded) expandedCustomerDigits = keepExpanded;
   const wrap = document.getElementById("adminCustomerList");
   wrap.innerHTML = `<p class="admin-empty-note"><i class="fa-solid fa-spinner fa-spin"></i> Yuklanmoqda...</p>`;
 
@@ -2876,45 +3016,58 @@ function renderAdminCustomerList(){
 
     wrap.innerHTML = customers.map(c=>{
       const digits = extractPhoneDigits(c.phone);
-      const custOrders = allOrders.filter(o=>o.phoneDigits===digits).sort((a,b)=>b.id-a.id);
-      const lastOrder = custOrders[0] || null;
+      const custOrders = allOrders.filter(o=>o.phoneDigits===digits);
+      const hasUnseen = custOrders.some(o=>o.seenByAdmin===false);
+      const isExpanded = expandedCustomerDigits===digits;
 
       const tgLabel = c.telegramUsername
         ? `<span class="ac-tg linked"><i class="fa-brands fa-telegram"></i> @${c.telegramUsername}</span>`
         : `<span class="ac-tg"><i class="fa-brands fa-telegram"></i> Bog'lanmagan</span>`;
 
-      let statusHTML = "";
-      if(lastOrder){
-        const isDelivered = lastOrder.status==="delivered";
-        const label = STATUS_I18N_KEYS[lastOrder.status] ? t(STATUS_I18N_KEYS[lastOrder.status]) : lastOrder.status;
-        statusHTML = `
-          <div class="admin-order-status">
-            <span class="aos-label">Oxirgi buyurtma: <span class="aos-badge ${isDelivered?'delivered':''}">${label}</span></span>
-            <button data-advance="${lastOrder.id}" data-status="${lastOrder.status}" ${isDelivered?"disabled":""}>
-              ${isDelivered ? "Yakunlangan" : "Keyingi bosqich \u2192"}
-            </button>
-          </div>
-        `;
-      }
+      const newBadge = hasUnseen ? `<span class="ac-new-badge"><i class="fa-solid fa-circle-exclamation"></i> Yangi</span>` : "";
+      const ordersHTML = isExpanded ? `<div class="ac-orders-list">${buildCustomerOrdersHTML(custOrders)}</div>` : "";
 
       return `
-        <div class="admin-customer-row">
+        <div class="admin-customer-row ${isExpanded?'expanded':''}" data-digits="${digits}">
           <div class="ac-top">
-            <span class="ac-name">${c.name || "Noma'lum"}</span>
-            <span class="ac-count">${c.orderCount || 0} marta buyurtma</span>
+            <div class="ac-name-wrap">
+              <span class="ac-name">${c.name || "Noma'lum"}</span>
+              ${newBadge}
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="ac-count">${c.orderCount || 0} marta</span>
+              <i class="fa-solid fa-chevron-down ac-chevron"></i>
+            </div>
           </div>
           <div class="ac-phone"><i class="fa-solid fa-phone"></i> ${c.phone || "-"}</div>
           ${tgLabel}
-          ${statusHTML}
+          ${ordersHTML}
         </div>
       `;
     }).join("");
 
+    wrap.querySelectorAll(".admin-customer-row").forEach(row=>{
+      row.addEventListener("click", (e)=>{
+        if(e.target.closest("[data-advance]")) return;
+        const digits = row.getAttribute("data-digits");
+        if(expandedCustomerDigits===digits){
+          expandedCustomerDigits = null;
+          renderAdminCustomerList();
+        } else {
+          expandedCustomerDigits = digits;
+          const custOrders = allOrders.filter(o=>o.phoneDigits===digits);
+          adminMarkCustomerOrdersSeen(custOrders).then(()=> renderAdminCustomerList(digits));
+        }
+      });
+    });
+
     wrap.querySelectorAll("[data-advance]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+      btn.addEventListener("click", (e)=>{
+        e.stopPropagation();
         const orderId = btn.getAttribute("data-advance");
         const status = btn.getAttribute("data-status");
-        adminAdvanceOrderStatus(orderId, status);
+        const phoneDigits = btn.getAttribute("data-phone");
+        adminAdvanceOrderStatus(orderId, status, phoneDigits);
       });
     });
   }).catch(err=>{
