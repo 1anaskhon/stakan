@@ -739,6 +739,24 @@
   </div>
 </div>
 
+<!-- ======================= RATING PROMPT MODAL ======================= -->
+<div class="modal-overlay" id="ratingPromptModal">
+  <div class="modal-box" style="max-width:360px; text-align:center;">
+    <div class="brand-mark" style="margin:0 auto 14px;">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <rect x="16" y="14" width="68" height="15" rx="7.5" fill="#ffcc00"/>
+        <path d="M22 29 L78 29 L69 90 Q50 98 31 90 Z" fill="#ffcc00"/>
+        <rect x="32" y="45" width="36" height="27" rx="4" fill="#12161c"/>
+        <path d="M50 50 C46 54 46 60 50 64 C54 60 54 54 50 50 Z" fill="#ffdb4d"/>
+      </svg>
+    </div>
+    <h2 data-i18n="toastOrderSuccess">Buyurtmangiz qabul qilindi!</h2>
+    <p class="sub" data-i18n="rateUsPrompt" style="margin-bottom:16px;">Xizmatimizni baholang</p>
+    <div class="rating-stars" id="ratingPromptStars" style="justify-content:center; margin-bottom:18px;"></div>
+    <button class="btn btn-ghost btn-block" id="ratingPromptSkip" type="button" data-i18n="skipLabel">O'tkazib yuborish</button>
+  </div>
+</div>
+
 <!-- ======================= MODIFIER PICKER MODAL ======================= -->
 <div class="modal-overlay" id="modifierModal">
   <div class="modal-box modifier-sheet-box">
@@ -1082,7 +1100,7 @@ const I18N = {
     heroRatingLabel:"(Mijozlar bahosi)", modifierSub:"Xohlagan qo'shimchalarni tanlang", modifierAddBtn:"Savatga qo'shish",
     scheduleNow:"Tezkor (hozir)", scheduleLater:"Vaqtni tanlash", scheduleTimeLabel:"Yetkazish vaqti",
     statusAccepted:"Qabul qilindi", statusPreparing:"Tayyorlanmoqda", statusCourier:"Kuryer yo'lda", statusDelivered:"Yetkazildi",
-    rateUsPrompt:"Xizmatimizni baholang", thanksForRating:"Rahmat! Bahoyingiz qabul qilindi"
+    rateUsPrompt:"Xizmatimizni baholang", thanksForRating:"Rahmat! Bahoyingiz qabul qilindi", skipLabel:"O'tkazib yuborish"
   },
   ru:{
     navHome:"\u{413}\u{43b}\u{430}\u{432}\u{43d}\u{430}\u{44f}", navMenu:"\u{41c}\u{435}\u{43d}\u{44e}", navCart:"\u{41a}\u{43e}\u{440}\u{437}\u{438}\u{43d}\u{430}", navHistory:"\u{418}\u{441}\u{442}\u{43e}\u{440}\u{438}\u{44f}",
@@ -1120,7 +1138,7 @@ const I18N = {
     heroRatingLabel:"(\u{41e}\u{446}\u{435}\u{43d}\u{43a}\u{430} \u{43a}\u{43b}\u{438}\u{435}\u{43d}\u{442}\u{43e}\u{432})", modifierSub:"\u{412}\u{44b}\u{431}\u{435}\u{440}\u{438}\u{442}\u{435} \u{43d}\u{443}\u{436}\u{43d}\u{44b}\u{435} \u{434}\u{43e}\u{431}\u{430}\u{432}\u{43a}\u{438}", modifierAddBtn:"\u{414}\u{43e}\u{431}\u{430}\u{432}\u{438}\u{442}\u{44c} \u{432} \u{43a}\u{43e}\u{440}\u{437}\u{438}\u{43d}\u{443}",
     scheduleNow:"\u{411}\u{44b}\u{441}\u{442}\u{440}\u{43e} (\u{441}\u{435}\u{439}\u{447}\u{430}\u{441})", scheduleLater:"\u{412}\u{44b}\u{431}\u{440}\u{430}\u{442}\u{44c} \u{432}\u{440}\u{435}\u{43c}\u{44f}", scheduleTimeLabel:"\u{412}\u{440}\u{435}\u{43c}\u{44f} \u{434}\u{43e}\u{441}\u{442}\u{430}\u{432}\u{43a}\u{438}",
     statusAccepted:"\u{41f}\u{440}\u{438}\u{43d}\u{44f}\u{442}", statusPreparing:"\u{413}\u{43e}\u{442}\u{43e}\u{432}\u{438}\u{442}\u{441}\u{44f}", statusCourier:"\u{41a}\u{443}\u{440}\u{44c}\u{435}\u{440} \u{432} \u{43f}\u{443}\u{442}\u{438}", statusDelivered:"\u{414}\u{43e}\u{441}\u{442}\u{430}\u{432}\u{43b}\u{435}\u{43d}",
-    rateUsPrompt:"\u{41e}\u{446}\u{435}\u{43d}\u{438}\u{442}\u{435} \u{43d}\u{430}\u{448} \u{441}\u{435}\u{440}\u{432}\u{438}\u{441}", thanksForRating:"\u{421}\u{43f}\u{430}\u{441}\u{438}\u{431}\u{43e}! \u{412}\u{430}\u{448}\u{430} \u{43e}\u{446}\u{435}\u{43d}\u{43a}\u{430} \u{43f}\u{440}\u{438}\u{43d}\u{44f}\u{442}\u{430}"
+    rateUsPrompt:"\u{41e}\u{446}\u{435}\u{43d}\u{438}\u{442}\u{435} \u{43d}\u{430}\u{448} \u{441}\u{435}\u{440}\u{432}\u{438}\u{441}", thanksForRating:"\u{421}\u{43f}\u{430}\u{441}\u{438}\u{431}\u{43e}! \u{412}\u{430}\u{448}\u{430} \u{43e}\u{446}\u{435}\u{43d}\u{43a}\u{430} \u{43f}\u{440}\u{438}\u{43d}\u{44f}\u{442}\u{430}", skipLabel:"\u{041f}\u{0440}\u{043e}\u{043f}\u{0443}\u{0441}\u{0442}\u{0438}\u{0442}\u{044c}"
   },
   en:{
     navHome:"Home", navMenu:"Menu", navCart:"Cart", navHistory:"History",
@@ -1158,7 +1176,7 @@ const I18N = {
     heroRatingLabel:"(Customer rating)", modifierSub:"Choose your add-ons", modifierAddBtn:"Add to cart",
     scheduleNow:"Fast (now)", scheduleLater:"Choose time", scheduleTimeLabel:"Delivery time",
     statusAccepted:"Accepted", statusPreparing:"Preparing", statusCourier:"Courier on the way", statusDelivered:"Delivered",
-    rateUsPrompt:"Rate our service", thanksForRating:"Thanks! Your rating was submitted"
+    rateUsPrompt:"Rate our service", thanksForRating:"Thanks! Your rating was submitted", skipLabel:"Skip"
   }
 };
 
@@ -1223,12 +1241,13 @@ const PRODUCTS = [
    BARCHA MIJOZLARGA REAL VAQTDA avtomatik yetib boradi.
 ========================================================= */
 const firebaseConfig = {
-  apiKey: "AIzaSyAU9dUq8YNrLjNL0QXGeQM6pj-t69VMAVk",
-  authDomain: "stakan-cafe.firebaseapp.com",
-  projectId: "stakan-cafe",
-  storageBucket: "stakan-cafe.firebasestorage.app",
-  messagingSenderId: "223817742166",
-  appId: "1:223817742166:web:b0b947d67940c03e38c8f7"
+  apiKey: "AIzaSyCopquOlM-EHyzjmYLS-d9JkA5CBaLwtpw",
+  authDomain: "stakancafe-3aafd.firebaseapp.com",
+  projectId: "stakancafe-3aafd",
+  storageBucket: "stakancafe-3aafd.firebasestorage.app",
+  messagingSenderId: "896484238927",
+  appId: "1:896484238927:web:bdfb55a445982ca3a22c3a",
+  measurementId: "G-22H6CHS35B"
 };
 const PRODUCTS_COLLECTION = "products";
 const CUSTOMERS_COLLECTION = "customers";
@@ -2180,6 +2199,37 @@ document.getElementById('openMapBtn').addEventListener('click', openMapModal);
 document.getElementById('closeMapBtn').addEventListener('click', closeMapModal);
 document.getElementById('mapModal').addEventListener('click', (e)=>{ if(e.target.id==='mapModal') closeMapModal(); });
 
+/* =========================================================
+   RATING PROMPT - buyurtma berilgach, bosh sahifada darhol
+   chiqadigan baholash oynasi (yetkazilishini kutmasdan).
+========================================================= */
+function openRatingPrompt(orderId){
+  const starsEl = document.getElementById("ratingPromptStars");
+  starsEl.innerHTML = [1,2,3,4,5].map(n=>`<i class="fa-solid fa-star" data-star="${n}"></i>`).join("");
+  const stars = starsEl.querySelectorAll("i");
+
+  stars.forEach(star=>{
+    star.addEventListener("mouseenter", ()=>{
+      const n = parseInt(star.getAttribute("data-star"));
+      stars.forEach(s=> s.classList.toggle("filled", parseInt(s.getAttribute("data-star"))<=n));
+    });
+    star.addEventListener("click", async ()=>{
+      const n = parseInt(star.getAttribute("data-star"));
+      const ok = await submitRating(orderId, n);
+      closeRatingPrompt();
+      if(ok) showToast(t("thanksForRating"), "success");
+    });
+  });
+  starsEl.addEventListener("mouseleave", ()=>{
+    stars.forEach(s=> s.classList.remove("filled"));
+  });
+
+  document.getElementById("ratingPromptModal").classList.add("open");
+}
+function closeRatingPrompt(){ document.getElementById("ratingPromptModal").classList.remove("open"); }
+document.getElementById("ratingPromptSkip").addEventListener("click", closeRatingPrompt);
+document.getElementById("ratingPromptModal").addEventListener("click", (e)=>{ if(e.target.id==="ratingPromptModal") closeRatingPrompt(); });
+
 document.getElementById('useMyLocationBtn').addEventListener('click', ()=>{
   if(!navigator.geolocation){ showToast(t('toastGeoUnsupported'), 'error'); return; }
   const preview = document.getElementById('mapAddressPreview');
@@ -2331,7 +2381,8 @@ async function submitOrder(){
 
   if(saveResult.saved){
     showToast(t("toastOrderSuccess"), "success", t("toastOrderSuccessSub"));
-    goToView("tracker");
+    goToView("home");
+    openRatingPrompt(order.id);
   } else {
     showToast(t("toastOrderSuccess"), "success", "Buyurtma Telegram'ga yuborildi, lekin jonli kuzatuv vaqtincha ishlamayapti (internetni tekshiring).");
     goToView("home");
@@ -2544,19 +2595,17 @@ function paintTrackerOrder(order){
   const dateStr = dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ", {day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
 
   let ratingHTML = "";
-  if(order.status==="delivered"){
-    if(order.rating){
-      ratingHTML = `<div class="rating-box"><div class="rating-done"><i class="fa-solid fa-circle-check"></i> ${t('thanksForRating')}</div></div>`;
-    } else {
-      ratingHTML = `
-        <div class="rating-box">
-          <p>${t('rateUsPrompt')}</p>
-          <div class="rating-stars" id="ratingStars">
-            ${[1,2,3,4,5].map(n=>`<i class="fa-solid fa-star" data-star="${n}"></i>`).join("")}
-          </div>
+  if(order.rating){
+    ratingHTML = `<div class="rating-box"><div class="rating-done"><i class="fa-solid fa-circle-check"></i> ${t('thanksForRating')}</div></div>`;
+  } else {
+    ratingHTML = `
+      <div class="rating-box">
+        <p>${t('rateUsPrompt')}</p>
+        <div class="rating-stars" id="ratingStars">
+          ${[1,2,3,4,5].map(n=>`<i class="fa-solid fa-star" data-star="${n}"></i>`).join("")}
         </div>
-      `;
-    }
+      </div>
+    `;
   }
 
   content.innerHTML = `
@@ -2575,7 +2624,7 @@ function paintTrackerOrder(order){
     </div>
   `;
 
-  if(order.status==="delivered" && !order.rating){
+  if(!order.rating){
     const starsEl = document.getElementById("ratingStars");
     const stars = starsEl.querySelectorAll("i");
     stars.forEach(star=>{
@@ -2666,7 +2715,7 @@ listenToAdminConfig();
 
 function getAdminPassword(){
   if(adminPasswordCache) return adminPasswordCache;
-  return localStorage.getItem(ADMIN_PASSWORD_KEY) || "admin";
+  return localStorage.getItem(ADMIN_PASSWORD_KEY) || "2223";
 }
 function setAdminPassword(pwd){
   localStorage.setItem(ADMIN_PASSWORD_KEY, pwd);
