@@ -1056,10 +1056,15 @@
 const CONFIG = {
   TELEGRAM_BOT_TOKEN: "8319111650:AAFXe2cN09v4-emi0Jln8mFkdtuNJ7DIiVQ",
   TELEGRAM_CHAT_ID: "7583392349",
-  CURRENCY: "so'm",
-  DELIVERY_FEE: 15000
+  TELEGRAM_CHAT_ID_2: "1424644626",
+  CAFE_PHONE: "+998 90 123 45 67",
+  CAFE_LAT: 41.311081,
+  CAFE_LNG: 69.240562,
+  WORKING_HOURS: { start: "08:00", end: "23:00" },
+  DELIVERY_FEE: 15000,
+  FREE_DELIVERY_MIN: 150000,
+  PICKUP_DISCOUNT: 0.10
 };
-
 /* =========================================================
    I18N
 ========================================================= */
@@ -2427,54 +2432,63 @@ function buildTelegramMarkdown(order){
   return lines.join("\n");
 }
 
-async function sendToTelegram(markdownText){
-  if(!CONFIG.TELEGRAM_BOT_TOKEN || CONFIG.TELEGRAM_BOT_TOKEN==="YOUR_BOT_TOKEN_HERE"){
-    console.warn("Telegram bot token sozlanmagan. CONFIG obyektida TELEGRAM_BOT_TOKEN va TELEGRAM_CHAT_ID ni to'ldiring.");
-    return false;
-  }
-  try{
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
-    const res = await fetch(url, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        chat_id: CONFIG.TELEGRAM_CHAT_ID,
-        text: markdownText,
-        parse_mode: "Markdown"
-      })
-    });
-    if(!res.ok) throw new Error("Telegram API error: " + res.status);
-    return true;
-  }catch(err){
-    console.error("Telegram yuborishda xatolik:", err);
-    showToast(t("toastTelegramFail"), "error");
-    return false;
-  }
-}
+async function sendToTelegram(text){
+  if(!CONFIG.TELEGRAM_BOT_TOKEN) return false;
+  const chatIds = [CONFIG.TELEGRAM_CHAT_ID, CONFIG.TELEGRAM_CHAT_ID_2].filter(Boolean);
+  let success = true;
 
+  for (const chatId of chatIds) {
+    try{
+      const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`;
+      const res = await fetch(url, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: text,
+          parse_mode: "Markdown"
+        })
+      });
+      if(!res.ok) success = false;
+    }catch(err){
+      console.error("Telegram yuborishda xatolik (" + chatId + "):", err);
+      success = false;
+    }
+  }
+
+  if(!success) {
+    showToast(t("toastTelegramFail"), "error");
+  }
+  return success;
+}
 /* Mijoz xaritadan tanlagan joylashuvni Telegram botga
    haqiqiy metka (native location pin) sifatida yuboradi. */
 async function sendLocationToTelegram(loc){
   if(!CONFIG.TELEGRAM_BOT_TOKEN || !loc) return false;
-  try{
-    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendLocation`;
-    const res = await fetch(url, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        chat_id: CONFIG.TELEGRAM_CHAT_ID,
-        latitude: loc.lat,
-        longitude: loc.lng
-      })
-    });
-    if(!res.ok) throw new Error("Telegram sendLocation error: " + res.status);
-    return true;
-  }catch(err){
-    console.error("Lokatsiya yuborishda xatolik:", err);
-    return false;
-  }
-}
+  const chatIds = [CONFIG.TELEGRAM_CHAT_ID, CONFIG.TELEGRAM_CHAT_ID_2].filter(Boolean);
+  let success = true;
 
+  for (const chatId of chatIds) {
+    try{
+      const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendLocation`;
+      const res = await fetch(url, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+          chat_id: chatId,
+          latitude: loc.lat,
+          longitude: loc.lng
+        })
+      });
+      if(!res.ok) success = false;
+    }catch(err){
+      console.error("Lokatsiya yuborishda xatolik (" + chatId + "):", err);
+      success = false;
+    }
+  }
+
+  return success;
+}
 /* =========================================================
    ORDER HISTORY - endi telefon raqami bo'yicha SERVERDA
    (Firestore, customers/{telefon}.orders) saqlanadi. Shu brauzer
