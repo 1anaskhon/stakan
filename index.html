@@ -879,7 +879,7 @@
             <button class="btn btn-primary" data-view="menu"><i class="fa-solid fa-bag-shopping"></i><span data-i18n="heroCta">Buyurtma berish</span></button>
           </div>
           <div class="hero-rating" id="heroRating" style="display:none;">
-            <i class="fa-solid fa-star"></i> <b id="heroRatingValue">0</b>/5 <span data-i18n="heroRatingLabel">(Mijozlar bahosi)</span>
+            <i class="fa-solid fa-star"></i> <b id="heroRatingValue">0</b>/5 (<span id="heroRatingCount">0</span> <span data-i18n="heroRatingLabel">mijoz bahosi</span>)
           </div>
           <div class="hero-stats">
             <div class="hero-stat"><b>15+</b><span data-i18n="statDishes">Xil taomlar</span></div>
@@ -1063,7 +1063,8 @@ const CONFIG = {
   WORKING_HOURS: { start: "08:00", end: "23:00" },
   DELIVERY_FEE: 15000,
   FREE_DELIVERY_MIN: 150000,
-  PICKUP_DISCOUNT: 0.10
+  PICKUP_DISCOUNT: 0.10,
+  CURRENCY: "so'm"
 };
 /* =========================================================
    I18N
@@ -1102,9 +1103,9 @@ const I18N = {
     toastLocationRequired:"Iltimos, xaritadan joylashuvni tanlang", toastPhoneInvalid:"Telefon raqamni to'liq kiriting",
     navTracker:"Mening buyurtmam", trackerTitle:"Mening buyurtmam", trackerSub:"Buyurtmangiz holatini kuzatib boring",
     trackerEmptyTitle:"Faol buyurtma yo'q", trackerEmptyText:"Buyurtma bersangiz, uning holati shu yerda ko'rinadi",
-    heroRatingLabel:"(Mijozlar bahosi)", modifierSub:"Xohlagan qo'shimchalarni tanlang", modifierAddBtn:"Savatga qo'shish",
+    heroRatingLabel:"mijoz bahosi", modifierSub:"Xohlagan qo'shimchalarni tanlang", modifierAddBtn:"Savatga qo'shish",
     scheduleNow:"Tezkor (hozir)", scheduleLater:"Vaqtni tanlash", scheduleTimeLabel:"Yetkazish vaqti",
-    statusAccepted:"Qabul qilindi", statusPreparing:"Tayyorlanmoqda", statusCourier:"Kuryer yo'lda", statusDelivered:"Yetkazildi",
+    statusAccepted:"Qabul qilindi", statusPreparing:"Tayyorlanmoqda", statusCourier:"Kuryer yo'lda", statusDelivered:"Yetkazildi", statusReady:"Buyurtma tayyor", statusPickedUp:"Buyurtma olib ketildi",
     rateUsPrompt:"Xizmatimizni baholang", thanksForRating:"Rahmat! Bahoyingiz qabul qilindi", skipLabel:"O'tkazib yuborish"
   },
   ru:{
@@ -1140,9 +1141,9 @@ const I18N = {
     toastLocationRequired:"\u{41f}\u{43e}\u{436}\u{430}\u{43b}\u{443}\u{439}\u{441}\u{442}\u{430}, \u{432}\u{44b}\u{431}\u{435}\u{440}\u{438}\u{442}\u{435} \u{43c}\u{435}\u{441}\u{442}\u{43e}\u{43f}\u{43e}\u{43b}\u{43e}\u{436}\u{435}\u{43d}\u{438}\u{435} \u{43d}\u{430} \u{43a}\u{430}\u{440}\u{442}\u{435}", toastPhoneInvalid:"\u{412}\u{432}\u{435}\u{434}\u{438}\u{442}\u{435} \u{43d}\u{43e}\u{43c}\u{435}\u{440} \u{442}\u{435}\u{43b}\u{435}\u{444}\u{43e}\u{43d}\u{430} \u{43f}\u{43e}\u{43b}\u{43d}\u{43e}\u{441}\u{442}\u{44c}\u{44e}",
     navTracker:"\u{41c}\u{43e}\u{439} \u{437}\u{430}\u{43a}\u{430}\u{437}", trackerTitle:"\u{41c}\u{43e}\u{439} \u{437}\u{430}\u{43a}\u{430}\u{437}", trackerSub:"\u{421}\u{43b}\u{435}\u{434}\u{438}\u{442}\u{435} \u{437}\u{430} \u{441}\u{442}\u{430}\u{442}\u{443}\u{441}\u{43e}\u{43c} \u{432}\u{430}\u{448}\u{435}\u{433}\u{43e} \u{437}\u{430}\u{43a}\u{430}\u{437}\u{430}",
     trackerEmptyTitle:"\u{41d}\u{435}\u{442} \u{430}\u{43a}\u{442}\u{438}\u{432}\u{43d}\u{43e}\u{433}\u{43e} \u{437}\u{430}\u{43a}\u{430}\u{437}\u{430}", trackerEmptyText:"\u{421}\u{434}\u{435}\u{43b}\u{430}\u{439}\u{442}\u{435} \u{437}\u{430}\u{43a}\u{430}\u{437}, \u{438} \u{435}\u{433}\u{43e} \u{441}\u{442}\u{430}\u{442}\u{443}\u{441} \u{43f}\u{43e}\u{44f}\u{432}\u{438}\u{442}\u{441}\u{44f} \u{437}\u{434}\u{435}\u{441}\u{44c}",
-    heroRatingLabel:"(\u{41e}\u{446}\u{435}\u{43d}\u{43a}\u{430} \u{43a}\u{43b}\u{438}\u{435}\u{43d}\u{442}\u{43e}\u{432})", modifierSub:"\u{412}\u{44b}\u{431}\u{435}\u{440}\u{438}\u{442}\u{435} \u{43d}\u{443}\u{436}\u{43d}\u{44b}\u{435} \u{434}\u{43e}\u{431}\u{430}\u{432}\u{43a}\u{438}", modifierAddBtn:"\u{414}\u{43e}\u{431}\u{430}\u{432}\u{438}\u{442}\u{44c} \u{432} \u{43a}\u{43e}\u{440}\u{437}\u{438}\u{43d}\u{443}",
+    heroRatingLabel:"\u{43e}\u{446}\u{435}\u{43d}\u{43e}\u{43a} \u{43a}\u{43b}\u{438}\u{435}\u{43d}\u{442}\u{43e}\u{432}", modifierSub:"\u{412}\u{44b}\u{431}\u{435}\u{440}\u{438}\u{442}\u{435} \u{43d}\u{443}\u{436}\u{43d}\u{44b}\u{435} \u{434}\u{43e}\u{431}\u{430}\u{432}\u{43a}\u{438}", modifierAddBtn:"\u{414}\u{43e}\u{431}\u{430}\u{432}\u{438}\u{442}\u{44c} \u{432} \u{43a}\u{43e}\u{440}\u{437}\u{438}\u{43d}\u{443}",
     scheduleNow:"\u{411}\u{44b}\u{441}\u{442}\u{440}\u{43e} (\u{441}\u{435}\u{439}\u{447}\u{430}\u{441})", scheduleLater:"\u{412}\u{44b}\u{431}\u{440}\u{430}\u{442}\u{44c} \u{432}\u{440}\u{435}\u{43c}\u{44f}", scheduleTimeLabel:"\u{412}\u{440}\u{435}\u{43c}\u{44f} \u{434}\u{43e}\u{441}\u{442}\u{430}\u{432}\u{43a}\u{438}",
-    statusAccepted:"\u{41f}\u{440}\u{438}\u{43d}\u{44f}\u{442}", statusPreparing:"\u{413}\u{43e}\u{442}\u{43e}\u{432}\u{438}\u{442}\u{441}\u{44f}", statusCourier:"\u{41a}\u{443}\u{440}\u{44c}\u{435}\u{440} \u{432} \u{43f}\u{443}\u{442}\u{438}", statusDelivered:"\u{414}\u{43e}\u{441}\u{442}\u{430}\u{432}\u{43b}\u{435}\u{43d}",
+    statusAccepted:"\u{41f}\u{440}\u{438}\u{43d}\u{44f}\u{442}", statusPreparing:"\u{413}\u{43e}\u{442}\u{43e}\u{432}\u{438}\u{442}\u{441}\u{44f}", statusCourier:"\u{41a}\u{443}\u{440}\u{44c}\u{435}\u{440} \u{432} \u{43f}\u{443}\u{442}\u{438}", statusDelivered:"\u{414}\u{43e}\u{441}\u{442}\u{430}\u{432}\u{43b}\u{435}\u{43d}", statusReady:"\u{417}\u{430}\u{43a}\u{430}\u{437} \u{433}\u{43e}\u{442}\u{43e}\u{432}", statusPickedUp:"\u{417}\u{430}\u{43a}\u{430}\u{437} \u{437}\u{430}\u{431}\u{440}\u{430}\u{43d}",
     rateUsPrompt:"\u{41e}\u{446}\u{435}\u{43d}\u{438}\u{442}\u{435} \u{43d}\u{430}\u{448} \u{441}\u{435}\u{440}\u{432}\u{438}\u{441}", thanksForRating:"\u{421}\u{43f}\u{430}\u{441}\u{438}\u{431}\u{43e}! \u{412}\u{430}\u{448}\u{430} \u{43e}\u{446}\u{435}\u{43d}\u{43a}\u{430} \u{43f}\u{440}\u{438}\u{43d}\u{44f}\u{442}\u{430}", skipLabel:"\u{041f}\u{0440}\u{043e}\u{043f}\u{0443}\u{0441}\u{0442}\u{0438}\u{0442}\u{044c}"
   },
   en:{
@@ -1178,9 +1179,9 @@ const I18N = {
     toastLocationRequired:"Please choose a location on the map", toastPhoneInvalid:"Please enter the full phone number",
     navTracker:"My order", trackerTitle:"My order", trackerSub:"Track your order status",
     trackerEmptyTitle:"No active order", trackerEmptyText:"Place an order and its status will appear here",
-    heroRatingLabel:"(Customer rating)", modifierSub:"Choose your add-ons", modifierAddBtn:"Add to cart",
+    heroRatingLabel:"customer ratings", modifierSub:"Choose your add-ons", modifierAddBtn:"Add to cart",
     scheduleNow:"Fast (now)", scheduleLater:"Choose time", scheduleTimeLabel:"Delivery time",
-    statusAccepted:"Accepted", statusPreparing:"Preparing", statusCourier:"Courier on the way", statusDelivered:"Delivered",
+    statusAccepted:"Accepted", statusPreparing:"Preparing", statusCourier:"Courier on the way", statusDelivered:"Delivered", statusReady:"Order ready", statusPickedUp:"Picked up",
     rateUsPrompt:"Rate our service", thanksForRating:"Thanks! Your rating was submitted", skipLabel:"Skip"
   }
 };
@@ -1356,8 +1357,11 @@ function extractPhoneDigits(phone){
   return (phone || "").replace(/\D/g,"").replace(/^998/,"");
 }
 
-const STATUS_STEPS = ["accepted","preparing","courier","delivered"];
-const STATUS_I18N_KEYS = {accepted:"statusAccepted", preparing:"statusPreparing", courier:"statusCourier", delivered:"statusDelivered"};
+const STATUS_STEPS_DELIVERY = ["accepted","preparing","courier","delivered"];
+const STATUS_STEPS_PICKUP = ["accepted","preparing","ready","picked_up"];
+const STATUS_STEPS = STATUS_STEPS_DELIVERY;
+const STATUS_I18N_KEYS = {accepted:"statusAccepted", preparing:"statusPreparing", courier:"statusCourier", delivered:"statusDelivered", ready:"statusReady", picked_up:"statusPickedUp"};
+function getStatusSteps(order){ return (order && order.deliveryType==="pickup") ? STATUS_STEPS_PICKUP : STATUS_STEPS_DELIVERY; }
 const LAST_ORDER_ID_KEY = "Stakan cafe_last_order_id";
 
 function saveOrderLocalFallback(order){
@@ -1442,10 +1446,13 @@ function listenToRatings(){
     db.collection(CONFIG_COLLECTION).doc("ratings").onSnapshot(doc=>{
       const box = document.getElementById("heroRating");
       const valEl = document.getElementById("heroRatingValue");
+      const countEl = document.getElementById("heroRatingCount");
       if(!box || !valEl) return;
       if(doc.exists && doc.data().count>0){
         const avg = doc.data().sum / doc.data().count;
-        valEl.textContent = avg.toFixed(1);
+        const avgStr = avg.toFixed(1);
+        valEl.textContent = state.lang==="en" ? avgStr : avgStr.replace(".", ",");
+        if(countEl) countEl.textContent = doc.data().count;
         box.style.display = "flex";
       } else {
         box.style.display = "none";
@@ -2387,7 +2394,6 @@ async function submitOrder(){
   if(saveResult.saved){
     showToast(t("toastOrderSuccess"), "success", t("toastOrderSuccessSub"));
     goToView("home");
-    openRatingPrompt(order.id);
   } else {
     showToast(t("toastOrderSuccess"), "success", "Buyurtma Telegram'ga yuborildi, lekin jonli kuzatuv vaqtincha ishlamayapti (internetni tekshiring).");
     goToView("home");
@@ -2590,13 +2596,15 @@ function paintTrackerOrder(order){
   empty.style.display = "none";
   content.style.display = "block";
 
-  const stepIdx = STATUS_STEPS.indexOf(order.status || "accepted");
-  const fillPct = stepIdx<=0 ? 0 : (stepIdx/(STATUS_STEPS.length-1))*84;
+  const orderSteps = getStatusSteps(order);
+  const stepIdx = orderSteps.indexOf(order.status || "accepted");
+  const fillPct = stepIdx<=0 ? 0 : (stepIdx/(orderSteps.length-1))*84;
 
-  const stepsHTML = STATUS_STEPS.map((s,i)=>{
+  const STEP_ICONS = {accepted:"fa-clipboard-check", preparing:"fa-kitchen-set", courier:"fa-motorcycle", delivered:"fa-house-flag", ready:"fa-bell-concierge", picked_up:"fa-bag-shopping"};
+  const stepsHTML = orderSteps.map((s,i)=>{
     const done = i<stepIdx;
     const active = i===stepIdx;
-    const icon = s==="accepted" ? "fa-clipboard-check" : s==="preparing" ? "fa-kitchen-set" : s==="courier" ? "fa-motorcycle" : "fa-house-flag";
+    const icon = STEP_ICONS[s] || "fa-circle";
     return `
       <div class="ot-step ${done?'done':''} ${active?'active':''}">
         <div class="ot-dot"><i class="fa-solid ${done?'fa-check':icon}"></i></div>
@@ -2608,10 +2616,11 @@ function paintTrackerOrder(order){
   const dt = new Date(order.date);
   const dateStr = dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ", {day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
 
+  const orderIsFinal = order.status==="delivered" || order.status==="picked_up";
   let ratingHTML = "";
   if(order.rating){
     ratingHTML = `<div class="rating-box"><div class="rating-done"><i class="fa-solid fa-circle-check"></i> ${t('thanksForRating')}</div></div>`;
-  } else {
+  } else if(orderIsFinal){
     ratingHTML = `
       <div class="rating-box">
         <p>${t('rateUsPrompt')}</p>
@@ -2638,7 +2647,7 @@ function paintTrackerOrder(order){
     </div>
   `;
 
-  if(!order.rating){
+  if(!order.rating && orderIsFinal){
     const starsEl = document.getElementById("ratingStars");
     const stars = starsEl.querySelectorAll("i");
     stars.forEach(star=>{
@@ -2982,10 +2991,11 @@ function fetchAllOrders(){
   });
 }
 
-async function adminAdvanceOrderStatus(orderId, currentStatus, phoneDigits){
-  const idx = STATUS_STEPS.indexOf(currentStatus);
-  if(idx===-1 || idx>=STATUS_STEPS.length-1) return;
-  const nextStatus = STATUS_STEPS[idx+1];
+async function adminAdvanceOrderStatus(orderId, currentStatus, phoneDigits, deliveryType){
+  const steps = deliveryType==="pickup" ? STATUS_STEPS_PICKUP : STATUS_STEPS_DELIVERY;
+  const idx = steps.indexOf(currentStatus);
+  if(idx===-1 || idx>=steps.length-1) return;
+  const nextStatus = steps[idx+1];
   try{
     await db.collection(ORDERS_COLLECTION).doc(String(orderId)).update({status: nextStatus});
     renderAdminCustomerList(phoneDigits);
@@ -3025,7 +3035,8 @@ function buildCustomerOrdersHTML(custOrders){
   const newestFirst = numbered.slice().sort((a,b)=> b.id - a.id);
 
   return newestFirst.map(order=>{
-    const isActive = order.status!=="delivered";
+    const isActive = order.status!=="delivered" && order.status!=="picked_up";
+    const orderSteps = getStatusSteps(order);
     const label = STATUS_I18N_KEYS[order.status] ? t(STATUS_I18N_KEYS[order.status]) : order.status;
     const deliveryLabel = order.deliveryType==="delivery"
       ? `<span><i class="fa-solid fa-motorcycle"></i> Yetkazib berish${order.location && order.location.address ? ": "+order.location.address : ""}</span>`
@@ -3034,14 +3045,14 @@ function buildCustomerOrdersHTML(custOrders){
       ? `<span><i class="fa-regular fa-clock"></i> ${order.scheduledTime}ga</span>` : "";
 
     const advanceBtn = isActive
-      ? `<button data-advance="${order.id}" data-status="${order.status}" data-phone="${order.phoneDigits}" style="margin-top:8px; font-size:11px; font-weight:700; padding:6px 12px; border-radius:9px; background:var(--yellow); color:#171308;">Keyingi bosqich: ${STATUS_I18N_KEYS[STATUS_STEPS[STATUS_STEPS.indexOf(order.status)+1]] ? t(STATUS_I18N_KEYS[STATUS_STEPS[STATUS_STEPS.indexOf(order.status)+1]]) : ''} \u2192</button>`
+      ? `<button data-advance="${order.id}" data-status="${order.status}" data-phone="${order.phoneDigits}" data-delivery-type="${order.deliveryType}" style="margin-top:8px; font-size:11px; font-weight:700; padding:6px 12px; border-radius:9px; background:var(--yellow); color:#171308;">Keyingi bosqich: ${STATUS_I18N_KEYS[orderSteps[orderSteps.indexOf(order.status)+1]] ? t(STATUS_I18N_KEYS[orderSteps[orderSteps.indexOf(order.status)+1]]) : ''} \u2192</button>`
       : "";
 
     return `
       <div class="ac-order-card ${isActive?'is-active':''}">
         <div class="ac-order-head">
           <span class="ac-order-num">#${order.orderIndex}-buyurtma</span>
-          <span class="aos-badge ${order.status==='delivered'?'delivered':''}">${label}</span>
+          <span class="aos-badge ${(order.status==='delivered'||order.status==='picked_up')?'delivered':''}">${label}</span>
         </div>
         <div class="ac-order-date"><i class="fa-regular fa-clock"></i> ${formatOrderDateTime(order.date)}</div>
         <div class="ac-order-items" style="margin-top:8px;">${orderItemsSummary(order)}</div>
@@ -3130,7 +3141,8 @@ function renderAdminCustomerList(keepExpanded){
         const orderId = btn.getAttribute("data-advance");
         const status = btn.getAttribute("data-status");
         const phoneDigits = btn.getAttribute("data-phone");
-        adminAdvanceOrderStatus(orderId, status, phoneDigits);
+        const deliveryType = btn.getAttribute("data-delivery-type");
+        adminAdvanceOrderStatus(orderId, status, phoneDigits, deliveryType);
       });
     });
   }).catch(err=>{
