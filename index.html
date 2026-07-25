@@ -592,6 +592,8 @@
     backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; padding:20px;
   }
   .modal-overlay.open{display:flex; animation:fadeIn .3s var(--ease);}
+  #mapModal{z-index:210;}
+  #infoModal{z-index:205;}
   @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
   .modal-box{
     background:var(--card); border:1px solid var(--border-strong); border-radius:24px; padding:30px 26px;
@@ -652,8 +654,9 @@
   .admin-header{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border); flex-shrink:0;}
   .admin-header h2{font-size:17px; display:flex; align-items:center; gap:9px;}
   .admin-header .admin-header-actions{display:flex; gap:8px;}
-  .admin-tabs{display:flex; gap:8px; padding:0 22px 14px; border-bottom:1px solid var(--border); flex-shrink:0;}
-  .admin-tab-btn{padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--muted); background:var(--card-2); border:1px solid var(--border); display:flex; align-items:center; gap:7px; transition:.2s;}
+  .admin-tabs{display:flex; gap:8px; padding:0 22px 14px; border-bottom:1px solid var(--border); flex-shrink:0; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;}
+  .admin-tabs::-webkit-scrollbar{display:none;}
+  .admin-tab-btn{padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--muted); background:var(--card-2); border:1px solid var(--border); display:flex; align-items:center; gap:7px; transition:.2s; flex-shrink:0; white-space:nowrap;}
   .admin-tab-btn.active{background:var(--yellow); color:#171308; border-color:var(--yellow);}
   .admin-customer-list{display:flex; flex-direction:column; gap:10px;}
   .admin-customer-row{background:var(--card-2); border:1px solid var(--border); border-radius:14px; padding:14px; cursor:pointer; transition:.2s;}
@@ -869,7 +872,7 @@
       <div id="adminProductsSection">
         <div style="display:flex; gap:10px; margin-bottom:16px;">
           <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button" style="margin-bottom:0;"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
-          <button class="btn btn-ghost" id="adminFeaturedBtn" type="button"><i class="fa-solid fa-fire"></i><span>Eng ko'p sotilganlar</span></button>
+          <button class="btn btn-ghost" id="adminFeaturedBtn" type="button"><i class="fa-solid fa-record-vinyl"></i><span>Ruletka</span></button>
         </div>
         <div class="admin-featured-picker" id="adminFeaturedPicker" style="display:none;"></div>
         <div class="admin-form" id="adminForm"></div>
@@ -1401,6 +1404,7 @@ function listenToProducts(){
 seedFirestoreIfEmpty();
 listenToProducts();
 listenToRatings();
+listenToFeatured();
 listenToCafeInfo();
 
 function nextProductId(){ return PRODUCTS.reduce((max,p)=>Math.max(max,p.id),0) + 1; }
@@ -1721,9 +1725,23 @@ document.getElementById("saveInfoBtn").addEventListener("click", ()=>{
    ko'rinishida boshqaradi. Hech narsa tanlanmagan bo'lsa,
    birinchi 5 ta mahsulot ko'rsatiladi (standart holat).
 ========================================================= */
-/* Ilgari bu yerda admin qo'lda "featured" mahsulotlarni tanlagan edi.
-   Endi bosh sahifadagi karusel VA "Mashhur taomlar" ro'yxati har doim
+/* Bosh sahifadagi katta karusel ("Ruletka") - buni admin qo'lda
+   config/featured hujjatida tanlaydi (klassik tarzda).
+   "Mashhur taomlar" ro'yxati esa buning aksicha - u har doim
    HAQIQIY sotuvlar soniga (product.soldCount) qarab avtomatik hisoblanadi. */
+let featuredIds = null; // null = hali yuklanmagan, standart (birinchi 5) ishlatiladi
+
+function listenToFeatured(){
+  if(!firebaseAvailable) return;
+  try{
+    db.collection(CONFIG_COLLECTION).doc("featured").onSnapshot(doc=>{
+      featuredIds = (doc.exists && Array.isArray(doc.data().ids) && doc.data().ids.length) ? doc.data().ids : null;
+      if(typeof renderCarousel==="function") renderCarousel(true);
+      const panel = document.getElementById("adminFeaturedPicker");
+      if(panel && panel.style.display!=="none") renderAdminFeaturedPicker();
+    }, err=>console.error("Ruletkani sinxronlashda xatolik:", err));
+  }catch(err){ console.error("Featured tinglash xatosi:", err); }
+}
 
 function getTopSellingProducts(n){
   const withSales = PRODUCTS.filter(p => (p.soldCount||0) > 0);
@@ -1734,7 +1752,23 @@ function getTopSellingProducts(n){
 }
 
 function getFeaturedProducts(){
-  return getTopSellingProducts(5);
+  if(featuredIds && featuredIds.length){
+    const list = featuredIds.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
+    if(list.length) return list;
+  }
+  return PRODUCTS.slice(0,5);
+}
+
+function saveFeaturedIds(ids){
+  featuredIds = ids;
+  if(!firebaseAvailable){
+    showToast("Internet yo'q, o'zgarish saqlanmadi", "error");
+    return;
+  }
+  db.collection(CONFIG_COLLECTION).doc("featured").set({ids}).catch(err=>{
+    console.error("Ruletkani saqlashda xatolik:", err);
+    showToast("Saqlashda xatolik yuz berdi", "error");
+  });
 }
 
 const CATEGORIES = ["all","burger","pizza","side","drink","dessert","combo"];
@@ -3086,19 +3120,20 @@ document.getElementById("adminFeaturedBtn").addEventListener("click", ()=>{
 
 function renderAdminFeaturedPicker(){
   const panel = document.getElementById("adminFeaturedPicker");
-  const ranked = getTopSellingProducts(5);
-  const hasSales = PRODUCTS.some(p=>(p.soldCount||0)>0);
-  panel.innerHTML = `<div class="fp-note"><i class="fa-solid fa-circle-info"></i> Bosh sahifadagi "Mashhur taomlar" va karusel shu ro'yxat asosida <b>avtomatik</b> yangilanadi (haqiqiy sotuvlar soniga qarab):</div>` +
-    `<div class="admin-top-products">` +
-    ranked.map((p,i)=>`
-      <div class="admin-top-row">
-        <span class="atr-rank">${i+1}</span>
-        <span class="atr-name">${p.emoji||""} ${p.name.uz}</span>
-        <span class="atr-count">${p.soldCount||0} dona sotilgan</span>
-      </div>
-    `).join("") +
-    `</div>` +
-    (hasSales ? "" : `<div class="fp-note" style="margin-top:8px;">Hali sotuvlar yo'q, shu sabab birinchi 5 mahsulot ko'rsatilmoqda.</div>`);
+  const currentIds = (featuredIds && featuredIds.length) ? featuredIds : PRODUCTS.slice(0,5).map(p=>p.id);
+  panel.innerHTML = `<div class="fp-note">Bosh sahifadagi ruletkada qaysi mahsulotlar aylanishini tanlang:</div>` +
+    PRODUCTS.map(p=>`
+      <label>
+        <input type="checkbox" data-fid="${p.id}" ${currentIds.includes(p.id)?"checked":""}>
+        <span>${p.emoji} ${p.name.uz}</span>
+      </label>
+    `).join("");
+  panel.querySelectorAll("input[data-fid]").forEach(cb=>{
+    cb.addEventListener("change", ()=>{
+      const selected = [...panel.querySelectorAll("input[data-fid]:checked")].map(el=>parseInt(el.getAttribute("data-fid")));
+      saveFeaturedIds(selected);
+    });
+  });
 }
 
 /* ---------- Bo'limlar: Mahsulotlar / Mijozlar ---------- */
