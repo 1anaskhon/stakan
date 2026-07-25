@@ -503,6 +503,50 @@
   }
   #useMyLocationBtn{margin-bottom:12px;}
 
+  /* ============ INFO MODAL (Biz haqimizda) ============ */
+  .info-modal-box{max-width:440px; padding:22px; max-height:82vh; overflow-y:auto;}
+  .info-modal-img{width:100%; max-height:220px; object-fit:cover; border-radius:16px; margin-bottom:16px; display:block;}
+  .info-modal-text{font-size:14px; line-height:1.7; color:var(--text); margin-bottom:18px; white-space:pre-line;}
+  .info-modal-locs{display:flex; flex-direction:column; gap:10px;}
+  .info-loc-row{
+    display:flex; align-items:center; gap:12px; background:var(--card-2); border:1px solid var(--border);
+    border-radius:14px; padding:13px 14px; text-decoration:none; transition:.2s var(--ease);
+  }
+  .info-loc-row:hover{border-color:var(--yellow); transform:translateY(-2px);}
+  .info-loc-row > i.fa-location-dot{color:var(--red); font-size:18px; flex-shrink:0;}
+  .info-loc-row > i.fa-arrow-up-right-from-square{color:var(--muted); font-size:12px; flex-shrink:0;}
+  .info-loc-row span{flex:1; display:flex; flex-direction:column; gap:2px; min-width:0;}
+  .info-loc-row b{font-size:13.5px; color:var(--text);}
+  .info-loc-row small{font-size:11.5px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+  /* ============ ADMIN: Info bo'limini sozlash ============ */
+  .admin-info-form{display:flex; flex-direction:column; gap:6px;}
+  .admin-info-label{font-size:12.5px; font-weight:700; color:var(--muted); margin:14px 0 2px;}
+  .admin-info-label:first-child{margin-top:0;}
+  .admin-image-preview{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    width:100%; height:160px; border-radius:16px; border:1.5px dashed var(--border-strong);
+    background:var(--card-2); color:var(--muted); font-size:13px; font-weight:600; cursor:pointer;
+    overflow:hidden; transition:.2s var(--ease);
+  }
+  .admin-image-preview:hover{border-color:var(--yellow);}
+  .admin-image-preview i{font-size:26px;}
+  .admin-image-preview img{width:100%; height:100%; object-fit:cover;}
+  #infoTextInput{
+    width:100%; padding:12px 14px; border-radius:12px; background:var(--card); border:1.5px solid var(--border-strong);
+    font-size:14px; font-weight:600; color:var(--text); font-family:inherit; resize:vertical;
+  }
+  #infoTextInput:focus{outline:none; border-color:var(--yellow); box-shadow:0 0 0 3px rgba(34,197,94,.15);}
+  .admin-loc-list{display:flex; flex-direction:column; gap:10px; margin-bottom:12px;}
+  .admin-loc-row{
+    display:flex; align-items:center; gap:12px; background:var(--card-2); border:1px solid var(--border);
+    border-radius:14px; padding:12px 14px;
+  }
+  .admin-loc-row > i.fa-location-dot{color:var(--red); font-size:16px; flex-shrink:0;}
+  .admin-loc-info{flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;}
+  .admin-loc-info b{font-size:13px; color:var(--text);}
+  .admin-loc-info small{font-size:11.5px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
   /* ============ HISTORY ============ */
   .history-list{display:flex; flex-direction:column; gap:12px;}
   .history-item{
@@ -733,9 +777,23 @@
       <i class="fa-solid fa-crosshairs"></i><span data-i18n="useMyLocation">Joriy joylashuvimni aniqlash</span>
     </button>
     <div class="map-address-preview" id="mapAddressPreview">Xaritani surib, markazga joylashuvni to'g'rilang</div>
+    <div class="field" id="mapLocNameField" style="display:none; margin-top:10px;">
+      <input type="text" id="mapLocNameInput" placeholder="Filial nomi (masalan: Chilonzor filiali)">
+    </div>
     <button class="btn btn-primary btn-block" id="confirmMapBtn" type="button">
       <i class="fa-solid fa-check"></i><span data-i18n="confirmLocation">Joylashuvni tasdiqlash</span>
     </button>
+  </div>
+</div>
+
+<!-- ======================= INFO MODAL (Biz haqimizda) ======================= -->
+<div class="modal-overlay" id="infoModal">
+  <div class="modal-box info-modal-box">
+    <div class="map-modal-head">
+      <h2>Biz haqimizda</h2>
+      <button class="icon-btn" id="closeInfoBtn" type="button"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="info-modal-body" id="infoModalBody"></div>
   </div>
 </div>
 
@@ -803,6 +861,7 @@
       <button class="admin-tab-btn active" id="adminTabProducts" type="button"><i class="fa-solid fa-burger"></i> Mahsulotlar</button>
       <button class="admin-tab-btn" id="adminTabCustomers" type="button"><i class="fa-solid fa-users"></i> Mijozlar</button>
       <button class="admin-tab-btn" id="adminTabStats" type="button"><i class="fa-solid fa-chart-line"></i> Statistika</button>
+      <button class="admin-tab-btn" id="adminTabInfo" type="button"><i class="fa-solid fa-circle-info"></i> Info bo'limini sozlash</button>
     </div>
     <div class="admin-body">
       <div class="admin-settings-box" id="adminSettingsBox"></div>
@@ -810,7 +869,7 @@
       <div id="adminProductsSection">
         <div style="display:flex; gap:10px; margin-bottom:16px;">
           <button class="btn btn-primary admin-add-btn" id="adminAddNewBtn" type="button" style="margin-bottom:0;"><i class="fa-solid fa-plus"></i><span>Yangi mahsulot qo'shish</span></button>
-          <button class="btn btn-ghost" id="adminFeaturedBtn" type="button"><i class="fa-solid fa-record-vinyl"></i><span>Ruletka</span></button>
+          <button class="btn btn-ghost" id="adminFeaturedBtn" type="button"><i class="fa-solid fa-fire"></i><span>Eng ko'p sotilganlar</span></button>
         </div>
         <div class="admin-featured-picker" id="adminFeaturedPicker" style="display:none;"></div>
         <div class="admin-form" id="adminForm"></div>
@@ -823,6 +882,23 @@
 
       <div id="adminStatsSection" style="display:none;">
         <div id="adminStatsContent"></div>
+      </div>
+
+      <div id="adminInfoSection" style="display:none;">
+        <div class="admin-info-form">
+          <label class="admin-info-label">Kafe rasmi</label>
+          <input type="file" accept="image/*" id="infoImageInput" style="display:none;">
+          <div class="admin-image-preview" id="infoImagePreview"><i class="fa-solid fa-image"></i><span>Rasm tanlash uchun bosing</span></div>
+
+          <label class="admin-info-label">Kafe haqida matn</label>
+          <textarea id="infoTextInput" rows="5" placeholder="Kafemiz haqida qisqacha ma'lumot..."></textarea>
+
+          <label class="admin-info-label">Filiallar (lokatsiyalar)</label>
+          <div class="admin-loc-list" id="adminLocList"></div>
+          <button class="btn btn-ghost btn-block" id="addLocationBtn" type="button"><i class="fa-solid fa-map-location-dot"></i> Lokatsiya qo'shish</button>
+
+          <button class="btn btn-primary btn-block" id="saveInfoBtn" type="button" style="margin-top:16px;"><i class="fa-solid fa-floppy-disk"></i> Saqlash</button>
+        </div>
       </div>
     </div>
   </div>
@@ -855,11 +931,13 @@
 
     <div class="header-actions" id="desktopActions">
       <button class="icon-btn lang-btn" id="langSwitchBtn"><i class="fa-solid fa-globe"></i><span id="currentLangLabel">UZ</span></button>
+      <button class="icon-btn" id="infoBtn" type="button" title="Biz haqimizda"><i class="fa-solid fa-circle-info"></i></button>
       <button class="icon-btn" data-view="cart" id="headerCartBtn"><i class="fa-solid fa-cart-shopping"></i><span class="badge hidden" id="cartBadgeDesktop">0</span></button>
     </div>
 
     <div class="header-actions mobile-topbar">
       <button class="icon-btn lang-btn" id="langSwitchBtnMobile"><i class="fa-solid fa-globe"></i><span id="currentLangLabelMobile">UZ</span></button>
+      <button class="icon-btn" id="infoBtnMobile" type="button" title="Biz haqimizda"><i class="fa-solid fa-circle-info"></i></button>
     </div>
   </div>
 </header>
@@ -1263,6 +1341,7 @@ const LAST_PHONE_KEY = "Stakan cafe_last_phone";
 let firestoreReady = false;
 let firebaseAvailable = false;
 let db = null;
+let cafeInfo = { image: null, text: "", locations: [] };
 
 /* MUHIM: Firebase CDN skripti ba'zi tarmoqlarda (reklama blokerlar,
    korporativ/provayder cheklovlari va h.k.) yuklanmasligi mumkin.
@@ -1309,8 +1388,11 @@ function listenToProducts(){
       list.forEach(p=>PRODUCTS.push(p));
       firestoreReady = true;
       if(typeof applyLanguage==="function") applyLanguage();
+      if(typeof renderCarousel==="function") renderCarousel(true);
       const panel = document.getElementById("adminPanelModal");
       if(panel && panel.classList.contains("open") && typeof renderAdminProductList==="function") renderAdminProductList();
+      const fpanel = document.getElementById("adminFeaturedPicker");
+      if(fpanel && fpanel.style.display!=="none" && typeof renderAdminFeaturedPicker==="function") renderAdminFeaturedPicker();
     }, err=>{
       console.error("Firestore bilan ulanishda xatolik (internet yo'qmi yoki Firestore qoidalari yopiqmi):", err);
     });
@@ -1319,7 +1401,7 @@ function listenToProducts(){
 seedFirestoreIfEmpty();
 listenToProducts();
 listenToRatings();
-listenToFeatured();
+listenToCafeInfo();
 
 function nextProductId(){ return PRODUCTS.reduce((max,p)=>Math.max(max,p.id),0) + 1; }
 
@@ -1396,8 +1478,10 @@ async function saveOrder(order){
   try{
     const custRef = db.collection(CUSTOMERS_COLLECTION).doc(digits);
     const orderRef = db.collection(ORDERS_COLLECTION).doc(String(order.id));
+    const productRefs = (order.items||[]).map(it=> db.collection(PRODUCTS_COLLECTION).doc(String(it.id)));
     const orderNumber = await db.runTransaction(async (tx)=>{
       const custDoc = await tx.get(custRef);
+      const productDocs = await Promise.all(productRefs.map(ref=> tx.get(ref)));
       const custData = custDoc.exists ? custDoc.data() : {
         name: order.name, phone: order.phone, orderCount: 0,
         telegramUsername: null, telegramId: null
@@ -1408,6 +1492,13 @@ async function saveOrder(order){
       custData.updatedAt = Date.now();
       tx.set(custRef, custData);
       tx.set(orderRef, order);
+      productDocs.forEach((pDoc, idx)=>{
+        if(pDoc.exists){
+          const qty = (order.items[idx] && order.items[idx].qty) || 0;
+          const currentSold = pDoc.data().soldCount || 0;
+          tx.update(productRefs[idx], { soldCount: currentSold + qty });
+        }
+      });
       return custData.orderCount;
     });
     return {orderNumber, saved:true};
@@ -1481,43 +1572,169 @@ async function submitRating(orderId, stars){
 }
 
 /* =========================================================
+   INFO BO'LIMI ("Biz haqimizda") - kafe rasmi, matni va
+   filiallar lokatsiyasi config/cafeInfo hujjatida saqlanadi
+   va admin panelidan tahrirlanadi.
+========================================================= */
+function escapeHTML(str){
+  return String(str==null ? "" : str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+
+function listenToCafeInfo(){
+  if(!firebaseAvailable){ renderInfoModalContent(); return; }
+  try{
+    db.collection(CONFIG_COLLECTION).doc("cafeInfo").onSnapshot(doc=>{
+      if(doc.exists){
+        const d = doc.data();
+        cafeInfo = { image: d.image || null, text: d.text || "", locations: Array.isArray(d.locations) ? d.locations : [] };
+      }
+      renderInfoModalContent();
+      const infoSection = document.getElementById("adminInfoSection");
+      if(infoSection && infoSection.style.display!=="none") renderAdminInfoForm();
+    }, err=>console.error("Info ma'lumotini sinxronlashda xatolik:", err));
+  }catch(err){ console.error("Info tinglash xatosi:", err); }
+}
+
+function saveCafeInfo(){
+  if(!firebaseAvailable){ showToast("Internet yo'q, saqlab bo'lmadi", "error"); return; }
+  const saveBtn = document.getElementById("saveInfoBtn");
+  if(saveBtn){ saveBtn.disabled = true; }
+  db.collection(CONFIG_COLLECTION).doc("cafeInfo").set(cafeInfo).then(()=>{
+    showToast("Ma'lumotlar saqlandi", "success");
+  }).catch(err=>{
+    console.error("Info saqlashda xatolik:", err);
+    showToast("Saqlashda xatolik yuz berdi", "error");
+  }).finally(()=>{
+    if(saveBtn) saveBtn.disabled = false;
+  });
+}
+
+function renderInfoModalContent(){
+  const body = document.getElementById("infoModalBody");
+  if(!body) return;
+  const imgHTML = cafeInfo.image ? `<img src="${cafeInfo.image}" class="info-modal-img" alt="Stakan Cafe">` : "";
+  const textHTML = cafeInfo.text
+    ? `<p class="info-modal-text">${escapeHTML(cafeInfo.text).replace(/\n/g,"<br>")}</p>`
+    : `<p class="info-modal-text" style="opacity:.6;">Ma'lumot hali kiritilmagan.</p>`;
+  const locsHTML = (cafeInfo.locations && cafeInfo.locations.length) ? `
+    <div class="info-modal-locs">
+      ${cafeInfo.locations.map(loc=>`
+        <a class="info-loc-row" href="https://www.google.com/maps?q=${loc.lat},${loc.lng}" target="_blank" rel="noopener">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>
+            <b>${escapeHTML(loc.name || "Filial")}</b>
+            <small>${escapeHTML(loc.address || (loc.lat.toFixed(5)+", "+loc.lng.toFixed(5)))}</small>
+          </span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      `).join("")}
+    </div>
+  ` : "";
+  body.innerHTML = imgHTML + textHTML + locsHTML;
+}
+
+function openInfoModal(){
+  renderInfoModalContent();
+  document.getElementById("infoModal").classList.add("open");
+}
+function closeInfoModal(){ document.getElementById("infoModal").classList.remove("open"); }
+document.getElementById("infoBtn").addEventListener("click", openInfoModal);
+document.getElementById("infoBtnMobile").addEventListener("click", openInfoModal);
+document.getElementById("closeInfoBtn").addEventListener("click", closeInfoModal);
+document.getElementById("infoModal").addEventListener("click", (e)=>{ if(e.target.id==="infoModal") closeInfoModal(); });
+
+/* ---------- Admin: Info bo'limini sozlash ---------- */
+let infoImageDataUrl = null;
+let infoLocationsDraft = [];
+
+function renderAdminInfoForm(){
+  infoImageDataUrl = cafeInfo.image || null;
+  infoLocationsDraft = cafeInfo.locations ? JSON.parse(JSON.stringify(cafeInfo.locations)) : [];
+  const textEl = document.getElementById("infoTextInput");
+  if(textEl) textEl.value = cafeInfo.text || "";
+  renderInfoImagePreview();
+  renderAdminLocList();
+}
+
+function renderInfoImagePreview(){
+  const el = document.getElementById("infoImagePreview");
+  if(!el) return;
+  el.innerHTML = infoImageDataUrl
+    ? `<img src="${infoImageDataUrl}">`
+    : `<i class="fa-solid fa-image"></i><span>Rasm tanlash uchun bosing</span>`;
+}
+
+document.getElementById("infoImagePreview").addEventListener("click", ()=> document.getElementById("infoImageInput").click());
+document.getElementById("infoImageInput").addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 3*1024*1024){ showToast("Rasm hajmi 3MB dan kichik bo'lsin", "error"); return; }
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    infoImageDataUrl = reader.result;
+    renderInfoImagePreview();
+  };
+  reader.readAsDataURL(file);
+});
+
+function renderAdminLocList(){
+  const wrap = document.getElementById("adminLocList");
+  if(!wrap) return;
+  if(!infoLocationsDraft.length){
+    wrap.innerHTML = `<p class="admin-empty-note" style="padding:14px 0;">Hali filial qo'shilmagan</p>`;
+    return;
+  }
+  wrap.innerHTML = infoLocationsDraft.map((loc,i)=>`
+    <div class="admin-loc-row">
+      <i class="fa-solid fa-location-dot"></i>
+      <div class="admin-loc-info">
+        <b>${escapeHTML(loc.name)}</b>
+        <small>${escapeHTML(loc.address || (loc.lat.toFixed(5)+", "+loc.lng.toFixed(5)))}</small>
+      </div>
+      <button type="button" class="icon-btn" data-remove-loc="${i}"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  `).join("");
+  wrap.querySelectorAll("[data-remove-loc]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const i = parseInt(btn.getAttribute("data-remove-loc"));
+      infoLocationsDraft.splice(i,1);
+      renderAdminLocList();
+    });
+  });
+}
+
+document.getElementById("addLocationBtn").addEventListener("click", ()=> openMapModalForAdmin());
+document.getElementById("saveInfoBtn").addEventListener("click", ()=>{
+  cafeInfo = {
+    image: infoImageDataUrl,
+    text: document.getElementById("infoTextInput").value.trim(),
+    locations: infoLocationsDraft
+  };
+  saveCafeInfo();
+});
+
+/* =========================================================
    RULETKA (bosh sahifadagi 3D karusel) - admin qaysi
    mahsulotlar ko'rinishini config/featured hujjatida {ids:[...]}
    ko'rinishida boshqaradi. Hech narsa tanlanmagan bo'lsa,
    birinchi 5 ta mahsulot ko'rsatiladi (standart holat).
 ========================================================= */
-let featuredIds = null; // null = hali yuklanmagan, standart (birinchi 5) ishlatiladi
+/* Ilgari bu yerda admin qo'lda "featured" mahsulotlarni tanlagan edi.
+   Endi bosh sahifadagi karusel VA "Mashhur taomlar" ro'yxati har doim
+   HAQIQIY sotuvlar soniga (product.soldCount) qarab avtomatik hisoblanadi. */
 
-function listenToFeatured(){
-  if(!firebaseAvailable) return;
-  try{
-    db.collection(CONFIG_COLLECTION).doc("featured").onSnapshot(doc=>{
-      featuredIds = (doc.exists && Array.isArray(doc.data().ids) && doc.data().ids.length) ? doc.data().ids : null;
-      if(typeof renderCarousel==="function") renderCarousel(true);
-      const panel = document.getElementById("adminFeaturedPicker");
-      if(panel && panel.style.display!=="none") renderAdminFeaturedPicker();
-    }, err=>console.error("Ruletkani sinxronlashda xatolik:", err));
-  }catch(err){ console.error("Featured tinglash xatosi:", err); }
+function getTopSellingProducts(n){
+  const withSales = PRODUCTS.filter(p => (p.soldCount||0) > 0);
+  if(withSales.length){
+    return [...PRODUCTS].sort((a,b)=> (b.soldCount||0) - (a.soldCount||0)).slice(0,n);
+  }
+  return PRODUCTS.slice(0,n);
 }
 
 function getFeaturedProducts(){
-  if(featuredIds && featuredIds.length){
-    const list = featuredIds.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
-    if(list.length) return list;
-  }
-  return PRODUCTS.slice(0,5);
-}
-
-function saveFeaturedIds(ids){
-  featuredIds = ids;
-  if(!firebaseAvailable){
-    showToast("Internet yo'q, o'zgarish saqlanmadi", "error");
-    return;
-  }
-  db.collection(CONFIG_COLLECTION).doc("featured").set({ids}).catch(err=>{
-    console.error("Ruletkani saqlashda xatolik:", err);
-    showToast("Saqlashda xatolik yuz berdi", "error");
-  });
+  return getTopSellingProducts(5);
 }
 
 const CATEGORIES = ["all","burger","pizza","side","drink","dessert","combo"];
@@ -1819,7 +2036,7 @@ function productCardHTML(p){
 
 function renderPopular(){
   const grid = document.getElementById("popularGrid");
-  grid.innerHTML = PRODUCTS.slice(0,4).map(productCardHTML).join("");
+  grid.innerHTML = getTopSellingProducts(4).map(productCardHTML).join("");
   bindCardEvents(grid);
 }
 
@@ -2155,6 +2372,7 @@ phoneInput.addEventListener("blur", ()=>{
 ========================================================= */
 let leafletMap = null;
 let pendingLocation = null;
+let mapModalMode = "checkout";
 const TASHKENT_CENTER = [41.311081, 69.240562];
 
 function initMap(){
@@ -2169,6 +2387,8 @@ function initMap(){
 }
 
 function openMapModal(){
+  mapModalMode = "checkout";
+  document.getElementById('mapLocNameField').style.display = "none";
   document.getElementById('mapModal').classList.add('open');
   setTimeout(()=>{
     initMap();
@@ -2205,6 +2425,26 @@ function openMapModal(){
     }
   }, 60);
 }
+
+/* Admin panelidan filial lokatsiyasi qo'shish - xuddi shu xarita
+   komponenti qayta ishlatiladi, faqat tasdiqlagach state.location
+   emas, filiallar ro'yxatiga (infoLocationsDraft) qo'shiladi. */
+function openMapModalForAdmin(){
+  mapModalMode = "admin";
+  const nameField = document.getElementById('mapLocNameField');
+  const nameInput = document.getElementById('mapLocNameInput');
+  nameField.style.display = "block";
+  nameInput.value = "";
+  document.getElementById('mapModal').classList.add('open');
+  setTimeout(()=>{
+    initMap();
+    leafletMap.invalidateSize();
+    leafletMap.setView(TASHKENT_CENTER, 14);
+    pendingLocation = {lat:TASHKENT_CENTER[0], lng:TASHKENT_CENTER[1]};
+    reverseGeocode(pendingLocation);
+  }, 60);
+}
+
 function closeMapModal(){ document.getElementById('mapModal').classList.remove('open'); }
 
 document.getElementById('openMapBtn').addEventListener('click', openMapModal);
@@ -2277,6 +2517,15 @@ async function reverseGeocode(loc){
 
 document.getElementById('confirmMapBtn').addEventListener('click', ()=>{
   if(!pendingLocation){ showToast(t('toastLocationRequired'), 'error'); return; }
+  if(mapModalMode==="admin"){
+    const nameInput = document.getElementById('mapLocNameInput');
+    const name = nameInput.value.trim();
+    if(!name){ nameInput.focus(); showToast("Filial nomini kiriting", "error"); return; }
+    infoLocationsDraft.push({ name, lat: pendingLocation.lat, lng: pendingLocation.lng, address: pendingLocation.address || null });
+    renderAdminLocList();
+    closeMapModal();
+    return;
+  }
   state.location = {...pendingLocation};
   updateLocationSummary();
   const field = document.getElementById('addressField');
@@ -2837,20 +3086,19 @@ document.getElementById("adminFeaturedBtn").addEventListener("click", ()=>{
 
 function renderAdminFeaturedPicker(){
   const panel = document.getElementById("adminFeaturedPicker");
-  const currentIds = (featuredIds && featuredIds.length) ? featuredIds : PRODUCTS.slice(0,5).map(p=>p.id);
-  panel.innerHTML = `<div class="fp-note">Bosh sahifadagi ruletkada qaysi mahsulotlar aylanishini tanlang:</div>` +
-    PRODUCTS.map(p=>`
-      <label>
-        <input type="checkbox" data-fid="${p.id}" ${currentIds.includes(p.id)?"checked":""}>
-        <span>${p.emoji} ${p.name.uz}</span>
-      </label>
-    `).join("");
-  panel.querySelectorAll("input[data-fid]").forEach(cb=>{
-    cb.addEventListener("change", ()=>{
-      const selected = [...panel.querySelectorAll("input[data-fid]:checked")].map(el=>parseInt(el.getAttribute("data-fid")));
-      saveFeaturedIds(selected);
-    });
-  });
+  const ranked = getTopSellingProducts(5);
+  const hasSales = PRODUCTS.some(p=>(p.soldCount||0)>0);
+  panel.innerHTML = `<div class="fp-note"><i class="fa-solid fa-circle-info"></i> Bosh sahifadagi "Mashhur taomlar" va karusel shu ro'yxat asosida <b>avtomatik</b> yangilanadi (haqiqiy sotuvlar soniga qarab):</div>` +
+    `<div class="admin-top-products">` +
+    ranked.map((p,i)=>`
+      <div class="admin-top-row">
+        <span class="atr-rank">${i+1}</span>
+        <span class="atr-name">${p.emoji||""} ${p.name.uz}</span>
+        <span class="atr-count">${p.soldCount||0} dona sotilgan</span>
+      </div>
+    `).join("") +
+    `</div>` +
+    (hasSales ? "" : `<div class="fp-note" style="margin-top:8px;">Hali sotuvlar yo'q, shu sabab birinchi 5 mahsulot ko'rsatilmoqda.</div>`);
 }
 
 /* ---------- Bo'limlar: Mahsulotlar / Mijozlar ---------- */
@@ -2858,18 +3106,22 @@ function switchAdminTab(tab){
   document.getElementById("adminTabProducts").classList.toggle("active", tab==="products");
   document.getElementById("adminTabCustomers").classList.toggle("active", tab==="customers");
   document.getElementById("adminTabStats").classList.toggle("active", tab==="stats");
+  document.getElementById("adminTabInfo").classList.toggle("active", tab==="info");
   document.getElementById("adminProductsSection").style.display = tab==="products" ? "block" : "none";
   document.getElementById("adminCustomersSection").style.display = tab==="customers" ? "block" : "none";
   document.getElementById("adminStatsSection").style.display = tab==="stats" ? "block" : "none";
+  document.getElementById("adminInfoSection").style.display = tab==="info" ? "block" : "none";
   closeAdminSettings();
   hideAdminForm();
   if(tab==="products") renderAdminProductList();
   else if(tab==="customers"){ expandedCustomerDigits = null; renderAdminCustomerList(); }
   else if(tab==="stats") renderAdminStats();
+  else if(tab==="info") renderAdminInfoForm();
 }
 document.getElementById("adminTabProducts").addEventListener("click", ()=> switchAdminTab("products"));
 document.getElementById("adminTabCustomers").addEventListener("click", ()=> switchAdminTab("customers"));
 document.getElementById("adminTabStats").addEventListener("click", ()=> switchAdminTab("stats"));
+document.getElementById("adminTabInfo").addEventListener("click", ()=> switchAdminTab("info"));
 
 function renderAdminStats(){
   const wrap = document.getElementById("adminStatsContent");
