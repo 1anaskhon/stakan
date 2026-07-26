@@ -2683,14 +2683,23 @@ async function submitOrder(){
   }
 }
 
+/* Telegram'ning eski "Markdown" rejimi _ * ` [ belgilarini
+   maxsus belgi deb hisoblaydi. Agar mijoz ismi, izohi yoki
+   mahsulot nomida shu belgilardan biri tasodifan bo'lsa,
+   butun xabar yuborilmay qoladi (bloklanadi). Shu sabab
+   yuborishdan oldin ularni "escape" qilamiz. */
+function escapeMarkdown(str){
+  return String(str==null ? "" : str).replace(/([_*`\[])/g, "\\$1");
+}
+
 function buildTelegramMarkdown(order){
   const dt = new Date(order.date);
   const dateStr = dt.toLocaleString(state.lang==="ru"?"ru-RU":state.lang==="en"?"en-US":"uz-UZ");
   let lines = [];
   lines.push(`*\u{1f9fe} Yangi buyurtma \u{2014} Stakan Cafe*`);
   lines.push(``);
-  lines.push(`*Mijoz:* ${order.name}`);
-  lines.push(`*Telefon:* ${order.phone}`);
+  lines.push(`*Mijoz:* ${escapeMarkdown(order.name)}`);
+  lines.push(`*Telefon:* ${escapeMarkdown(order.phone)}`);
   if(order.orderNumber){
     lines.push(`*Bu mijozning:* ${order.orderNumber}-buyurtmasi \u{1f501}`);
   }
@@ -2702,15 +2711,15 @@ function buildTelegramMarkdown(order){
   }
   if(order.deliveryType==="delivery" && order.location){
     const loc = order.location;
-    if(loc.address) lines.push(`*Manzil:* ${loc.address}`);
+    if(loc.address) lines.push(`*Manzil:* ${escapeMarkdown(loc.address)}`);
     lines.push(`*Xarita:* https://maps.google.com/?q=${loc.lat},${loc.lng}`);
   }
-  if(order.comment) lines.push(`*Izoh:* ${order.comment}`);
+  if(order.comment) lines.push(`*Izoh:* ${escapeMarkdown(order.comment)}`);
   lines.push(``);
   lines.push(`*Mahsulotlar:*`);
   order.items.forEach(it=>{
-    const modsText = (it.modifiers && it.modifiers.length) ? ` (${it.modifiers.map(m=>m.name.uz).join(", ")})` : "";
-    lines.push(`\u{2022} ${it.name.uz}${modsText} x${it.qty} \u{2014} ${it.price*it.qty} so'm`);
+    const modsText = (it.modifiers && it.modifiers.length) ? ` (${it.modifiers.map(m=>escapeMarkdown(m.name.uz)).join(", ")})` : "";
+    lines.push(`\u{2022} ${escapeMarkdown(it.name.uz)}${modsText} x${it.qty} \u{2014} ${it.price*it.qty} so'm`);
   });
   lines.push(``);
   lines.push(`*Mahsulotlar summasi:* ${order.subtotal} so'm`);
@@ -2738,7 +2747,15 @@ async function sendToTelegram(text){
           parse_mode: "Markdown"
         })
       });
-      if(!res.ok) success = false;
+      if(!res.ok){
+        success = false;
+        try{
+          const errBody = await res.json();
+          console.error("Telegram sendMessage xatosi (" + chatId + "):", errBody.description || errBody);
+        }catch(_){
+          console.error("Telegram sendMessage xatosi (" + chatId + "), status:", res.status);
+        }
+      }
     }catch(err){
       console.error("Telegram yuborishda xatolik (" + chatId + "):", err);
       success = false;
